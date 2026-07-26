@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Active Recovery Yoga — 21 min</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #0f0f14;
+    color: #f0f0f0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+  }
+
+  /* START SCREEN */
+  #start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 32px 24px;
+    text-align: center;
+  }
+  #start-screen h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+  #start-screen .subtitle { color: #888; font-size: 15px; margin-bottom: 40px; }
+  .phase-list { width: 100%; max-width: 360px; margin-bottom: 40px; }
+  .phase-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 0; border-bottom: 1px solid #1e1e2a;
+    text-align: left;
+  }
+  .phase-dot {
+    width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0;
+  }
+  .phase-label { font-size: 14px; color: #ccc; flex: 1; }
+  .phase-dur { font-size: 13px; color: #666; }
+  .btn-start {
+    background: #7c5cfc;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 18px 48px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .btn-start:active { opacity: 0.85; }
+
+  /* SESSION SCREEN */
+  #session-screen {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    min-height: 100vh;
+    padding-bottom: 32px;
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    width: 100%;
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .phase-badge {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 20px;
+    color: #fff;
+  }
+  .progress-text { font-size: 13px; color: #666; }
+  .btn-exit {
+    background: none; border: 1px solid #333; color: #888;
+    border-radius: 8px; padding: 4px 12px; font-size: 12px; cursor: pointer;
+  }
+
+  /* PROGRESS BAR */
+  .progress-wrap { width: calc(100% - 40px); height: 3px; background: #1e1e2a; border-radius: 2px; margin-bottom: 16px; }
+  .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+
+  /* POSE IMAGE */
+  .pose-wrap {
+    width: calc(100% - 40px);
+    max-width: 340px;
+    aspect-ratio: 1 / 1;
+    background: #15151f;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .pose-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 20px; display: block; }
+
+  /* POSE INFO */
+  .pose-name {
+    font-size: 24px; font-weight: 700; text-align: center;
+    margin-bottom: 6px; padding: 0 20px;
+  }
+  .pose-side {
+    font-size: 13px; color: #7c5cfc; text-align: center;
+    margin-bottom: 16px; font-weight: 600; letter-spacing: 0.5px;
+    min-height: 18px;
+  }
+  .pose-cue {
+    font-size: 14px; color: #999; text-align: center;
+    padding: 0 28px; line-height: 1.6; margin-bottom: 28px;
+    max-width: 340px;
+  }
+
+  /* TIMER */
+  .timer-ring-wrap { position: relative; width: 120px; height: 120px; margin-bottom: 28px; }
+  .timer-ring-wrap svg { transform: rotate(-90deg); }
+  .timer-bg { fill: none; stroke: #1e1e2a; stroke-width: 8; }
+  .timer-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+  .timer-num {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 32px; font-weight: 700; font-variant-numeric: tabular-nums;
+  }
+  .timer-label {
+    position: absolute; bottom: 14px; left: 0; right: 0;
+    text-align: center; font-size: 10px; color: #666; letter-spacing: 1px; text-transform: uppercase;
+  }
+
+  /* CONTROLS */
+  .controls { display: flex; gap: 16px; align-items: center; }
+  .btn-nav {
+    width: 52px; height: 52px; border-radius: 50%;
+    border: 1px solid #333; background: #15151f;
+    color: #ccc; font-size: 20px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-nav:active { opacity: 0.7; }
+  .btn-pause {
+    width: 68px; height: 68px; border-radius: 50%;
+    border: none; background: #7c5cfc;
+    color: #fff; font-size: 24px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .btn-pause:active { opacity: 0.85; }
+
+  /* REST SCREEN between sides */
+  .side-tag {
+    display: inline-block;
+    background: #1e1e2a; border-radius: 6px;
+    padding: 4px 10px; font-size: 12px; color: #888; margin-bottom: 8px;
+  }
+
+  /* DONE SCREEN */
+  #done-screen {
+    display: none; flex-direction: column;
+    align-items: center; justify-content: center;
+    min-height: 100vh; padding: 40px 24px; text-align: center;
+  }
+  #done-screen h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+  #done-screen p { color: #888; font-size: 15px; line-height: 1.6; margin-bottom: 40px; }
+  .btn-restart {
+    background: #7c5cfc; color: #fff; border: none;
+    border-radius: 14px; padding: 16px 40px;
+    font-size: 16px; font-weight: 600; cursor: pointer;
+    width: 100%; max-width: 320px;
+  }
+
+  /* COUNTDOWN OVERLAY */
+  #countdown-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(10,10,18,0.93);
+    z-index: 200;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+  }
+  #countdown-overlay .cdlabel {
+    font-size: 12px; color: #555; letter-spacing: 2px; text-transform: uppercase;
+  }
+  #countdown-overlay .cdname {
+    font-size: 22px; font-weight: 700; color: #f0f0f0;
+    text-align: center; padding: 0 40px; line-height: 1.3;
+  }
+  #countdown-overlay .cdside {
+    font-size: 13px; color: #7c5cfc; font-weight: 600; letter-spacing: 0.5px;
+    min-height: 18px;
+  }
+  #countdown-overlay .cdnum {
+    font-size: 96px; font-weight: 700; color: #7c5cfc;
+    line-height: 1; margin-top: 8px;
+  }
+
+  /* AUDIO CONTROLS PANEL */
+  .audio-panel {
+    width: 100%;
+    padding: 10px 18px 14px;
+    background: rgba(0,0,0,0.25);
+    border-top: 1px solid #1e1e2a;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .audio-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .audio-label {
+    font-size: 11px;
+    color: #888;
+    min-width: 56px;
+    white-space: nowrap;
+  }
+  .audio-slider {
+    -webkit-appearance: none;
+    flex: 1;
+    height: 3px;
+    accent-color: #7c5cfc;
+    cursor: pointer;
+    background: #333;
+    border-radius: 2px;
+  }
+  .audio-mute {
+    background: #1a1a28;
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 3px 8px;
+    color: #aaa;
+    font-size: 15px;
+    cursor: pointer;
+    min-width: 34px;
+    text-align: center;
+    line-height: 1.5;
+  }
+  .audio-mute.muted {
+    color: #444;
+    border-color: #1e1e1e;
+    background: #101018;
+  }
+</style>
+</head>
+<body>
+
+<!-- Background music — local webm audio -->
+<audio id="bg-music" loop preload="auto">
+  <source src="yoga_images/yoga_ambient.webm" type="audio/webm">
+</audio>
+
+<!-- ======== START SCREEN ======== -->
+<div id="start-screen">
+  <div style="font-size:52px;margin-bottom:16px;">🧘</div>
+  <h1>Active Recovery</h1>
+  <p class="subtitle">Posterior chain · Hips · Thoracic mobility</p>
+
+  <div class="phase-list">
+    <div class="phase-item">
+      <div class="phase-dot" style="background:#64b5f6"></div>
+      <span class="phase-label">Warm-Up</span>
+      <span class="phase-dur">3 min</span>
+    </div>
+    <div class="phase-item">
+      <div class="phase-dot" style="background:#81c784"></div>
+      <span class="phase-label">Sun Salutations</span>
+      <span class="phase-dur">4 min</span>
+    </div>
+    <div class="phase-item">
+      <div class="phase-dot" style="background:#ffb74d"></div>
+      <span class="phase-label">Standing Poses</span>
+      <span class="phase-dur">4 min</span>
+    </div>
+    <div class="phase-item">
+      <div class="phase-dot" style="background:#f06292"></div>
+      <span class="phase-label">Floor Work</span>
+      <span class="phase-dur">8 min</span>
+    </div>
+    <div class="phase-item" style="border:none">
+      <div class="phase-dot" style="background:#ba68c8"></div>
+      <span class="phase-label">Cool-Down</span>
+      <span class="phase-dur">2 min</span>
+    </div>
+  </div>
+
+  <div style="width:100%;max-width:320px;display:flex;justify-content:space-between;align-items:center;padding:14px 0 0;border-top:1px solid #1a1a28;margin-top:4px;">
+    <span style="font-size:13px;color:#555;">Total</span>
+    <span style="font-size:15px;font-weight:600;color:#aaa;">21 min</span>
+  </div>
+
+  <button class="btn-start" onclick="startSession()">Begin Session</button>
+</div>
+
+<!-- ======== SESSION SCREEN ======== -->
+<div id="session-screen">
+  <div class="top-bar">
+    <span class="phase-badge" id="phase-badge">Warm-Up</span>
+    <span class="progress-text" id="progress-text">1 / 12</span>
+    <button class="btn-exit" onclick="exitSession()">✕ Exit</button>
+  </div>
+
+  <div class="progress-wrap">
+    <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+  </div>
+
+  <div class="pose-wrap">
+    <img id="pose-img" src="" alt="yoga pose" />
+  </div>
+
+  <div class="pose-name" id="pose-name">Cat-Cow</div>
+  <div class="pose-side" id="pose-side"></div>
+  <div class="pose-cue" id="pose-cue">Hands under shoulders, knees under hips. Inhale: arch back, lift head. Exhale: round spine, tuck chin.</div>
+
+  <div class="timer-ring-wrap">
+    <svg width="120" height="120" viewBox="0 0 120 120">
+      <circle class="timer-bg" cx="60" cy="60" r="52"/>
+      <circle class="timer-fill" id="timer-ring" cx="60" cy="60" r="52"
+        stroke="#7c5cfc"
+        stroke-dasharray="326.7"
+        stroke-dashoffset="0"/>
+    </svg>
+    <div class="timer-num" id="timer-num">60</div>
+    <div class="timer-label">seconds</div>
+  </div>
+
+  <div class="controls">
+    <button class="btn-nav" onclick="prevPose()">←</button>
+    <button class="btn-pause" id="btn-pause" onclick="togglePause()">⏸</button>
+    <button class="btn-nav" onclick="nextPose()">→</button>
+  </div>
+
+  <div class="audio-panel">
+    <div class="audio-row" style="justify-content:space-between;margin-bottom:2px;">
+      <span style="font-size:11px;color:#666;letter-spacing:0.5px;">AUDIO</span>
+      <button id="mute-all-btn" onclick="toggleMuteAll()" style="background:#1a1a28;border:1px solid #333;border-radius:6px;padding:3px 12px;color:#aaa;font-size:11px;cursor:pointer;letter-spacing:0.5px;">MUTE ALL</button>
+    </div>
+    <div class="audio-row">
+      <span class="audio-label">🎵 Music</span>
+      <input type="range" class="audio-slider" id="music-vol" min="0" max="100" value="35" oninput="setMusicVol(this.value)">
+      <button class="audio-mute" id="music-mute" onclick="toggleMusicMute()">🔊</button>
+    </div>
+    <div class="audio-row">
+      <span class="audio-label">🔔 Gong</span>
+      <input type="range" class="audio-slider" id="gong-vol" min="0" max="100" value="100" oninput="setGongVol(this.value)">
+      <button class="audio-mute" id="gong-mute" onclick="toggleGongMute()">🔊</button>
+    </div>
+    <div class="audio-row">
+      <span class="audio-label">🗣️ Voice</span>
+      <input type="range" class="audio-slider" id="voice-vol" min="0" max="100" value="55" oninput="setVoiceVol(this.value)">
+      <button class="audio-mute" id="voice-mute" onclick="toggleVoiceMute()">🔊</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======== COUNTDOWN OVERLAY ======== -->
+<div id="countdown-overlay">
+  <div class="cdlabel">Next Up</div>
+  <div class="cdname" id="cd-name"></div>
+  <div class="cdside" id="cd-side"></div>
+  <div class="cdnum"  id="cd-num">3</div>
+</div>
+
+<!-- ======== DONE SCREEN ======== -->
+<div id="done-screen">
+  <div style="font-size:64px;margin-bottom:20px;">✅</div>
+  <h2>Session Complete</h2>
+  <p>40 minutes done. Hips open, spine mobile, parasympathetic system happy. Go eat, rest, and come back stronger tomorrow.</p>
+  <button class="btn-restart" onclick="restart()">Start Again</button>
+</div>
+
+<script>
+// ==========================================
+// POSE DATA
+// ==========================================
+const PHASES = [
+  { name: "Warm-Up",          color: "#64b5f6", fillColor: "#1a2a3a" },
+  { name: "Sun Salutation",   color: "#81c784", fillColor: "#1a2d1a" },
+  { name: "Standing",         color: "#ffb74d", fillColor: "#2d2010" },
+  { name: "Floor Work",       color: "#f06292", fillColor: "#2d1020" },
+  { name: "Cool-Down",        color: "#ba68c8", fillColor: "#201a2d" },
+];
+
+// Each pose: { name, side (optional), duration (sec), cue, phase (0-4), draw (fn name) }
+const POSES = [
+  // WARM-UP
+  { name: "Breath Awareness",   duration: 60,  cue: "Lie on your back. Breathe in through nose 4 counts, hold 2, out 6. Let your nervous system settle.", phase: 0, draw: "savasana" },
+  { name: "Cat-Cow",            duration: 60,  cue: "Hands under shoulders, knees under hips. Inhale: arch back, lift head. Exhale: round spine, tuck chin. Do ×10 slow.", phase: 0, draw: "catcow" },
+  { name: "Thread the Needle",  duration: 30,  side: "LEFT SIDE",  cue: "On all-fours, slide left arm under right arm along floor. Rest temple down. Breathe into right shoulder.", phase: 0, draw: "thread_left" },
+  { name: "Thread the Needle",  duration: 30,  side: "RIGHT SIDE", cue: "Switch sides. Slide right arm under left arm. Stack hips level. Soften the top shoulder down.", phase: 0, draw: "thread_right" },
+
+  // SUN SALUTATIONS — Mountain/Forward Fold/Half Lift once, then Plank→Updog→Downdog ×3
+  { name: "Mountain Pose",      duration: 20,  cue: "Stand tall, feet hip-width. Arms at sides, palms forward. Root down through feet, lengthen through crown.", phase: 1, draw: "mountain" },
+  { name: "Forward Fold",       duration: 20,  cue: "Hinge from hips, fold forward. Bend knees as needed. Let head and neck fully release.", phase: 1, draw: "forward_fold" },
+  { name: "Half Lift",          duration: 10,  cue: "Hands to shins or thighs. Long flat back. Shoulders away from ears. Gaze slightly forward.", phase: 1, draw: "half_lift" },
+  { name: "Plank → Low Plank",  duration: 20,  side: "ROUND 1 OF 3", cue: "Step or jump back to plank. Lower slowly with elbows in. Pause in low plank (Chaturanga).", phase: 1, draw: "plank" },
+  { name: "Upward Dog",         duration: 15,  cue: "Press tops of feet down, lift chest and thighs. Shoulders down, chin slightly lifted.", phase: 1, draw: "updog" },
+  { name: "Downward Dog",       duration: 30,  cue: "Hips high, heels toward floor. Pedal feet. Hold 5 breaths.", phase: 1, draw: "downdog" },
+  { name: "Plank → Low Plank",  duration: 20,  side: "ROUND 2 OF 3", cue: "Back to plank. Elbows in, lower with full control. Full body tight.", phase: 1, draw: "plank" },
+  { name: "Upward Dog",         duration: 15,  cue: "Press tops of feet down, lift chest and thighs. Shoulders down, chin slightly lifted.", phase: 1, draw: "updog" },
+  { name: "Downward Dog",       duration: 30,  cue: "Hips high, heels toward floor. Pedal feet. Hold 5 breaths.", phase: 1, draw: "downdog" },
+  { name: "Plank → Low Plank",  duration: 20,  side: "ROUND 3 OF 3", cue: "Last round — make this one count. Full control on the way down.", phase: 1, draw: "plank" },
+  { name: "Upward Dog",         duration: 15,  cue: "Press tops of feet down, lift chest and thighs. Shoulders down, chin slightly lifted.", phase: 1, draw: "updog" },
+  { name: "Downward Dog",       duration: 30,  cue: "Hips high, heels toward floor. Pedal feet. Hold 5 breaths. Then walk feet to hands and rise to standing.", phase: 1, draw: "downdog" },
+
+  // STANDING
+  { name: "Warrior I",          duration: 30,  side: "LEFT FOOT FORWARD",  cue: "Left foot forward, back heel down at 45°. Hips square forward. Arms overhead, relax shoulders.", phase: 2, draw: "warrior1_left" },
+  { name: "Warrior II",         duration: 30,  side: "LEFT FOOT FORWARD",  cue: "Open hips to the side. Arms wide, front knee over ankle. Gaze over front fingertips.", phase: 2, draw: "warrior2_left" },
+  { name: "Reverse Warrior",    duration: 20,  side: "LEFT SIDE",          cue: "Front arm sweeps up, back hand slides down rear leg. Side body long. Stay low in the lunge.", phase: 2, draw: "rev_warrior_left" },
+  { name: "Warrior I",          duration: 30,  side: "RIGHT FOOT FORWARD", cue: "Switch to right side. Right foot forward, back heel at 45°. Hips square forward. Arms overhead.", phase: 2, draw: "warrior1_right" },
+  { name: "Warrior II",         duration: 30,  side: "RIGHT FOOT FORWARD", cue: "Open hips to the side. Sink the front knee, keep it tracking over the second toe. Arms wide.", phase: 2, draw: "warrior2_right" },
+  { name: "Reverse Warrior",    duration: 20,  side: "RIGHT SIDE",         cue: "Front arm sweeps up, back hand slides down rear leg. Open through the ribcage.", phase: 2, draw: "rev_warrior_right" },
+  { name: "Standing Forward Fold", duration: 60, cue: "Feet hip-width. Hinge at hips, fold all the way. Grab opposite elbows and sway gently. Full release of hamstrings.", phase: 2, draw: "forward_fold" },
+
+  // FLOOR WORK
+  { name: "Low Lunge / Crescent", duration: 30, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right knee down. Arms overhead. Square hips forward. Breathe into the hip flexor.", phase: 3, draw: "low_lunge_left" },
+  { name: "Pigeon Pose",          duration: 60, side: "LEFT LEG FORWARD",  cue: "From low lunge, slide left shin forward across the mat. Ease hips toward floor. Walk hands forward, chest down. Breathe into the outer left hip.", phase: 3, draw: "pigeon_left" },
+  { name: "Low Lunge / Crescent", duration: 30, side: "RIGHT FOOT FORWARD", cue: "Come back through all-fours. Right foot forward, left knee down. Arms overhead. Square hips forward. Breathe into the right hip flexor.", phase: 3, draw: "low_lunge_right" },
+  { name: "Pigeon Pose",          duration: 60, side: "RIGHT LEG FORWARD", cue: "Slide right shin forward across the mat. Ease hips toward floor. Walk hands forward, chest down. Stay here — let the hip fully release.", phase: 3, draw: "pigeon_right" },
+  { name: "Seated Forward Fold", duration: 60, cue: "Legs extended. Flex feet, hinge from hips. Reach for feet or shins. Keep spine long. Don't round the lower back aggressively.", phase: 3, draw: "seated_fold" },
+  { name: "Supine Spinal Twist", duration: 60, side: "LEFT KNEE DOWN",    cue: "On back, right knee to chest, cross it over to the left. Right arm out. Gaze right or up. Let gravity do the work.", phase: 3, draw: "twist_left" },
+  { name: "Supine Spinal Twist", duration: 60, side: "RIGHT KNEE DOWN",   cue: "Switch sides. Left knee crosses right. Left arm out. Breathe into the thoracic spine — feel each vertebra release.", phase: 3, draw: "twist_right" },
+  { name: "Bridge Pose",        duration: 60,  cue: "Feet hip-width near glutes. Press down, lift hips. Hold 20 seconds, lower slowly, pause, repeat. Activates glutes and opens hip flexors.", phase: 3, draw: "bridge" },
+  { name: "Happy Baby",         duration: 60,  cue: "Knees to chest, grab outer feet. Knees wider than torso. Gently rock side to side. Final active stretch — enjoy it.", phase: 3, draw: "happy_baby" },
+
+  // COOL-DOWN
+  { name: "Child's Pose",       duration: 60, cue: "Knees wide, big toes together. Arms extended or resting back. Let forehead drop. Full surrender. Breathe into the back body.", phase: 4, draw: "childs_pose" },
+  { name: "Savasana",           duration: 60, cue: "Lie flat. Legs loose, arms out at 45°, palms up. Eyes closed. Don't adjust, don't fidget. Just be still. You've done the work.", phase: 4, draw: "savasana" },
+];
+
+// ==========================================
+// POSE IMAGES — local files in yoga_images/
+// ==========================================
+const IMAGES = {
+  savasana:          "yoga_images/savasana.jpg",
+  catcow:            "yoga_images/catcow.webp",
+  thread_left:       "yoga_images/thread_left.png",
+  thread_right:      "yoga_images/thread_right.jpeg",
+  mountain:          "yoga_images/mountain.jpg",
+  forward_fold:      "yoga_images/forward_fold.webp",
+  half_lift:         "yoga_images/half_lift.webp",
+  plank:             "yoga_images/plank.jpg",
+  updog:             "yoga_images/updog.webp",
+  downdog:           "yoga_images/downdog.jpeg",
+  warrior1_left:     "yoga_images/warrior1_left.avif",
+  warrior1_right:    "yoga_images/warrior1_right.jpg",
+  warrior2_left:     "yoga_images/warrior2_left.webp",
+  warrior2_right:    "yoga_images/warrior2_right.webp",
+  rev_warrior_left:  "yoga_images/rev_warrior_left.jpg",
+  rev_warrior_right: "yoga_images/rev_warrior_right.jpg",
+  low_lunge_left:    "yoga_images/low_lunge_left.webp",
+  low_lunge_right:   "yoga_images/low_lunge_right.webp",
+  pigeon_left:       "yoga_images/pigeon_left.jpg",
+  pigeon_right:      "yoga_images/pigeon_right.gif",
+  seated_fold:       "yoga_images/seated_fold.jpg",
+  twist_left:        "yoga_images/twist_left.jpg",
+  twist_right:       "yoga_images/twist_right.jpg",
+  bridge:            "yoga_images/bridge.avif",
+  happy_baby:        "yoga_images/happy_baby.avif",
+  childs_pose:       "yoga_images/childs_pose.jpg",
+};
+
+// ==========================================
+// SESSION STATE
+// ==========================================
+let currentIdx = 0;
+let timeLeft = 0;
+let totalDuration = 0;
+let paused = false;
+let tickInterval = null;
+
+function totalPoses() { return POSES.length; }
+
+function startSession() {
+  getAudioCtx(); // unlock audio on user gesture
+  ytPlay();
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('session-screen').style.display = 'flex';
+  currentIdx = 0;
+  loadPose(0);
+}
+
+function loadPose(idx) {
+  clearInterval(tickInterval);
+  const pose = POSES[idx];
+  const phase = PHASES[pose.phase];
+
+  // Phase badge
+  const badge = document.getElementById('phase-badge');
+  badge.textContent = phase.name;
+  badge.style.background = phase.color + '22';
+  badge.style.color = phase.color;
+
+  // Progress
+  document.getElementById('progress-text').textContent = `${idx + 1} / ${POSES.length}`;
+  const pct = ((idx) / POSES.length) * 100;
+  const fill = document.getElementById('progress-fill');
+  fill.style.width = pct + '%';
+  fill.style.background = phase.color;
+
+  // Photo
+  document.getElementById('pose-img').src = IMAGES[pose.draw] || IMAGES['savasana'];
+
+  // Text
+  document.getElementById('pose-name').textContent = pose.name;
+  document.getElementById('pose-side').textContent = pose.side || '';
+  document.getElementById('pose-cue').textContent = pose.cue;
+
+  // Announce pose name via female voice
+  announcePose(pose);
+
+  // Timer
+  timeLeft = pose.duration;
+  totalDuration = pose.duration;
+  paused = false;
+  document.getElementById('btn-pause').textContent = '⏸';
+  updateTimerDisplay();
+  startTick();
+}
+
+function updateTimerDisplay() {
+  document.getElementById('timer-num').textContent = timeLeft;
+  const circumference = 326.7;
+  const fraction = timeLeft / totalDuration;
+  const offset = circumference * (1 - fraction);
+  const ring = document.getElementById('timer-ring');
+  ring.style.strokeDashoffset = offset;
+  ring.style.stroke = PHASES[POSES[currentIdx].phase].color;
+}
+
+function startTick() {
+  tickInterval = setInterval(() => {
+    if (!paused) {
+      timeLeft--;
+      updateTimerDisplay();
+      if (timeLeft <= 0) {
+        clearInterval(tickInterval);
+        playGong();
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        setTimeout(() => {
+          if (currentIdx < POSES.length - 1) {
+            startCountdown(currentIdx + 1);
+          } else {
+            showDone();
+          }
+        }, 600);
+      }
+    }
+  }, 1000);
+}
+
+function startCountdown(nextIdx) {
+  const overlay = document.getElementById('countdown-overlay');
+  const numEl   = document.getElementById('cd-num');
+  const nameEl  = document.getElementById('cd-name');
+  const sideEl  = document.getElementById('cd-side');
+
+  const nextPose = POSES[nextIdx];
+  nameEl.textContent = nextPose.name;
+  sideEl.textContent = nextPose.side || '';
+
+  let count = 3;
+  numEl.textContent = count;
+  overlay.style.display = 'flex';
+
+  const cdInterval = setInterval(() => {
+    count--;
+    if (count <= 0) {
+      clearInterval(cdInterval);
+      overlay.style.display = 'none';
+      currentIdx = nextIdx;
+      loadPose(currentIdx);
+    } else {
+      numEl.textContent = count;
+    }
+  }, 1000);
+}
+
+function togglePause() {
+  paused = !paused;
+  document.getElementById('btn-pause').textContent = paused ? '▶' : '⏸';
+}
+
+function nextPose() {
+  if (currentIdx < POSES.length - 1) {
+    currentIdx++;
+    loadPose(currentIdx);
+  } else {
+    showDone();
+  }
+}
+
+function prevPose() {
+  if (currentIdx > 0) {
+    currentIdx--;
+    loadPose(currentIdx);
+  }
+}
+
+function exitSession() {
+  clearInterval(tickInterval);
+  ytPause();
+  document.getElementById('session-screen').style.display = 'none';
+  document.getElementById('start-screen').style.display = 'flex';
+}
+
+function showDone() {
+  clearInterval(tickInterval);
+  ytPause();
+  document.getElementById('session-screen').style.display = 'none';
+  document.getElementById('done-screen').style.display = 'flex';
+}
+
+function restart() {
+  document.getElementById('done-screen').style.display = 'none';
+  document.getElementById('start-screen').style.display = 'flex';
+}
+
+// ==========================================
+// AUDIO — gong sound + female voice
+// ==========================================
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playGong() {
+  if (gongMuted) return;
+  try {
+    const ctx = getAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+    const now = ctx.currentTime;
+    const vol = Math.max(0.0001, gongVolState);
+    // Deep gong: fundamental + harmonics, fast attack, slow exponential decay
+    [[90, 0.55 * vol], [180, 0.28 * vol], [270, 0.14 * vol], [360, 0.08 * vol], [540, 0.04 * vol]].forEach(([freq, gain]) => {
+      const osc = ctx.createOscillator();
+      const g   = ctx.createGain();
+      osc.connect(g);
+      g.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      g.gain.setValueAtTime(0, now);
+      g.gain.linearRampToValueAtTime(gain, now + 0.01); // sharp attack
+      g.gain.exponentialRampToValueAtTime(0.0001, now + 3.0); // slow ring
+      osc.start(now);
+      osc.stop(now + 3.0);
+    });
+  } catch(e) {}
+}
+
+function announcePose(pose) {
+  if (!('speechSynthesis' in window)) return;
+  if (voiceMuted) return;
+  speechSynthesis.cancel();
+  const text = pose.side ? `${pose.name}. ${pose.side.toLowerCase()}` : pose.name;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-GB';
+  utter.rate = 0.88;
+  utter.pitch = 1.1;
+  utter.volume = voiceVolState;
+  const FEMALE_NAMES = ['Samantha','Karen','Victoria','Moira','Fiona','Tessa',
+                        'Zira','Hazel','Susan','Catherine','Emily','Serena',
+                        'female','woman'];
+  const trySpeak = () => {
+    const voices = speechSynthesis.getVoices();
+    const femaleVoice = voices.find(v =>
+      FEMALE_NAMES.some(n => v.name.toLowerCase().includes(n.toLowerCase()))
+    ) || voices.find(v => v.lang.startsWith('en'));
+    if (femaleVoice) utter.voice = femaleVoice;
+    speechSynthesis.speak(utter);
+  };
+  if (speechSynthesis.getVoices().length) {
+    trySpeak();
+  } else {
+    speechSynthesis.onvoiceschanged = trySpeak;
+  }
+}
+
+// ==========================================
+// BACKGROUND MUSIC — HTML5 Audio
+// ==========================================
+const bgMusic = document.getElementById('bg-music');
+
+function ytPlay() {
+  bgMusic.volume = musicVolState / 100;
+  bgMusic.muted  = musicMuted;
+  bgMusic.play().catch(() => {}); // catch autoplay policy errors silently
+}
+function ytPause() {
+  bgMusic.pause();
+}
+
+// ==========================================
+// AUDIO CONTROLS STATE
+// ==========================================
+let musicVolState = 35;
+let musicMuted    = false;
+let gongVolState  = 1.0;
+let gongMuted     = false;
+let voiceVolState = 0.55;
+let voiceMuted    = false;
+
+function setMusicVol(v) {
+  musicVolState  = parseInt(v);
+  bgMusic.volume = musicVolState / 100;
+  bgMusic.muted  = false;
+  musicMuted = false;
+  updateMuteBtn('music-mute', false);
+}
+function toggleMusicMute() {
+  musicMuted = !musicMuted;
+  bgMusic.muted = musicMuted;
+  updateMuteBtn('music-mute', musicMuted);
+}
+
+function setGongVol(v) {
+  gongVolState = parseInt(v) / 100;
+}
+function toggleGongMute() {
+  gongMuted = !gongMuted;
+  updateMuteBtn('gong-mute', gongMuted);
+}
+
+function setVoiceVol(v) {
+  voiceVolState = parseInt(v) / 100;
+}
+function toggleVoiceMute() {
+  voiceMuted = !voiceMuted;
+  updateMuteBtn('voice-mute', voiceMuted);
+}
+
+function updateMuteBtn(id, muted) {
+  const btn = document.getElementById(id);
+  if (!btn) return;
+  btn.textContent = muted ? '🔇' : '🔊';
+  btn.classList.toggle('muted', muted);
+}
+
+let allMuted = false;
+function toggleMuteAll() {
+  allMuted = !allMuted;
+  // Music
+  musicMuted = allMuted;
+  bgMusic.muted = musicMuted;
+  updateMuteBtn('music-mute', musicMuted);
+  // Gong
+  gongMuted = allMuted;
+  updateMuteBtn('gong-mute', gongMuted);
+  // Voice
+  voiceMuted = allMuted;
+  updateMuteBtn('voice-mute', voiceMuted);
+  if (allMuted) speechSynthesis.cancel();
+  // Update button label
+  const btn = document.getElementById('mute-all-btn');
+  if (btn) btn.textContent = allMuted ? 'UNMUTE ALL' : 'MUTE ALL';
+}
+
+// Wire pose pause/resume to music
+const _origTogglePause = togglePause;
+togglePause = function() {
+  _origTogglePause();
+  if (paused) ytPause(); else ytPlay();
+};
+
+// Keep screen awake if supported
+try {
+  if ('wakeLock' in navigator) {
+    navigator.wakeLock.request('screen').catch(() => {});
+  }
+} catch(e) {}
+</script>
+</body>
+</html>
