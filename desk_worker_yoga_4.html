@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Desk Worker D — Standing Flow</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a12; color: #f0f0f0; }
+  #start-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; max-height: 100%; padding: 16px 24px; text-align: center; overflow: hidden; }
+  #start-screen h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: #666; font-size: 13px; margin-bottom: 14px; }
+  .btn-start { background: #7c5cfc; color: #fff; border: none; border-radius: 14px; padding: 14px 48px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; max-width: 320px; margin-top: 12px; }
+  .btn-start:active { opacity: 0.85; }
+  .phase-list { width: 100%; max-width: 320px; }
+  .phase-item { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid #1a1a28; }
+  .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .phase-label { flex: 1; text-align: left; font-size: 14px; color: #ddd; }
+  .phase-dur { font-size: 13px; color: #555; }
+  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; }
+  .top-bar { width: 100%; padding: 10px 20px 8px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .phase-badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+  .progress-text { font-size: 13px; color: #666; }
+  .btn-exit { background: none; border: 1px solid #333; color: #888; border-radius: 8px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
+  .progress-wrap { width: calc(100% - 40px); height: 3px; background: #1e1e2a; border-radius: 2px; margin-bottom: 10px; flex-shrink: 0; }
+  .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+  .pose-wrap { width: calc(100% - 40px); max-width: 440px; flex: 1 1 auto; min-height: 60px; max-height: min(42vh, 360px); background: #15151f; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; overflow: hidden; }
+  .pose-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 20px; display: block; }
+  .pose-name { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; padding: 0 20px; flex-shrink: 0; }
+  .pose-side { font-size: 13px; color: #7c5cfc; text-align: center; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.5px; min-height: 18px; flex-shrink: 0; }
+  .pose-cue { font-size: 14px; color: #999; text-align: center; padding: 0 24px; line-height: 1.55; margin-bottom: 14px; max-width: 480px; flex-shrink: 0; display: block; overflow: visible; }
+  .bottom-row { position: relative; display: flex; align-items: flex-end; justify-content: center; flex-shrink: 0; margin-bottom: 12px; width: 100%; padding: 0 20px; min-height: 120px; }
+  .br-main { display: flex; align-items: center; gap: 28px; }
+  .timer-ring-wrap { position: relative; width: 110px; height: 110px; }
+  .timer-ring-wrap svg { transform: rotate(-90deg); }
+  .timer-bg { fill: none; stroke: #1e1e2a; stroke-width: 8; }
+  .timer-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+  .timer-num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .timer-label { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; font-size: 10px; color: #666; letter-spacing: 1px; text-transform: uppercase; }
+  .controls { display: flex; gap: 16px; align-items: center; }
+  .btn-nav { width: 56px; height: 56px; border-radius: 50%; border: 1px solid #333; background: #15151f; color: #ccc; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .btn-nav:active { opacity: 0.7; }
+  .btn-pause { width: 74px; height: 74px; border-radius: 50%; border: none; background: #7c5cfc; color: #fff; font-size: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .btn-pause:active { opacity: 0.85; }
+  #done-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100%; padding: 40px 24px; text-align: center; }
+  #done-screen h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+  #done-screen p { color: #888; font-size: 15px; line-height: 1.6; margin-bottom: 40px; }
+  .btn-restart { background: #7c5cfc; color: #fff; border: none; border-radius: 14px; padding: 16px 40px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; max-width: 320px; }
+  #audio-corner { display: none; position: absolute; right: 20px; bottom: 0; background: rgba(10,10,20,0.92); border: 1px solid #2a2a3a; border-radius: 14px; padding: 10px 12px 8px; flex-direction: row; gap: 8px; align-items: flex-end; z-index: 10; }
+  .ch { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .ch-icon { font-size: 13px; line-height: 1; }
+  .ch input[type=range] { writing-mode: vertical-lr; direction: rtl; -webkit-appearance: slider-vertical; width: 20px; height: 68px; accent-color: #7c5cfc; cursor: pointer; }
+  .ch-mute { background: none; border: none; cursor: pointer; font-size: 13px; color: #666; padding: 0; line-height: 1; }
+  .ch-mute.muted { color: #2a2a3a; }
+  .ch-divider { width: 1px; height: 72px; background: #2a2a3a; align-self: center; }
+  .ch-muteall { background: none; border: 1px solid #333; border-radius: 6px; color: #666; font-size: 9px; cursor: pointer; padding: 5px 5px; letter-spacing: 0.5px; text-transform: uppercase; writing-mode: vertical-lr; height: 60px; align-self: center; white-space: nowrap; }
+  .ch-muteall:hover { color: #aaa; border-color: #555; }
+  #countdown-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,18,0.93); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+  #countdown-overlay .cdlabel { font-size: 12px; color: #555; letter-spacing: 2px; text-transform: uppercase; }
+  #countdown-overlay .cdname { font-size: 22px; font-weight: 700; color: #f0f0f0; text-align: center; padding: 0 40px; line-height: 1.3; }
+  #countdown-overlay .cdside { font-size: 13px; color: #7c5cfc; font-weight: 600; letter-spacing: 0.5px; min-height: 18px; }
+  #countdown-overlay .cdnum { font-size: 96px; font-weight: 700; color: #7c5cfc; line-height: 1; margin-top: 8px; }
+</style>
+</head>
+<body>
+<audio id="bg-music" loop preload="auto">
+  <source src="yoga_images/yoga_ambient.webm" type="audio/webm">
+</audio>
+
+<div id="start-screen">
+  <div style="font-size:36px;margin-bottom:8px;">⚡</div>
+  <h1>Desk Worker D</h1>
+  <p class="subtitle">Standing Flow — Strength · Balance · Lateral Body · Forearms</p>
+  <div class="phase-list">
+    <div class="phase-item"><div class="phase-dot" style="background:#80cbc4"></div><span class="phase-label">Ground &amp; Centre</span><span class="phase-dur">2 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#f06292"></div><span class="phase-label">Warrior Flow</span><span class="phase-dur">5 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#ffb74d"></div><span class="phase-label">Triangle &amp; Balance</span><span class="phase-dur">5 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#81c784"></div><span class="phase-label">Backbend &amp; Forearms</span><span class="phase-dur">2 min</span></div>
+    <div class="phase-item" style="border:none"><div class="phase-dot" style="background:#ba68c8"></div><span class="phase-label">Rest</span><span class="phase-dur">2 min</span></div>
+  </div>
+  <div style="width:100%;max-width:320px;display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;border-top:1px solid #1a1a28;margin-top:4px;">
+    <span style="font-size:13px;color:#555;">Total</span>
+    <span style="font-size:15px;font-weight:600;color:#aaa;">~15 min</span>
+  </div>
+  <button class="btn-start" onclick="startSession()">Begin Session</button>
+</div>
+
+<div id="session-screen">
+  <div class="top-bar">
+    <span class="phase-badge" id="phase-badge">Ground &amp; Centre</span>
+    <span class="progress-text" id="progress-text">1 / 18</span>
+    <button class="btn-exit" onclick="exitSession()">✕ Exit</button>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="pose-wrap">
+    <img id="pose-img" src="" alt="yoga pose" />
+    <div id="pose-img-missing" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;height:100%;color:#444;">
+      <span style="font-size:40px;">📷</span><span style="font-size:12px;letter-spacing:1px;text-transform:uppercase;">Image needed</span>
+    </div>
+  </div>
+  <div class="pose-name" id="pose-name">Mountain Pose</div>
+  <div class="pose-side" id="pose-side"></div>
+  <div class="pose-cue" id="pose-cue"></div>
+  <div class="bottom-row">
+    <div class="br-main">
+      <div class="timer-ring-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle class="timer-bg" cx="55" cy="55" r="47"/>
+          <circle class="timer-fill" id="timer-ring" cx="55" cy="55" r="47" stroke="#7c5cfc" stroke-dasharray="295.3" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-num" id="timer-num">60</div>
+        <div class="timer-label">secs</div>
+      </div>
+      <div class="controls">
+        <button class="btn-nav" onclick="prevPose()">←</button>
+        <button class="btn-pause" id="btn-pause" onclick="togglePause()">⏸</button>
+        <button class="btn-nav" onclick="nextPose()">→</button>
+      </div>
+    </div>
+    <div id="audio-corner">
+      <div class="ch"><span class="ch-icon">🎵</span><input type="range" id="music-vol" min="0" max="100" value="35" oninput="setMusicVol(this.value)"><button class="ch-mute" id="music-mute" onclick="toggleMusicMute()">🔊</button></div>
+      <div class="ch"><span class="ch-icon">🔔</span><input type="range" id="gong-vol" min="0" max="100" value="100" oninput="setGongVol(this.value)"><button class="ch-mute" id="gong-mute" onclick="toggleGongMute()">🔊</button></div>
+      <div class="ch"><span class="ch-icon">🗣️</span><input type="range" id="voice-vol" min="0" max="100" value="55" oninput="setVoiceVol(this.value)"><button class="ch-mute" id="voice-mute" onclick="toggleVoiceMute()">🔊</button></div>
+      <div class="ch-divider"></div>
+      <button id="mute-all-btn" class="ch-muteall" onclick="toggleMuteAll()">MUTE ALL</button>
+    </div>
+  </div>
+</div>
+
+<div id="countdown-overlay">
+  <div class="cdlabel">Next Up</div>
+  <div class="cdname" id="cd-name"></div>
+  <div class="cdside" id="cd-side"></div>
+  <div class="cdnum" id="cd-num">3</div>
+</div>
+
+<div id="done-screen">
+  <div style="font-size:64px;margin-bottom:20px;">✅</div>
+  <h2>Session Complete</h2>
+  <p>Standing strength restored. Lateral body opened. Balance sharpened. Thoracic extended. Forearms freed. The most energising of the four sessions — do this one when you need to wake up.</p>
+  <button class="btn-restart" onclick="restart()">Start Again</button>
+</div>
+
+<script>
+const PHASES = [
+  { name: "Ground & Centre",      color: "#80cbc4", fillColor: "#0d2020" },
+  { name: "Warrior Flow",         color: "#f06292", fillColor: "#2d1020" },
+  { name: "Triangle & Balance",   color: "#ffb74d", fillColor: "#2d2010" },
+  { name: "Backbend & Forearms",  color: "#81c784", fillColor: "#1a2d1a" },
+  { name: "Rest",                 color: "#ba68c8", fillColor: "#201a2d" },
+];
+
+const IMAGES = {
+  mountain:        "yoga_images/mountain.jpg",
+  chair_pose:      "yoga_images/chair_pose.avif",
+  warrior1_left:   "yoga_images/warrior1_left.avif",
+  warrior1_right:  "yoga_images/warrior1_right.jpg",
+  warrior2_left:   "yoga_images/warrior2_left.webp",
+  warrior2_right:  "yoga_images/warrior2_right.webp",
+  rev_warrior_left: "yoga_images/rev_warrior_left.jpg",
+  rev_warrior_right:"yoga_images/rev_warrior_right.jpg",
+  triangle_left:   "yoga_images/triangle_left.jpg",
+  triangle_right:  "yoga_images/triangle_right.jpg",
+  side_angle_left: "yoga_images/side_angle_left.jpg",
+  side_angle_right:"yoga_images/side_angle_right.jpg",
+  tree_left:       "yoga_images/tree_left.avif",
+  tree_right:      "yoga_images/tree_right.avif",
+  fish_pose:       "yoga_images/fish_pose.jpeg",
+  forearm_left:    "yoga_images/forearm-stretch.webp",
+  forearm_right:   "yoga_images/right-forearm-stretches.jpg",
+  childs_pose:     "yoga_images/childs_pose.jpg",
+};
+
+const POSES = [
+  // GROUND & CENTRE
+  { name: "Mountain Pose", duration: 45, cue: "Stand with feet hip-width. Lift your toes, spread them, and lower. Press all four corners of each foot into the floor. Roll shoulders back, lift the crown of your head. You've been hunched over a desk — start by just standing properly.", phase: 0, draw: "mountain" },
+  { name: "Chair Pose", duration: 45, cue: "Feet together or hip-width. Bend knees and sit back as if toward a chair. Arms up, core engaged. The quads and glutes do zero work sitting all day — 45 seconds of Chair Pose reminds them they exist.", phase: 0, draw: "chair_pose" },
+  // WARRIOR FLOW
+  { name: "Warrior I", duration: 50, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right foot at 45°. Hips square forward. Arms up, shoulders down. Deep hip flexor stretch in the back leg — the opposite of sitting with hips flexed all day.", phase: 1, draw: "warrior1_left" },
+  { name: "Warrior I", duration: 50, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, left foot at 45°. Square the hips as much as possible. Keep the front knee tracking over the second toe. Strong back leg.", phase: 1, draw: "warrior1_right" },
+  { name: "Warrior II", duration: 50, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right foot parallel to the back. Arms wide, gaze over left hand. Open hip stance — the opposite of the closed, hunched desk position. Sink the front thigh toward parallel.", phase: 1, draw: "warrior2_left" },
+  { name: "Warrior II", duration: 50, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, left foot back. Arms wide, gaze forward. Keep the back arm reaching actively — it opens the entire chest and shoulder girdle.", phase: 1, draw: "warrior2_right" },
+  { name: "Reverse Warrior", duration: 40, side: "LEFT SIDE", cue: "From Warrior II, flip the left palm up and reach the arm back and up. Right hand slides down the back leg. Opens the left side of the ribcage and thoracic spine — completely underused at a desk.", phase: 1, draw: "rev_warrior_left" },
+  { name: "Reverse Warrior", duration: 40, side: "RIGHT SIDE", cue: "Flip the right palm, reach up and back. Left hand on back leg. Feel the right side of the torso open completely. Breathe into it.", phase: 1, draw: "rev_warrior_right" },
+  // TRIANGLE & BALANCE
+  { name: "Triangle Pose", duration: 50, side: "LEFT SIDE", cue: "Straight left leg, hinge sideways, reach left hand toward shin or a block. Right arm up, gaze at right thumb. Full lateral stretch — the spine almost never moves sideways at a desk.", phase: 2, draw: "triangle_left" },
+  { name: "Triangle Pose", duration: 50, side: "RIGHT SIDE", cue: "Straight right leg, hinge right, left arm up. Keep both sides of the torso long. Feel the stretch from the right outer foot all the way up through the left fingertips.", phase: 2, draw: "triangle_right" },
+  { name: "Side Angle Pose", duration: 40, side: "LEFT SIDE", cue: "Left knee bent, lean left, left forearm to left thigh. Right arm overhead, creating a long diagonal line. Opens the right oblique and intercostal muscles — the forgotten desk-worker stretch.", phase: 2, draw: "side_angle_left" },
+  { name: "Side Angle Pose", duration: 40, side: "RIGHT SIDE", cue: "Right knee bent, lean right, right forearm to thigh. Left arm overhead. Keep the left hip pressing forward — don't collapse into the bent side.", phase: 2, draw: "side_angle_right" },
+  { name: "Tree Pose", duration: 45, side: "LEFT LEG", cue: "Left foot planted. Right foot to left ankle, calf, or inner thigh (avoid the knee). Hands at chest or overhead. Balance challenges the deep hip stabilisers — dormant from sitting all day.", phase: 2, draw: "tree_left" },
+  { name: "Tree Pose", duration: 45, side: "RIGHT LEG", cue: "Right foot planted. Left foot to right ankle, calf, or thigh. Find a fixed gaze point — it helps balance. The small foot and ankle muscles are reactivating after hours of being still.", phase: 2, draw: "tree_right" },
+  // BACKBEND & FOREARMS
+  { name: "Fish Pose", duration: 45, cue: "Lie on your back, hands under hips palms down. Press elbows into floor and arch the upper back, resting the top of the head lightly on the mat. The strongest passive thoracic opener available — the direct antidote to screen-rounding.", phase: 3, draw: "fish_pose" },
+  { name: "Forearm Flexor Stretch", duration: 30, side: "LEFT ARM", cue: "Left arm forward, palm up. Right hand pulls fingers back toward you. Hold steady — don't bounce. If you type a lot, you'll really feel this one.", phase: 3, draw: "forearm_left" },
+  { name: "Forearm Flexor Stretch", duration: 30, side: "RIGHT ARM", cue: "Right arm forward, palm up. Left hand pulls fingers back gently. The forearm flexors are under continuous load from typing — they deserve the full hold.", phase: 3, draw: "forearm_right" },
+  // REST
+  { name: "Child's Pose", duration: 90, cue: "Knees wide, big toes together, arms extended forward. Forehead down. Full decompression — breathe into the back body and feel it expand on every inhale. After a standing flow, this rest is earned.", phase: 4, draw: "childs_pose" },
+];
+
+let currentIdx=0,timeLeft=0,totalDuration=0,paused=false,tickInterval=null;
+function startSession(){getAudioCtx();ytPlay();document.getElementById('start-screen').style.display='none';document.getElementById('session-screen').style.display='flex';document.getElementById('audio-corner').style.display='flex';currentIdx=0;loadPose(0);clearInterval(tickInterval);startCountdown(0,5,'Get Ready');}
+function loadPose(idx){clearInterval(tickInterval);const pose=POSES[idx],phase=PHASES[pose.phase];const badge=document.getElementById('phase-badge');badge.textContent=phase.name;badge.style.background=phase.color+'22';badge.style.color=phase.color;document.getElementById('progress-text').textContent=`${idx+1} / ${POSES.length}`;const pct=(idx/POSES.length)*100;const fill=document.getElementById('progress-fill');fill.style.width=pct+'%';fill.style.background=phase.color;const imgSrc=IMAGES[pose.draw],imgEl=document.getElementById('pose-img'),missingEl=document.getElementById('pose-img-missing');if(imgSrc){const t=new Image();t.onload=()=>{imgEl.src=imgSrc;imgEl.style.display='block';missingEl.style.display='none';};t.onerror=()=>{imgEl.style.display='none';missingEl.style.display='flex';};t.src=imgSrc;}else{imgEl.style.display='none';missingEl.style.display='flex';}document.getElementById('pose-name').textContent=pose.name;document.getElementById('pose-side').textContent=pose.side||'';document.getElementById('pose-cue').textContent=pose.cue;announcePose(pose);timeLeft=pose.duration;totalDuration=pose.duration;paused=false;document.getElementById('btn-pause').textContent='⏸';updateTimerDisplay();startTick();}
+function updateTimerDisplay(){document.getElementById('timer-num').textContent=timeLeft;const offset=295.3*(1-timeLeft/totalDuration);const ring=document.getElementById('timer-ring');ring.style.strokeDashoffset=offset;ring.style.stroke=PHASES[POSES[currentIdx].phase].color;}
+function startTick(){tickInterval=setInterval(()=>{if(!paused){timeLeft--;updateTimerDisplay();if(timeLeft<=0){clearInterval(tickInterval);playGong();if(navigator.vibrate)navigator.vibrate([200,100,200]);setTimeout(()=>{currentIdx<POSES.length-1?startCountdown(currentIdx+1):showDone();},600);}}},1000);}
+function startCountdown(nextIdx,initialCount=3,label='Next Up'){const overlay=document.getElementById('countdown-overlay');const next=POSES[nextIdx];document.getElementById('cd-name').textContent=next.name;document.getElementById('cd-side').textContent=next.side||'';const labelEl=document.querySelector('#countdown-overlay .cdlabel');if(labelEl)labelEl.textContent=label;let count=initialCount;document.getElementById('cd-num').textContent=count;overlay.style.display='flex';const cd=setInterval(()=>{count--;if(count<=0){clearInterval(cd);overlay.style.display='none';if(labelEl)labelEl.textContent='Next Up';currentIdx=nextIdx;loadPose(currentIdx);}else{document.getElementById('cd-num').textContent=count;}},1000);}
+function togglePause(){paused=!paused;document.getElementById('btn-pause').textContent=paused?'▶':'⏸';if(paused)ytPause();else ytPlay();}
+function nextPose(){if(currentIdx<POSES.length-1){currentIdx++;loadPose(currentIdx);}else{showDone();}}
+function prevPose(){if(currentIdx>0){currentIdx--;loadPose(currentIdx);}}
+function exitSession(){clearInterval(tickInterval);ytPause();document.getElementById('session-screen').style.display='none';document.getElementById('start-screen').style.display='flex';}
+function showDone(){clearInterval(tickInterval);ytPause();document.getElementById('session-screen').style.display='none';document.getElementById('done-screen').style.display='flex';}
+function restart(){document.getElementById('done-screen').style.display='none';document.getElementById('start-screen').style.display='flex';}
+let audioCtx=null;
+function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+function playGong(){if(gongMuted)return;try{const ctx=getAudioCtx();if(ctx.state==='suspended')ctx.resume();const now=ctx.currentTime,vol=Math.max(0.0001,gongVolState);[[90,0.55*vol],[180,0.28*vol],[270,0.14*vol],[360,0.08*vol],[540,0.04*vol]].forEach(([freq,gain])=>{const osc=ctx.createOscillator(),g=ctx.createGain();osc.connect(g);g.connect(ctx.destination);osc.type='sine';osc.frequency.value=freq;g.gain.setValueAtTime(0,now);g.gain.linearRampToValueAtTime(gain,now+0.01);g.gain.exponentialRampToValueAtTime(0.0001,now+3.0);osc.start(now);osc.stop(now+3.0);});}catch(e){}}
+function announcePose(pose){if(!('speechSynthesis' in window)||voiceMuted)return;speechSynthesis.cancel();const text=pose.side?`${pose.name}. ${pose.side.toLowerCase()}`:pose.name;const utter=new SpeechSynthesisUtterance(text);utter.lang='en-GB';utter.rate=0.88;utter.pitch=1.1;utter.volume=voiceVolState;const FEMALE=['Samantha','Karen','Victoria','Moira','Fiona','Tessa','Zira','Hazel','Susan','Catherine','Emily','Serena','female','woman'];const trySpeak=()=>{const v=speechSynthesis.getVoices();const fv=v.find(x=>FEMALE.some(n=>x.name.toLowerCase().includes(n.toLowerCase())))||v.find(x=>x.lang.startsWith('en'));if(fv)utter.voice=fv;speechSynthesis.speak(utter);};if(speechSynthesis.getVoices().length){trySpeak();}else{speechSynthesis.onvoiceschanged=trySpeak;}}
+const bgMusic=document.getElementById('bg-music');
+function ytPlay(){bgMusic.volume=musicVolState/100;bgMusic.muted=musicMuted;bgMusic.play().catch(()=>{});}
+function ytPause(){bgMusic.pause();}
+let musicVolState=35,musicMuted=false,gongVolState=1.0,gongMuted=false,voiceVolState=0.55,voiceMuted=false;
+function setMusicVol(v){musicVolState=parseInt(v);bgMusic.volume=musicVolState/100;bgMusic.muted=false;musicMuted=false;updateMuteBtn('music-mute',false);}
+function toggleMusicMute(){musicMuted=!musicMuted;bgMusic.muted=musicMuted;updateMuteBtn('music-mute',musicMuted);}
+function setGongVol(v){gongVolState=parseInt(v)/100;}
+function toggleGongMute(){gongMuted=!gongMuted;updateMuteBtn('gong-mute',gongMuted);}
+function setVoiceVol(v){voiceVolState=parseInt(v)/100;}
+function toggleVoiceMute(){voiceMuted=!voiceMuted;updateMuteBtn('voice-mute',voiceMuted);}
+function updateMuteBtn(id,muted){const btn=document.getElementById(id);if(!btn)return;btn.textContent=muted?'🔇':'🔊';btn.classList.toggle('muted',muted);}
+let allMuted=false;
+function toggleMuteAll(){allMuted=!allMuted;musicMuted=allMuted;bgMusic.muted=musicMuted;updateMuteBtn('music-mute',musicMuted);gongMuted=allMuted;updateMuteBtn('gong-mute',gongMuted);voiceMuted=allMuted;updateMuteBtn('voice-mute',voiceMuted);if(allMuted)speechSynthesis.cancel();const btn=document.getElementById('mute-all-btn');if(btn)btn.textContent=allMuted?'UNMUTE':'MUTE ALL';}
+document.getElementById('start-screen').addEventListener('click',function unlockAudio(){bgMusic.load();const ctx=getAudioCtx();if(ctx.state==='suspended')ctx.resume().catch(()=>{});document.getElementById('start-screen').removeEventListener('click',unlockAudio);},{once:true});
+try{if('wakeLock' in navigator)navigator.wakeLock.request('screen').catch(()=>{});}catch(e){}
+</script>
+</body>
+</html>
