@@ -71,12 +71,12 @@
 <div id="start-screen">
   <div style="font-size:36px;margin-bottom:8px;">🦴</div>
   <h1>Desk Worker A</h1>
-  <p class="subtitle">Spine &amp; Floor — Thoracic · Lower Back · Core · Glutes</p>
+  <p class="subtitle">Spine &amp; Floor — Thoracic · Lower Back · Core · Glutes · Neck</p>
   <div class="phase-list">
-    <div class="phase-item"><div class="phase-dot" style="background:#80cbc4"></div><span class="phase-label">Floor Warm-Up</span><span class="phase-dur">4 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#80cbc4"></div><span class="phase-label">Floor Warm-Up</span><span class="phase-dur">2 min</span></div>
     <div class="phase-item"><div class="phase-dot" style="background:#f06292"></div><span class="phase-label">Prone Spine</span><span class="phase-dur">3 min</span></div>
     <div class="phase-item"><div class="phase-dot" style="background:#ffb74d"></div><span class="phase-label">Core &amp; Glutes</span><span class="phase-dur">2 min</span></div>
-    <div class="phase-item"><div class="phase-dot" style="background:#81c784"></div><span class="phase-label">Supine Recovery</span><span class="phase-dur">4 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#81c784"></div><span class="phase-label">Supine Recovery</span><span class="phase-dur">3 min</span></div>
     <div class="phase-item" style="border:none"><div class="phase-dot" style="background:#ba68c8"></div><span class="phase-label">Wind Down</span><span class="phase-dur">3 min</span></div>
   </div>
   <div style="width:100%;max-width:320px;display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;border-top:1px solid #1a1a28;margin-top:4px;">
@@ -89,7 +89,7 @@
 <div id="session-screen">
   <div class="top-bar">
     <span class="phase-badge" id="phase-badge">Floor Warm-Up</span>
-    <span class="progress-text" id="progress-text">1 / 15</span>
+    <span class="progress-text" id="progress-text">1 / 18</span>
     <button class="btn-exit" onclick="exitSession()">✕ Exit</button>
   </div>
   <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
@@ -109,7 +109,7 @@
           <circle class="timer-bg" cx="55" cy="55" r="47"/>
           <circle class="timer-fill" id="timer-ring" cx="55" cy="55" r="47" stroke="#7c5cfc" stroke-dasharray="295.3" stroke-dashoffset="0"/>
         </svg>
-        <div class="timer-num" id="timer-num">60</div>
+        <div class="timer-num" id="timer-num">45</div>
         <div class="timer-label">secs</div>
       </div>
       <div class="controls">
@@ -138,7 +138,7 @@
 <div id="done-screen">
   <div style="font-size:64px;margin-bottom:20px;">✅</div>
   <h2>Session Complete</h2>
-  <p>Thoracic spine mobile. Posterior chain reactivated. Lumbar decompressed. Do this on any day — morning, lunch break, or before bed.</p>
+  <p>Thoracic spine mobile. Posterior chain reactivated. Lumbar decompressed. Neck and traps released. Do this on any day — morning, lunch break, or before bed.</p>
   <button class="btn-restart" onclick="restart()">Start Again</button>
 </div>
 
@@ -152,44 +152,50 @@ const PHASES = [
 ];
 
 const IMAGES = {
-  catcow:       "yoga_images/catcow.webp",
-  thread_left:  "yoga_images/thread_left.png",
-  thread_right: "yoga_images/thread_right.jpeg",
-  sphinx:       "yoga_images/sphinx.jpeg",
-  locust:       "yoga_images/locust.avif",
-  updog:        "yoga_images/updog.webp",
-  plank:        "yoga_images/plank.jpg",
-  bridge:       "yoga_images/bridge.avif",
+  catcow:         "yoga_images/catcow.webp",
+  thread_left:    "yoga_images/thread_left.png",
+  thread_right:   "yoga_images/thread_right.jpeg",
+  sphinx:         "yoga_images/sphinx.jpeg",
+  locust:         "yoga_images/locust.avif",
+  updog:          "yoga_images/updog.webp",
+  childs_pose:    "yoga_images/childs_pose.jpg",
+  plank:          "yoga_images/plank.jpg",
+  bridge:         "yoga_images/bridge.avif",
   knees_to_chest: "yoga_images/knees_to_chest.jpg",
-  twist_right:  "yoga_images/twist_right.jpg",
-  twist_left:   "yoga_images/twist_left.jpg",
-  happy_baby:   "yoga_images/happy_baby.avif",
-  chin_tucks:   "yoga_images/physio-chin-tucks.jpg",
+  twist_right:    "yoga_images/twist_right.jpg",
+  twist_left:     "yoga_images/twist_left.jpg",
+  happy_baby:     "yoga_images/happy_baby.avif",
+  chin_tucks:     "yoga_images/physio-chin-tucks.jpg",
   neck_extension: "yoga_images/neck_extenstion.jpg",
-  savasana:     "yoga_images/savasana.jpg",
+  neck_left:      "yoga_images/side-neck-stretch.webp",
+  neck_right:     "yoga_images/neck_stretche_right.webp",
+  savasana:       "yoga_images/savasana.jpg",
 };
 
 const POSES = [
   // FLOOR WARM-UP
-  { name: "Cat-Cow", duration: 90, cue: "Hands under shoulders, knees under hips. Inhale: arch back, drop belly, lift head. Exhale: round spine, tuck chin. Do ×10 slow — warms every lumbar disc before you ask anything of them.", phase: 0, draw: "catcow" },
-  { name: "Thread the Needle", duration: 60, side: "LEFT SIDE", cue: "From all-fours, slide left arm under right arm along the floor. Rest temple down. Breathe into the right shoulder blade — thoracic rotation is the first thing desk work locks out.", phase: 0, draw: "thread_left" },
-  { name: "Thread the Needle", duration: 60, side: "RIGHT SIDE", cue: "Switch sides. Slide right arm under left. Stack hips level. Each exhale lets you rotate a fraction further into the mid-back.", phase: 0, draw: "thread_right" },
+  { name: "Cat-Cow", duration: 45, cue: "Hands under shoulders, knees under hips. Inhale: arch back, drop belly, lift head. Exhale: round spine, tuck chin. Do ×8 slow — warms every lumbar disc before you ask anything of them.", phase: 0, draw: "catcow" },
+  { name: "Thread the Needle", duration: 45, side: "LEFT SIDE", cue: "From all-fours, slide left arm under right arm along the floor. Rest temple down. Breathe into the right shoulder blade — thoracic rotation is the first thing desk work locks out.", phase: 0, draw: "thread_left" },
+  { name: "Thread the Needle", duration: 45, side: "RIGHT SIDE", cue: "Switch sides. Slide right arm under left. Stack hips level. Each exhale lets you rotate a fraction further into the mid-back.", phase: 0, draw: "thread_right" },
   // PRONE SPINE
-  { name: "Sphinx Pose", duration: 75, cue: "Lie face down. Forearms on mat, elbows under shoulders. Press down and lift the chest — passive backbend, no effort from the lower back. Directly reverses the mid-back rounding from hours at a screen.", phase: 1, draw: "sphinx" },
-  { name: "Locust Pose", duration: 45, cue: "Arms alongside body, palms down. On each inhale, lift chest, arms and legs simultaneously. Hold 3 seconds, lower, rest. Repeat ×5. The posterior chain completely disengages from sitting — this reactivates it.", phase: 1, draw: "locust" },
+  { name: "Sphinx Pose", duration: 45, cue: "Lie face down. Forearms on mat, elbows under shoulders. Press down and lift the chest — passive backbend, no effort from the lower back. Directly reverses mid-back rounding from hours at a screen.", phase: 1, draw: "sphinx" },
+  { name: "Locust Pose", duration: 45, cue: "Arms alongside body, palms down. Inhale and lift chest, arms and legs simultaneously. Hold 3 seconds, lower. Repeat ×4. The posterior chain completely disengages from sitting — this reactivates it.", phase: 1, draw: "locust" },
   { name: "Upward Dog", duration: 45, cue: "Press palms into floor, straighten arms, lift chest and thighs off mat. Shoulders roll back and down. Active thoracic extension — the strongest counter-movement to a desk-rounded upper back.", phase: 1, draw: "updog" },
+  { name: "Child's Pose", duration: 45, cue: "Knees wide, big toes together, arms extended forward. Forehead down. Full decompression of the lumbar and sacrum — breathe into the back body and feel it expand with every inhale.", phase: 1, draw: "childs_pose" },
   // CORE & GLUTES
   { name: "Plank Hold", duration: 45, cue: "Hands under shoulders, body in one line from heels to skull. Engage your core and squeeze your glutes. Sitting all day switches off both — this switches them back on. Keep breathing.", phase: 2, draw: "plank" },
-  { name: "Bridge Pose", duration: 75, cue: "Feet hip-width, knees bent. Press feet into floor and drive hips up. Squeeze glutes hard — hold 10 seconds, lower slowly, pause, repeat ×4. Glute amnesia is one of the biggest consequences of desk work. This is the direct fix.", phase: 2, draw: "bridge" },
+  { name: "Bridge Pose", duration: 45, cue: "Feet hip-width, knees bent. Press feet into floor and drive hips up. Squeeze glutes hard — hold 8 seconds, lower slowly, pause, repeat ×3. Glute amnesia is one of the biggest consequences of desk work. This is the direct fix.", phase: 2, draw: "bridge" },
   // SUPINE RECOVERY
   { name: "Knees to Chest", duration: 45, cue: "Lie on back. Hug both knees to chest. Rock gently side to side. Releases the compression built up in the lumbar discs from hours in a chair.", phase: 3, draw: "knees_to_chest" },
-  { name: "Supine Twist", duration: 60, side: "LEFT KNEE DOWN", cue: "Right knee to chest, cross it left. Right arm out, gaze right. Don't force the twist — let gravity take it. Feel this unwind the lumbar, not just the lower back.", phase: 3, draw: "twist_right" },
-  { name: "Supine Twist", duration: 60, side: "RIGHT KNEE DOWN", cue: "Left knee crosses right. Left arm out. Each exhale lets you sink a fraction deeper. Complete spinal rotation you won't get from any chair stretch.", phase: 3, draw: "twist_left" },
-  { name: "Happy Baby", duration: 60, cue: "On your back. Knees wide, grab outer feet. Ankles over knees. Rock side to side. Releases the sacroiliac joint and inner groin — both compressed from sitting all day.", phase: 3, draw: "happy_baby" },
+  { name: "Supine Twist", duration: 45, side: "LEFT KNEE DOWN", cue: "Right knee to chest, cross it left. Right arm out, gaze right. Don't force the twist — let gravity take it. Feel this unwind the lumbar, not just the lower back.", phase: 3, draw: "twist_right" },
+  { name: "Supine Twist", duration: 45, side: "RIGHT KNEE DOWN", cue: "Left knee crosses right. Left arm out. Each exhale lets you sink a fraction deeper. Complete spinal rotation you won't get from any chair stretch.", phase: 3, draw: "twist_left" },
+  { name: "Happy Baby", duration: 45, cue: "On your back. Knees wide, grab outer feet. Ankles over knees. Rock side to side. Releases the sacroiliac joint and inner groin — both compressed from sitting all day.", phase: 3, draw: "happy_baby" },
   // WIND DOWN
   { name: "Chin Tucks", duration: 35, cue: "Sitting or lying tall, draw chin straight back (double chin). Hold 3 seconds, release. Repeat ×8. Directly reverses forward head posture from screen time.", phase: 4, draw: "chin_tucks" },
   { name: "Neck Extension", duration: 35, cue: "Tuck chin, then slowly lift face toward the ceiling. Return to neutral. Repeat ×8. Desk work locks the neck in forward flexion — this is how you get the backward range back.", phase: 4, draw: "neck_extension" },
-  { name: "Savasana", duration: 90, cue: "Lie flat. Legs loose, arms at 45°, palms up. Eyes closed. Don't move. Let everything you just opened settle and integrate. The mat is doing the work now.", phase: 4, draw: "savasana" },
+  { name: "Neck Stretch", duration: 35, side: "LEFT SIDE", cue: "Drop left ear toward left shoulder. Right shoulder stays relaxed — don't shrug. The upper trap is chronically overloaded by screen work. Give it the full hold.", phase: 4, draw: "neck_left" },
+  { name: "Neck Stretch", duration: 35, side: "RIGHT SIDE", cue: "Drop right ear to right shoulder. Breathe into the left side of the neck. Feel the stretch travel all the way down to the trap.", phase: 4, draw: "neck_right" },
+  { name: "Savasana", duration: 45, cue: "Lie flat. Legs loose, arms at 45°, palms up. Eyes closed. Don't move. Let everything you just opened settle and integrate. The mat is doing the work now.", phase: 4, draw: "savasana" },
 ];
 
 let currentIdx = 0, timeLeft = 0, totalDuration = 0, paused = false, tickInterval = null;

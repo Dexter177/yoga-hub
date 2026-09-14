@@ -73,11 +73,11 @@
   <h1>Desk Worker B</h1>
   <p class="subtitle">Hips &amp; Legs — Hip Flexors · Hamstrings · Glutes · Calves</p>
   <div class="phase-list">
-    <div class="phase-item"><div class="phase-dot" style="background:#80cbc4"></div><span class="phase-label">Standing Warm-Up</span><span class="phase-dur">4 min</span></div>
-    <div class="phase-item"><div class="phase-dot" style="background:#f06292"></div><span class="phase-label">Hip Flexors</span><span class="phase-dur">2 min</span></div>
-    <div class="phase-item"><div class="phase-dot" style="background:#ffb74d"></div><span class="phase-label">Deep Hips</span><span class="phase-dur">4 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#80cbc4"></div><span class="phase-label">Standing Warm-Up</span><span class="phase-dur">3 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#f06292"></div><span class="phase-label">Hip Flexors</span><span class="phase-dur">3 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#ffb74d"></div><span class="phase-label">Deep Hips</span><span class="phase-dur">3 min</span></div>
     <div class="phase-item"><div class="phase-dot" style="background:#81c784"></div><span class="phase-label">Legs &amp; Calves</span><span class="phase-dur">2 min</span></div>
-    <div class="phase-item" style="border:none"><div class="phase-dot" style="background:#ba68c8"></div><span class="phase-label">Desk Recovery</span><span class="phase-dur">4 min</span></div>
+    <div class="phase-item" style="border:none"><div class="phase-dot" style="background:#ba68c8"></div><span class="phase-label">Desk Recovery</span><span class="phase-dur">3 min</span></div>
   </div>
   <div style="width:100%;max-width:320px;display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;border-top:1px solid #1a1a28;margin-top:4px;">
     <span style="font-size:13px;color:#555;">Total</span>
@@ -89,7 +89,7 @@
 <div id="session-screen">
   <div class="top-bar">
     <span class="phase-badge" id="phase-badge">Standing Warm-Up</span>
-    <span class="progress-text" id="progress-text">1 / 17</span>
+    <span class="progress-text" id="progress-text">1 / 20</span>
     <button class="btn-exit" onclick="exitSession()">✕ Exit</button>
   </div>
   <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
@@ -109,7 +109,7 @@
           <circle class="timer-bg" cx="55" cy="55" r="47"/>
           <circle class="timer-fill" id="timer-ring" cx="55" cy="55" r="47" stroke="#7c5cfc" stroke-dasharray="295.3" stroke-dashoffset="0"/>
         </svg>
-        <div class="timer-num" id="timer-num">60</div>
+        <div class="timer-num" id="timer-num">45</div>
         <div class="timer-label">secs</div>
       </div>
       <div class="controls">
@@ -138,7 +138,7 @@
 <div id="done-screen">
   <div style="font-size:64px;margin-bottom:20px;">✅</div>
   <h2>Session Complete</h2>
-  <p>Hip flexors lengthened. Piriformis released. Hamstrings open. Circulation restored. Legs up the wall is non-negotiable — do this one every day.</p>
+  <p>Hip flexors lengthened. Piriformis released. Hamstrings open. Circulation restored. Do this one every day.</p>
   <button class="btn-restart" onclick="restart()">Start Again</button>
 </div>
 
@@ -152,48 +152,54 @@ const PHASES = [
 ];
 
 const IMAGES = {
-  downdog:          "yoga_images/downdog.jpeg",
-  half_lift:        "yoga_images/half_lift.webp",
-  forward_fold:     "yoga_images/forward_fold.webp",
-  wide_legged_fold: "yoga_images/wide_legged_fold.jpeg",
-  low_lunge_left:   "yoga_images/low_lunge_left.webp",
-  low_lunge_right:  "yoga_images/low_lunge_right.webp",
-  pigeon_left:      "yoga_images/pigeon_left.jpg",
-  pigeon_right:     "yoga_images/pigeon_right.gif",
-  garland_squat:    "yoga_images/garland_squat.jpg",
-  quad_left:        "yoga_images/standing_quad_left.jpg",
-  quad_right:       "yoga_images/standing_quad_right.jpg",
-  calf_left:        "yoga_images/calf_stretch_left.avif",
-  calf_right:       "yoga_images/calf_stretch_right.avif",
-  neck_left:        "yoga_images/side-neck-stretch.webp",
-  neck_right:       "yoga_images/neck_stretche_right.webp",
-  wrist_circles:    "yoga_images/Wrist-Circles-Stretch.gif",
-  legs_up_wall:     "yoga_images/legs_up_wall.avif",
+  downdog:              "yoga_images/downdog.jpeg",
+  half_lift:            "yoga_images/half_lift.webp",
+  forward_fold:         "yoga_images/forward_fold.webp",
+  wide_legged_fold:     "yoga_images/wide_legged_fold.jpeg",
+  low_lunge_left:       "yoga_images/low_lunge_left.webp",
+  low_lunge_right:      "yoga_images/low_lunge_right.webp",
+  lizard_left:          "yoga_images/lizard_left.jpg",
+  lizard_right:         "yoga_images/lizard_right.jpg",
+  pigeon_left:          "yoga_images/pigeon_left.jpg",
+  pigeon_right:         "yoga_images/pigeon_right.gif",
+  garland_squat:        "yoga_images/garland_squat.jpg",
+  frog_pose:            "yoga_images/frog_pose.jpg",
+  quad_left:            "yoga_images/standing_quad_left.jpg",
+  quad_right:           "yoga_images/standing_quad_right.jpg",
+  calf_left:            "yoga_images/calf_stretch_left.avif",
+  calf_right:           "yoga_images/calf_stretch_right.avif",
+  wrist_circles:        "yoga_images/Wrist-Circles-Stretch.gif",
+  supine_figure4_left:  "yoga_images/supine_figure4_left.jpg",
+  supine_figure4_right: "yoga_images/supine_figure4_right.jpg",
+  legs_up_wall:         "yoga_images/legs_up_wall.avif",
 };
 
 const POSES = [
   // STANDING WARM-UP
-  { name: "Downward Dog", duration: 60, cue: "Hips high, heels toward floor. Pedal feet slowly. Head fully hangs — neck free. Decompresses the shoulder joint and wakes up the hamstrings before they have to work. Stay for 5 long breaths.", phase: 0, draw: "downdog" },
+  { name: "Downward Dog", duration: 45, cue: "Hips high, heels toward floor. Pedal feet slowly. Head fully hangs — neck free. Decompresses the shoulder joint and wakes up the hamstrings before they have to work.", phase: 0, draw: "downdog" },
   { name: "Half Lift", duration: 45, cue: "From forward fold, press fingertips to shins or floor. Lengthen the spine forward — flat back, hips over heels. Feel the hamstrings engage and the lower back decompress before you fold deeper.", phase: 0, draw: "half_lift" },
-  { name: "Standing Forward Fold", duration: 60, cue: "Feet hip-width. Hinge from hips, fold forward. Bend knees as needed. Let head and neck hang completely — decompress the spine with gravity. Full posterior chain from calves to skull.", phase: 0, draw: "forward_fold" },
-  { name: "Wide-Legged Forward Fold", duration: 60, cue: "Step feet wide, toes forward. Hinge and fold, hands to floor. The adductors and inner hamstrings are almost never stretched at a desk — hold and breathe, let gravity do the work.", phase: 0, draw: "wide_legged_fold" },
+  { name: "Standing Forward Fold", duration: 45, cue: "Feet hip-width. Hinge from hips, fold forward. Bend knees as needed. Let head and neck hang completely — decompress the spine with gravity. Full posterior chain from calves to skull.", phase: 0, draw: "forward_fold" },
+  { name: "Wide-Legged Forward Fold", duration: 45, cue: "Step feet wide, toes forward. Hinge and fold, hands to floor. The adductors and inner hamstrings are almost never stretched at a desk — hold and breathe, let gravity do the work.", phase: 0, draw: "wide_legged_fold" },
   // HIP FLEXORS
-  { name: "Low Lunge", duration: 60, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right knee down. Arms overhead, hips square. Sink forward — your hip flexors are shortened all day sitting. Let them actually lengthen.", phase: 1, draw: "low_lunge_left" },
-  { name: "Low Lunge", duration: 60, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, left knee down. Arms up. Square hips forward. Don't rush — the right hip flexor needs as much time as the left.", phase: 1, draw: "low_lunge_right" },
+  { name: "Low Lunge", duration: 45, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right knee down. Arms overhead, hips square. Sink forward — your hip flexors are shortened all day sitting. Let them actually lengthen.", phase: 1, draw: "low_lunge_left" },
+  { name: "Low Lunge", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, left knee down. Arms up. Square hips forward. Don't rush — the right hip flexor needs as much time as the left.", phase: 1, draw: "low_lunge_right" },
+  { name: "Lizard Pose", duration: 45, side: "LEFT FOOT FORWARD", cue: "From Low Lunge, bring left foot outside left hand and lower onto forearms if available. The psoas and hip capsule open in a completely different plane than Low Lunge. If you only do one hip flexor stretch, make it this one.", phase: 1, draw: "lizard_left" },
+  { name: "Lizard Pose", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot outside right hand, forearms down. Hips drop toward the floor. The deeper you go, the more the inner groin releases alongside the hip flexor — a dual stretch that Low Lunge can't quite match.", phase: 1, draw: "lizard_right" },
   // DEEP HIPS
-  { name: "Pigeon Pose", duration: 90, side: "LEFT LEG FORWARD", cue: "Slide left shin across the mat. Ease hips down. Walk hands forward. Breathe into the outer left hip. Glute medius and piriformis — both seized from sitting. Don't rush.", phase: 2, draw: "pigeon_left" },
-  { name: "Pigeon Pose", duration: 90, side: "RIGHT LEG FORWARD", cue: "Slide right shin across. Ease hips to floor. Chest down. Stay and breathe — the outer right hip needs the full hold to release.", phase: 2, draw: "pigeon_right" },
-  { name: "Garland Squat", duration: 60, cue: "Feet wider than hips, toes out. Lower into a deep squat, hands in prayer at chest. This is the deepest hip flexor stretch available — the position humans sat in before chairs existed.", phase: 2, draw: "garland_squat" },
+  { name: "Pigeon Pose", duration: 45, side: "LEFT LEG FORWARD", cue: "Slide left shin across the mat. Ease hips down. Walk hands forward. Breathe into the outer left hip. Glute medius and piriformis — both seized from sitting.", phase: 2, draw: "pigeon_left" },
+  { name: "Pigeon Pose", duration: 45, side: "RIGHT LEG FORWARD", cue: "Slide right shin across. Ease hips to floor. Chest down. Stay and breathe — the outer right hip needs the full hold to release.", phase: 2, draw: "pigeon_right" },
+  { name: "Garland Squat", duration: 45, cue: "Feet wider than hips, toes out. Lower into a deep squat, hands in prayer at chest. This is the deepest hip flexor stretch available — the position humans sat in before chairs existed.", phase: 2, draw: "garland_squat" },
+  { name: "Frog Pose", duration: 45, cue: "From hands and knees, spread knees wide and turn feet out so inner feet rest on the mat. Lower onto forearms. Hips sink back and down. The adductors and inner groin are completely missed by any standing work — this is how you find them.", phase: 2, draw: "frog_pose" },
   // LEGS & CALVES
   { name: "Standing Quad Stretch", duration: 30, side: "LEFT LEG", cue: "Stand on right foot, left heel to glute. Hold ankle, knees together, hips forward. The quad shortens from sitting bent all day — give it back its full length.", phase: 3, draw: "quad_left" },
   { name: "Standing Quad Stretch", duration: 30, side: "RIGHT LEG", cue: "Switch. Right heel to glute, knees level. Fingertips on a wall if needed. Feel the full stretch through the front of the thigh.", phase: 3, draw: "quad_right" },
   { name: "Calf Stretch", duration: 30, side: "LEFT LEG", cue: "Left foot steps back, heel flat on floor. Lean forward. Calves tighten when the foot stays planted under a desk all day — give them the stretch.", phase: 3, draw: "calf_left" },
   { name: "Calf Stretch", duration: 30, side: "RIGHT LEG", cue: "Right foot back, heel flat. Slightly bend the back knee to hit the deeper soleus muscle underneath the calf.", phase: 3, draw: "calf_right" },
   // DESK RECOVERY
-  { name: "Neck Stretch", duration: 35, side: "LEFT SIDE", cue: "Drop left ear toward left shoulder. Right shoulder relaxed — don't shrug. The upper trap is chronically overloaded by screen work. Give it the full hold.", phase: 4, draw: "neck_left" },
-  { name: "Neck Stretch", duration: 35, side: "RIGHT SIDE", cue: "Drop right ear to right shoulder. Breathe into the left side of the neck. Feel it travel down to the trap.", phase: 4, draw: "neck_right" },
   { name: "Wrist Circles", duration: 30, cue: "Extend both arms forward. Slow full circles — 5 forward, 5 backward. The wrist joint needs full rotation, not just the typing plane it's stuck in all day.", phase: 4, draw: "wrist_circles" },
-  { name: "Legs Up the Wall", duration: 120, cue: "Hips to a wall, legs straight up. Arms open, palms up. Eyes closed. Blood drains back from feet and ankles — reversing the pooling from sitting all day. Stay completely still.", phase: 4, draw: "legs_up_wall" },
+  { name: "Supine Figure-4", duration: 45, side: "LEFT HIP", cue: "Lie on back. Cross left ankle over right thigh just above the knee. Flex the left foot. Either stay here or draw the right knee toward your chest. Targets the piriformis and external hip rotators — the muscles that lock up from sitting.", phase: 4, draw: "supine_figure4_left" },
+  { name: "Supine Figure-4", duration: 45, side: "RIGHT HIP", cue: "Cross right ankle over left thigh, flex right foot. Draw the left knee in. This is the lying version of Pigeon — accessible to everyone and often more effective because the pelvis stays level.", phase: 4, draw: "supine_figure4_right" },
+  { name: "Legs Up the Wall", duration: 45, cue: "Hips to a wall, legs straight up. Arms open, palms up. Eyes closed. Blood drains back from feet and ankles — reversing the pooling from sitting all day. Stay completely still.", phase: 4, draw: "legs_up_wall" },
 ];
 
 let currentIdx=0,timeLeft=0,totalDuration=0,paused=false,tickInterval=null;
