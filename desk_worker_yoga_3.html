@@ -77,7 +77,7 @@
     <div class="phase-item"><div class="phase-dot" style="background:#f06292"></div><span class="phase-label">Seated Hamstrings</span><span class="phase-dur">2 min</span></div>
     <div class="phase-item"><div class="phase-dot" style="background:#ffb74d"></div><span class="phase-label">Core &amp; Kneeling</span><span class="phase-dur">3 min</span></div>
     <div class="phase-item"><div class="phase-dot" style="background:#81c784"></div><span class="phase-label">Upper Body</span><span class="phase-dur">4 min</span></div>
-    <div class="phase-item" style="border:none"><div class="phase-dot" style="background:#ba68c8"></div><span class="phase-label">Supine Rest</span><span class="phase-dur">4 min</span></div>
+    <div class="phase-item" style="border:none"><div class="phase-dot" style="background:#ba68c8"></div><span class="phase-label">Supine Rest</span><span class="phase-dur">5 min</span></div>
   </div>
   <div style="width:100%;max-width:320px;display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;border-top:1px solid #1a1a28;margin-top:4px;">
     <span style="font-size:13px;color:#555;">Total</span>
@@ -89,7 +89,7 @@
 <div id="session-screen">
   <div class="top-bar">
     <span class="phase-badge" id="phase-badge">Seated Groin</span>
-    <span class="progress-text" id="progress-text">1 / 20</span>
+    <span class="progress-text" id="progress-text">1 / 21</span>
     <button class="btn-exit" onclick="exitSession()">✕ Exit</button>
   </div>
   <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
@@ -167,11 +167,12 @@ const IMAGES = {
   shoulder_circles:   "yoga_images/shoulder-circles.webp",
   reverse_prayer:     "yoga_images/Reverse-prayer-pose-jpg.webp",
   reclined_butterfly:   "yoga_images/reclined_butterfly.jpg",
-  supine_thoracic:      "yoga_images/supine_thoracic.jpg",
+  supine_thoracic:      "yoga_images/supine_thoracic.webp",
   banana_left:          "yoga_images/banana_left.jpg",
   banana_right:         "yoga_images/banana_right.jpg",
   windshield_wipers:    "yoga_images/windshield_wipers.jpg",
-  supine_chest_stretch: "yoga_images/supine_chest_stretch.jpg",
+  reclined_hand_to_toe_left:  "yoga_images/reclined_hand_to_toe_left.webp",
+  reclined_hand_to_toe_right: "yoga_images/reclined_hand_to_toe_right.jpg",
 };
 
 const POSES = [
@@ -199,7 +200,8 @@ const POSES = [
   { name: "Banana Pose", duration: 45, side: "LEFT SIDE", cue: "Lie flat. Shift both legs to the right and both arms overhead to the right, creating a banana curve. The left side body — lat, oblique, hip — gets a full-length stretch you can't reach in any standing position. Keep both hips on the floor.", phase: 4, draw: "banana_left" },
   { name: "Banana Pose", duration: 45, side: "RIGHT SIDE", cue: "Shift both legs and arms to the left. The right lat and intercostals open. Lateral chain work is almost always skipped by desk workers — this reaches where nothing else does.", phase: 4, draw: "banana_right" },
   { name: "Windshield Wipers", duration: 45, cue: "Lie on back, knees bent, feet hip-width apart. Let both knees fall slowly to one side, return to center, then fall to the other. 8–10 full sweeps. Mobilises the hips and lumbar in rotation without any effort — the perfect passive decompressor.", phase: 4, draw: "windshield_wipers" },
-  { name: "Supine Chest Stretch", duration: 40, cue: "Lie on back, arms out to the sides at shoulder height, palms up. Bend both elbows to 90°. Let the arms sink toward the floor. Gravity opens the pectoral muscles and front of the shoulders — the exact pattern that gets chronically shortened from forward typing posture.", phase: 4, draw: "supine_chest_stretch" },
+  { name: "Reclined Hand-to-Big-Toe", duration: 40, side: "LEFT LEG", cue: "Lie on your back. Extend the left leg up toward the ceiling, holding the big toe, a strap around the foot, or the back of the thigh. Right leg stays flat on the floor. The entire posterior chain — hamstring, calf, back of the knee — opens from the floor up. No bouncing. Steady breath, let gravity do the work.", phase: 4, draw: "reclined_hand_to_toe_left" },
+  { name: "Reclined Hand-to-Big-Toe", duration: 40, side: "RIGHT LEG", cue: "Right leg extends up, left leg flat. Hold wherever comfortable — big toe, strap, or back of the thigh. This is the most effective supine hamstring stretch available because the pelvis stays level on the floor. You'll feel the difference between sides immediately.", phase: 4, draw: "reclined_hand_to_toe_right" },
 ];
 
 let currentIdx=0,timeLeft=0,totalDuration=0,paused=false,tickInterval=null;
