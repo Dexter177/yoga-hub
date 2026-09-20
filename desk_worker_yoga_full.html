@@ -340,7 +340,7 @@ function loadPose(idx) {
   const pose = POSES[idx], phase = PHASES[pose.phase];
   const badge = document.getElementById('phase-badge');
   badge.textContent = phase.name; badge.style.background = phase.color + '22'; badge.style.color = phase.color;
-  document.getElementById('progress-text').textContent = `${idx + 1} / ${POSES.length}`;
+  document.getElementById('progress-text').textContent = `${Math.round((idx + 1) / POSES.length * 100)}% (${idx + 1}/${POSES.length})`;
   const pct = (idx / POSES.length) * 100;
   const fill = document.getElementById('progress-fill');
   fill.style.width = pct + '%'; fill.style.background = phase.color;
