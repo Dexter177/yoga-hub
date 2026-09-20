@@ -25,11 +25,11 @@
   .btn-exit { background: none; border: 1px solid #333; color: #888; border-radius: 8px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
   .progress-wrap { width: calc(100% - 40px); height: 3px; background: #1e1e2a; border-radius: 2px; margin-bottom: 10px; flex-shrink: 0; }
   .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
-  .pose-wrap { width: calc(100% - 40px); max-width: 440px; flex: 1 1 auto; min-height: 60px; max-height: min(42vh, 360px); background: #15151f; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; overflow: hidden; }
+  .pose-wrap { width: calc(100% - 40px); max-width: 440px; flex: 0 0 auto; height: min(38vh, 280px); background: #15151f; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; overflow: hidden; }
   .pose-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 20px; display: block; }
-  .pose-name { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; padding: 0 20px; flex-shrink: 0; }
+  .pose-name { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; padding: 0 20px; flex-shrink: 0; width: calc(100% - 40px); max-width: 440px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pose-side { font-size: 13px; color: #7c5cfc; text-align: center; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.5px; min-height: 18px; flex-shrink: 0; }
-  .pose-cue { font-size: 14px; color: #999; text-align: center; padding: 0 24px; line-height: 1.55; margin-bottom: 14px; max-width: 480px; flex-shrink: 0; display: block; overflow: visible; }
+  .pose-cue { font-size: 14px; color: #999; text-align: center; padding: 0 24px; line-height: 1.55; margin-bottom: 14px; max-width: 480px; flex-shrink: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
   .bottom-row { position: absolute; bottom: 0; left: 0; right: 0; display: flex; align-items: flex-end; justify-content: center; width: 100%; padding: 0 20px 12px; min-height: 120px; }
   .br-main { display: flex; align-items: center; gap: 28px; }
   .timer-ring-wrap { position: relative; width: 110px; height: 110px; }
@@ -144,7 +144,7 @@
   <h2>Session Complete</h2>
   <p>Inner groin opened. Hamstrings freed. Thoracic rotation restored. Shoulders and wrists decompressed. One of the most neglected sessions — and one of the most valuable.</p>
   <button class="btn-restart" onclick="restart()">Start Again</button>
-  <button onclick="window.location.href='index.html'" style="background:none;border:1px solid #333;color:#888;border-radius:14px;padding:13px 40px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:320px;margin-top:10px;">← Return to Hub</button>
+  <button onclick="(window.parent.goBack ? window.parent.goBack() : window.location.href='index.html')" style="background:none;border:1px solid #333;color:#888;border-radius:14px;padding:13px 40px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:320px;margin-top:10px;">← Return to Hub</button>
 </div>
 
 <script>

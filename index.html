@@ -84,10 +84,10 @@ body {
 }
 .mp-toggle {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 16px; cursor: pointer;
+  padding: 11px 16px; cursor: pointer; position: relative;
 }
-.mp-toggle-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #777; }
-#mp-now { color: #a78bfa; font-size: 11px; font-weight: 400; }
+.mp-toggle-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #777; flex: 1; overflow: hidden; white-space: nowrap; }
+#mp-now { color: #a78bfa; font-size: 11px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; }
 .mp-arrow { font-size: 11px; color: #333; transition: transform 0.2s; }
 .mp-arrow.open { transform: rotate(180deg); }
 .mp-body { display: none; padding: 4px 16px 16px; }
@@ -293,7 +293,7 @@ input[type=range] { flex: 1; accent-color: #7c5cfc; cursor: pointer; }
   <div class="mp-toggle" onclick="toggleMusicPanel()">
     <span class="mp-toggle-left">🎵 Music&nbsp;<span id="mp-now"></span></span>
     <button id="btn-mini-pp" onclick="event.stopPropagation();miniTogglePlay()"
-      style="display:none;align-items:center;justify-content:center;background:none;border:1px solid #333;color:#aaa;border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer;flex-shrink:0;line-height:1;">▶</button>
+      style="display:none;align-items:center;justify-content:center;background:none;border:1px solid #333;color:#aaa;border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer;line-height:1;position:absolute;left:50%;transform:translateX(-50%);">▶</button>
     <span class="mp-arrow" id="mp-arrow">▼</span>
   </div>
   <div class="mp-body" id="mp-body">
