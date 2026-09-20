@@ -47,7 +47,10 @@
   #done-screen h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
   #done-screen p { color: #888; font-size: 15px; line-height: 1.6; margin-bottom: 40px; }
   .btn-restart { background: #7c5cfc; color: #fff; border: none; border-radius: 14px; padding: 16px 40px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; max-width: 320px; }
-  #audio-corner { display: none; position: absolute; right: 20px; bottom: 0; background: rgba(10,10,20,0.92); border: 1px solid #2a2a3a; border-radius: 14px; padding: 10px 12px 8px; flex-direction: row; gap: 8px; align-items: flex-end; z-index: 10; }
+  #audio-corner { display: none; position: fixed; right: 20px; bottom: 20px; background: rgba(10,10,20,0.92); border: 1px solid #2a2a3a; border-radius: 14px; padding: 10px 12px 8px; flex-direction: row; gap: 8px; align-items: flex-end; z-index: 10; touch-action: none; }
+  #audio-corner.unlocked { cursor: move; }
+  #audio-lock-btn { background: none; border: none; cursor: pointer; font-size: 13px; color: #555; padding: 0; line-height: 1; writing-mode: vertical-lr; height: 30px; align-self: flex-start; }
+  #audio-lock-btn:hover { color: #aaa; }
   .ch { display: flex; flex-direction: column; align-items: center; gap: 5px; }
   .ch-icon { font-size: 13px; line-height: 1; }
   .ch input[type=range] { writing-mode: vertical-lr; direction: rtl; -webkit-appearance: slider-vertical; width: 20px; height: 68px; accent-color: #7c5cfc; cursor: pointer; }
@@ -124,6 +127,7 @@
       <div class="ch"><span class="ch-icon">🗣️</span><input type="range" id="voice-vol" min="0" max="100" value="55" oninput="setVoiceVol(this.value)"><button class="ch-mute" id="voice-mute" onclick="toggleVoiceMute()">🔊</button></div>
       <div class="ch-divider"></div>
       <button id="mute-all-btn" class="ch-muteall" onclick="toggleMuteAll()">MUTE ALL</button>
+      <button id="audio-lock-btn" onclick="toggleAudioLock()" title="Lock / unlock position">🔒</button>
     </div>
   </div>
 </div>
@@ -235,6 +239,62 @@ let allMuted=false;
 function toggleMuteAll(){allMuted=!allMuted;musicMuted=allMuted;bgMusic.muted=musicMuted;updateMuteBtn('music-mute',musicMuted);gongMuted=allMuted;updateMuteBtn('gong-mute',gongMuted);voiceMuted=allMuted;updateMuteBtn('voice-mute',voiceMuted);if(allMuted)speechSynthesis.cancel();const btn=document.getElementById('mute-all-btn');if(btn)btn.textContent=allMuted?'UNMUTE':'MUTE ALL';}
 document.getElementById('start-screen').addEventListener('click',function unlockAudio(){bgMusic.load();const ctx=getAudioCtx();if(ctx.state==='suspended')ctx.resume().catch(()=>{});document.getElementById('start-screen').removeEventListener('click',unlockAudio);},{once:true});
 try{if('wakeLock' in navigator)navigator.wakeLock.request('screen').catch(()=>{});}catch(e){}
+
+// ── Keyboard navigation ──
+document.addEventListener('keydown', function(e) {
+  var sess = document.getElementById('session-screen');
+  if (!sess || sess.style.display !== 'flex') return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); nextPose(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); prevPose(); }
+  else if (e.key === ' ') { e.preventDefault(); togglePause(); }
+});
+
+// ── Draggable audio panel ──
+(function() {
+  var panel = document.getElementById('audio-corner');
+  var locked = true, dragging = false, ox = 0, oy = 0;
+  try {
+    var sx = localStorage.getItem('audio_x'), sy = localStorage.getItem('audio_y');
+    if (sx && sy) { panel.style.right = 'auto'; panel.style.bottom = 'auto'; panel.style.left = sx; panel.style.top = sy; }
+  } catch(e) {}
+  window.toggleAudioLock = function() {
+    locked = !locked;
+    document.getElementById('audio-lock-btn').textContent = locked ? '🔒' : '🔓';
+    panel.classList.toggle('unlocked', !locked);
+  };
+  panel.addEventListener('mousedown', function(e) {
+    if (locked || e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+    dragging = true;
+    var r = panel.getBoundingClientRect();
+    ox = e.clientX - r.left; oy = e.clientY - r.top;
+    e.preventDefault();
+  });
+  panel.addEventListener('touchstart', function(e) {
+    if (locked) return;
+    dragging = true;
+    var t = e.touches[0], r = panel.getBoundingClientRect();
+    ox = t.clientX - r.left; oy = t.clientY - r.top;
+  }, {passive: true});
+  document.addEventListener('mousemove', function(e) {
+    if (!dragging) return;
+    panel.style.left = (e.clientX - ox) + 'px';
+    panel.style.top = (e.clientY - oy) + 'px';
+    panel.style.right = 'auto'; panel.style.bottom = 'auto';
+  });
+  document.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
+    var t = e.touches[0];
+    panel.style.left = (t.clientX - ox) + 'px';
+    panel.style.top = (t.clientY - oy) + 'px';
+    panel.style.right = 'auto'; panel.style.bottom = 'auto';
+  }, {passive: true});
+  function stopDrag() {
+    if (!dragging) return; dragging = false;
+    try { localStorage.setItem('audio_x', panel.style.left); localStorage.setItem('audio_y', panel.style.top); } catch(e) {}
+  }
+  document.addEventListener('mouseup', stopDrag);
+  document.addEventListener('touchend', stopDrag);
+})();
 </script>
 </body>
 </html>
