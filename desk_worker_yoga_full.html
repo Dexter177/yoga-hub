@@ -85,7 +85,7 @@
     <span style="font-size:13px;color:#555;">Total</span>
     <span style="font-size:15px;font-weight:600;color:#aaa;">~57 min · 79 poses</span>
   </div>
-  <button class="btn-start" onclick="startSession()">Begin Full Session</button>
+  <button class="btn-start" onclick="showAdGate()">Begin Full Session</button>
 </div>
 
 <div id="session-screen">
@@ -505,6 +505,89 @@ document.addEventListener('keydown', function(e) {
   document.addEventListener('mouseup', stopDrag);
   document.addEventListener('touchend', stopDrag);
 })();
+
+// ── Ad Gate ──
+var adTimer = null;
+
+function showAdGate() {
+  var gate = document.getElementById('ad-gate');
+  gate.style.display = 'flex';
+  var secs = 15;
+  document.getElementById('ad-countdown').textContent = secs;
+  var startBtn = document.getElementById('ad-start-btn');
+  var skipBtn  = document.getElementById('ad-skip-btn');
+  startBtn.disabled = true;
+  startBtn.style.opacity = '0.35';
+  startBtn.style.cursor = 'not-allowed';
+  skipBtn.style.display = 'none';
+  skipBtn.textContent = 'Skip →';
+
+  // ══════════════════════════════════════════════════════════════
+  // REPLACE THIS BLOCK with your AdSense Rewarded Ad SDK call.
+  // When the ad finishes / user earns reward → call proceedToSession()
+  // ══════════════════════════════════════════════════════════════
+  clearInterval(adTimer);
+  adTimer = setInterval(function() {
+    secs--;
+    document.getElementById('ad-countdown').textContent = secs > 0 ? secs : '✓';
+    if (secs === 10) { skipBtn.style.display = 'block'; }
+    if (secs <= 0) {
+      clearInterval(adTimer);
+      startBtn.disabled = false;
+      startBtn.style.opacity = '1';
+      startBtn.style.cursor = 'pointer';
+      skipBtn.style.display = 'none';
+    }
+  }, 1000);
+}
+
+function skipAd() { clearInterval(adTimer); proceedToSession(); }
+
+function proceedToSession() {
+  document.getElementById('ad-gate').style.display = 'none';
+  startSession();
+}
 </script>
+
+<!-- ── Ad Gate Overlay ── -->
+<div id="ad-gate" style="display:none;position:fixed;inset:0;background:rgba(8,8,16,0.97);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:28px;gap:0;">
+  <div style="max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;gap:18px;">
+
+    <div style="font-size:11px;color:#444;letter-spacing:2px;text-transform:uppercase;margin-bottom:-4px;">Free · Supported by ads</div>
+    <div style="font-size:20px;font-weight:700;color:#f0f0f0;text-align:center;line-height:1.3;">Watch a short ad to start<br><span style="color:#7c5cfc;">your Full Hour session</span></div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         AD SLOT — replace this div with your AdSense code
+         e.g. <ins class="adsbygoogle" ...></ins>
+         Call proceedToSession() in your ad's onComplete callback
+         ═══════════════════════════════════════════════════════ -->
+    <div style="width:100%;height:210px;background:#12121e;border:1px dashed #2a2a3a;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;">
+      <div style="position:absolute;top:10px;left:14px;font-size:10px;color:#2a2a3a;letter-spacing:1.5px;text-transform:uppercase;">Advertisement</div>
+      <div style="font-size:40px;">🧘</div>
+      <div style="font-size:14px;color:#555;text-align:center;line-height:1.5;">Yoga gear, supplements &amp; apps<br>you might love</div>
+      <div style="position:absolute;bottom:10px;right:14px;font-size:10px;color:#222;">Ad placeholder · swap with AdSense</div>
+    </div>
+    <!-- END AD SLOT -->
+
+    <div style="display:flex;align-items:center;gap:14px;width:100%;margin-top:2px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:48px;">
+        <div id="ad-countdown" style="font-size:34px;font-weight:700;color:#7c5cfc;line-height:1;">15</div>
+        <div style="font-size:9px;color:#333;letter-spacing:1px;text-transform:uppercase;">secs</div>
+      </div>
+      <button id="ad-start-btn" onclick="proceedToSession()" disabled
+        style="flex:1;background:#7c5cfc;color:#fff;border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:600;transition:opacity 0.4s,cursor 0.4s;">
+        Start Session →
+      </button>
+    </div>
+
+    <button id="ad-skip-btn" onclick="skipAd()"
+      style="display:none;background:none;border:none;color:#555;font-size:13px;cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:3px;">
+      Skip →
+    </button>
+
+    <div style="font-size:11px;color:#2a2a3a;text-align:center;line-height:1.5;">Sessions A–D are always free.<br>This combined session is supported by a short ad.</div>
+  </div>
+</div>
+
 </body>
 </html>
