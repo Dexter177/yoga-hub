@@ -292,6 +292,8 @@ input[type=range] { flex: 1; accent-color: #7c5cfc; cursor: pointer; }
 <div id="music-panel">
   <div class="mp-toggle" onclick="toggleMusicPanel()">
     <span class="mp-toggle-left">🎵 Music&nbsp;<span id="mp-now"></span></span>
+    <button id="btn-mini-pp" onclick="event.stopPropagation();miniTogglePlay()"
+      style="display:none;align-items:center;justify-content:center;background:none;border:1px solid #333;color:#aaa;border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer;flex-shrink:0;line-height:1;">▶</button>
     <span class="mp-arrow" id="mp-arrow">▼</span>
   </div>
   <div class="mp-body" id="mp-body">
@@ -446,6 +448,14 @@ function toggleLocalPlay() {
 
 function updatePP() {
   document.getElementById('btn-pp').textContent = localPlaying ? '⏸' : '▶';
+  var mini = document.getElementById('btn-mini-pp');
+  if (!mini) return;
+  mini.textContent = localPlaying ? '⏸' : '▶';
+  mini.style.display = currentFileName ? 'flex' : 'none';
+}
+
+function miniTogglePlay() {
+  if (currentFileName) toggleLocalPlay();
 }
 
 // ───────────────────────────────────
