@@ -80,7 +80,7 @@
   </div>
   <div style="width:100%;max-width:320px;display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;border-top:1px solid #1a1a28;margin-top:4px;">
     <span style="font-size:13px;color:#555;">Total</span>
-    <span style="font-size:15px;font-weight:600;color:#aaa;">~56 min · 79 poses</span>
+    <span style="font-size:15px;font-weight:600;color:#aaa;">~57 min · 79 poses</span>
   </div>
   <button class="btn-start" onclick="startSession()">Begin Full Session</button>
 </div>
@@ -254,7 +254,6 @@ const POSES = [
   { name: "Neck Extension", duration: 35, cue: "Tuck chin, then slowly lift face toward the ceiling. Return to neutral. Repeat ×8. Desk work locks the neck in forward flexion — this is how you get the backward range back.", phase: 0, draw: "neck_extension" },
   { name: "Neck Stretch", duration: 35, side: "LEFT SIDE", cue: "Drop left ear toward left shoulder. Right shoulder stays relaxed — don't shrug. The upper trap is chronically overloaded by screen work. Give it the full hold.", phase: 0, draw: "neck_left" },
   { name: "Neck Stretch", duration: 35, side: "RIGHT SIDE", cue: "Drop right ear to right shoulder. Breathe into the left side of the neck. Feel the stretch travel all the way down to the trap.", phase: 0, draw: "neck_right" },
-  { name: "Savasana", duration: 45, cue: "Lie flat. Legs loose, arms at 45°, palms up. Eyes closed. Don't move. Let Session A integrate before moving on.", phase: 0, draw: "savasana" },
   // ── SESSION B — HIPS & LEGS ──
   { name: "Downward Dog", duration: 45, cue: "Hips high, heels toward floor. Pedal feet slowly. Head fully hangs — neck free. Decompresses the shoulder joint and wakes up the hamstrings before they have to work.", phase: 1, draw: "downdog" },
   { name: "Half Lift", duration: 45, cue: "From forward fold, press fingertips to shins or floor. Lengthen the spine forward — flat back, hips over heels. Feel the hamstrings engage and the lower back decompress before you fold deeper.", phase: 1, draw: "half_lift" },
@@ -319,6 +318,7 @@ const POSES = [
   { name: "Reclining Hero", duration: 60, cue: "From kneeling, sit back between your heels (use a block under the hips if needed). Lean back onto forearms or all the way down. The quad and hip flexor get a completely different stretch than anything standing — full passive extension of the knee joint and front of the hip. Stay up if knees are uncomfortable.", phase: 3, draw: "reclining_hero" },
   { name: "Crocodile Pose", duration: 45, cue: "Lie face down. Stack your forearms under your forehead. Feet hip-width, toes turned out. Completely release all effort. The front body — belly, chest, hip flexors — decompresses into the floor. After a standing flow, the spine loves being supported from the front.", phase: 3, draw: "crocodile_pose" },
   { name: "Seated Meditation", duration: 60, cue: "Sit comfortably — cross-legged, on your heels, or in a chair. Hands on knees, eyes closed. Follow the breath for the full 60 seconds without fixing or controlling it. The body has worked; let the nervous system catch up.", phase: 3, draw: "seated_meditation" },
+  { name: "Savasana", duration: 90, cue: "Lie flat. Legs loose, arms at 45°, palms up. Eyes closed. Don't move. An entire hour of work — every disc decompressed, every hip opened, every shoulder released. Let it all integrate. The mat is doing the work now.", phase: 3, draw: "savasana" },
 ];
 
 let currentIdx = 0, timeLeft = 0, totalDuration = 0, paused = false, tickInterval = null;
