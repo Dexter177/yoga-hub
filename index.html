@@ -84,10 +84,10 @@ body {
 }
 .mp-toggle {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 11px 16px; cursor: pointer;
+  padding: 11px 16px; cursor: pointer; position: relative;
 }
-.mp-toggle-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #777; }
-#mp-now { color: #a78bfa; font-size: 11px; font-weight: 400; }
+.mp-toggle-left { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #777; flex: 1; overflow: hidden; white-space: nowrap; }
+#mp-now { color: #a78bfa; font-size: 11px; font-weight: 400; overflow: hidden; text-overflow: ellipsis; }
 .mp-arrow { font-size: 11px; color: #333; transition: transform 0.2s; }
 .mp-arrow.open { transform: rotate(180deg); }
 .mp-body { display: none; padding: 4px 16px 16px; }
@@ -145,6 +145,25 @@ input[type=range] { flex: 1; accent-color: #7c5cfc; cursor: pointer; }
   border-radius: 8px; padding: 4px 9px; font-size: 10px; cursor: pointer; flex-shrink: 0;
 }
 .btn-yt-stop { background: none; border: none; color: #444; cursor: pointer; font-size: 16px; flex-shrink: 0; padding: 0 2px; }
+/* YT saved list */
+.yt-saved-list { margin-top: 6px; display: none; }
+.yt-saved-item {
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 0; border-bottom: 1px solid #151522;
+}
+.yt-saved-item:last-child { border-bottom: none; }
+.yt-saved-title {
+  flex: 1; background: none; border: none; color: #bbb;
+  font-size: 12px; cursor: pointer; text-align: left;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  padding: 0;
+}
+.yt-saved-title:hover { color: #a78bfa; }
+.btn-yt-del {
+  background: none; border: none; color: #333; cursor: pointer;
+  font-size: 13px; flex-shrink: 0; padding: 0 2px; line-height: 1;
+}
+.btn-yt-del:hover { color: #ef4444; }
 /* YT video container — clipped but iframe still renders audio */
 .yt-video-wrap {
   height: 0; overflow: hidden; border-radius: 12px;
@@ -249,6 +268,20 @@ input[type=range] { flex: 1; accent-color: #7c5cfc; cursor: pointer; }
         <div class="card-dur"><div class="dur-big">15</div><div class="dur-unit">min</div></div>
       </div>
 
+      <!-- Full Hour -->
+      <div class="card" onclick="launchSession('desk_worker_yoga_full.html','Desk Worker — Full Hour')">
+        <div class="card-icon">🧘</div>
+        <div class="card-body">
+          <div class="card-name">Full Hour — A+B+C+D</div>
+          <div class="card-desc">Complete desk-worker session · Spine · Hips · Seated · Standing</div>
+          <div class="card-tags">
+            <span class="ctag">Weekend</span>
+            <span class="ctag">79 poses</span>
+          </div>
+        </div>
+        <div class="card-dur"><div class="dur-big">57</div><div class="dur-unit">min</div></div>
+      </div>
+
       <!-- Recovery -->
       <div class="card" onclick="launchSession('yoga_recovery.html','Active Recovery')">
         <div class="card-icon">🌙</div>
@@ -278,6 +311,8 @@ input[type=range] { flex: 1; accent-color: #7c5cfc; cursor: pointer; }
 <div id="music-panel">
   <div class="mp-toggle" onclick="toggleMusicPanel()">
     <span class="mp-toggle-left">🎵 Music&nbsp;<span id="mp-now"></span></span>
+    <button id="btn-mini-pp" onclick="event.stopPropagation();miniTogglePlay()"
+      style="display:none;align-items:center;justify-content:center;background:none;border:1px solid #333;color:#aaa;border-radius:50%;width:28px;height:28px;font-size:14px;cursor:pointer;line-height:1;position:absolute;left:50%;transform:translateX(-50%);">▶</button>
     <span class="mp-arrow" id="mp-arrow">▼</span>
   </div>
   <div class="mp-body" id="mp-body">
@@ -315,6 +350,8 @@ input[type=range] { flex: 1; accent-color: #7c5cfc; cursor: pointer; }
         <button class="btn-yt-toggle" id="btn-yt-toggle" onclick="toggleYTVideo()">Show video</button>
         <button class="btn-yt-stop" onclick="stopYT()" title="Stop">✕</button>
       </div>
+      <!-- Saved URLs list -->
+      <div class="yt-saved-list" id="yt-saved-list"></div>
       <!-- Video container — overflow:hidden clips visually but audio keeps playing -->
       <div class="yt-video-wrap" id="yt-video-wrap">
         <iframe id="yt-frame" src=""
@@ -432,6 +469,14 @@ function toggleLocalPlay() {
 
 function updatePP() {
   document.getElementById('btn-pp').textContent = localPlaying ? '⏸' : '▶';
+  var mini = document.getElementById('btn-mini-pp');
+  if (!mini) return;
+  mini.textContent = localPlaying ? '⏸' : '▶';
+  mini.style.display = currentFileName ? 'flex' : 'none';
+}
+
+function miniTogglePlay() {
+  if (currentFileName) toggleLocalPlay();
 }
 
 // ───────────────────────────────────
@@ -440,8 +485,8 @@ function updatePP() {
 let ytRunning = false;
 let ytVideoVisible = false;
 
-function loadYT() {
-  const url = document.getElementById('yt-url').value.trim();
+async function loadYT(urlOverride) {
+  const url = urlOverride || document.getElementById('yt-url').value.trim();
   if (!url) return;
 
   const vMatch = url.match(/(?:v=|youtu\.be\/)([A-Za-z0-9_-]{11})/);
@@ -473,7 +518,72 @@ function loadYT() {
   document.getElementById('yt-lbl').textContent = shortLabel;
   document.getElementById('yt-status').classList.add('on');
   setNow('▶ YouTube');
+
+  // Fetch title via oEmbed and save URL
+  try {
+    const oembedUrl = 'https://www.youtube.com/oembed?url=' + encodeURIComponent(url) + '&format=json';
+    const resp = await fetch(oembedUrl);
+    const title = resp.ok ? (await resp.json()).title : null;
+    saveYTUrl(url, title || shortLabel);
+  } catch(e) {
+    saveYTUrl(url, shortLabel);
+  }
 }
+
+// ── Saved URLs persistence ──
+function getSavedYTUrls() {
+  try { return JSON.parse(localStorage.getItem('yt_saved_urls') || '[]'); }
+  catch(e) { return []; }
+}
+
+function saveYTUrl(url, title) {
+  try {
+    const saved = getSavedYTUrls();
+    if (!saved.find(s => s.url === url)) {
+      saved.push({ url, title });
+      localStorage.setItem('yt_saved_urls', JSON.stringify(saved));
+      renderSavedYTUrls();
+    }
+  } catch(e) {}
+}
+
+function deleteYTUrl(idx) {
+  try {
+    const saved = getSavedYTUrls();
+    saved.splice(idx, 1);
+    localStorage.setItem('yt_saved_urls', JSON.stringify(saved));
+    renderSavedYTUrls();
+  } catch(e) {}
+}
+
+function renderSavedYTUrls() {
+  const container = document.getElementById('yt-saved-list');
+  if (!container) return;
+  const saved = getSavedYTUrls();
+  if (saved.length === 0) { container.style.display = 'none'; return; }
+  container.style.display = 'block';
+  container.innerHTML = '';
+  saved.forEach((s, i) => {
+    const div = document.createElement('div');
+    div.className = 'yt-saved-item';
+    const titleBtn = document.createElement('button');
+    titleBtn.className = 'yt-saved-title';
+    titleBtn.textContent = s.title;
+    titleBtn.title = s.url;
+    titleBtn.onclick = () => { document.getElementById('yt-url').value = s.url; loadYT(); };
+    const delBtn = document.createElement('button');
+    delBtn.className = 'btn-yt-del';
+    delBtn.textContent = '✕';
+    delBtn.title = 'Remove';
+    delBtn.onclick = () => deleteYTUrl(i);
+    div.appendChild(titleBtn);
+    div.appendChild(delBtn);
+    container.appendChild(div);
+  });
+}
+
+// Load saved URLs on startup
+renderSavedYTUrls();
 
 function toggleYTVideo() {
   ytVideoVisible = !ytVideoVisible;

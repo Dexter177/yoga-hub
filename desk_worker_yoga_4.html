@@ -18,19 +18,19 @@
   .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .phase-label { flex: 1; text-align: left; font-size: 14px; color: #ddd; }
   .phase-dur { font-size: 13px; color: #555; }
-  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; }
+  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; position: relative; padding-bottom: 144px; }
   .top-bar { width: 100%; padding: 10px 20px 8px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .phase-badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
   .progress-text { font-size: 13px; color: #666; }
   .btn-exit { background: none; border: 1px solid #333; color: #888; border-radius: 8px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
   .progress-wrap { width: calc(100% - 40px); height: 3px; background: #1e1e2a; border-radius: 2px; margin-bottom: 10px; flex-shrink: 0; }
   .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
-  .pose-wrap { width: calc(100% - 40px); max-width: 440px; flex: 1 1 auto; min-height: 60px; max-height: min(42vh, 360px); background: #15151f; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; overflow: hidden; }
+  .pose-wrap { width: calc(100% - 40px); max-width: 440px; flex: 0 0 auto; height: min(38vh, 280px); background: #15151f; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; overflow: hidden; }
   .pose-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 20px; display: block; }
-  .pose-name { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; padding: 0 20px; flex-shrink: 0; }
+  .pose-name { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; padding: 0 20px; flex-shrink: 0; width: calc(100% - 40px); max-width: 440px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pose-side { font-size: 13px; color: #7c5cfc; text-align: center; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.5px; min-height: 18px; flex-shrink: 0; }
-  .pose-cue { font-size: 14px; color: #999; text-align: center; padding: 0 24px; line-height: 1.55; margin-bottom: 14px; max-width: 480px; flex-shrink: 0; display: block; overflow: visible; }
-  .bottom-row { position: relative; display: flex; align-items: flex-end; justify-content: center; flex-shrink: 0; margin-bottom: 12px; width: 100%; padding: 0 20px; min-height: 120px; }
+  .pose-cue { font-size: 14px; color: #999; text-align: center; padding: 0 24px; line-height: 1.55; margin-bottom: 14px; max-width: 480px; flex-shrink: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .bottom-row { position: absolute; bottom: 0; left: 0; right: 0; display: flex; align-items: flex-end; justify-content: center; width: 100%; padding: 0 20px 12px; min-height: 120px; }
   .br-main { display: flex; align-items: center; gap: 28px; }
   .timer-ring-wrap { position: relative; width: 110px; height: 110px; }
   .timer-ring-wrap svg { transform: rotate(-90deg); }
@@ -47,7 +47,10 @@
   #done-screen h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
   #done-screen p { color: #888; font-size: 15px; line-height: 1.6; margin-bottom: 40px; }
   .btn-restart { background: #7c5cfc; color: #fff; border: none; border-radius: 14px; padding: 16px 40px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; max-width: 320px; }
-  #audio-corner { display: none; position: absolute; right: 20px; bottom: 0; background: rgba(10,10,20,0.92); border: 1px solid #2a2a3a; border-radius: 14px; padding: 10px 12px 8px; flex-direction: row; gap: 8px; align-items: flex-end; z-index: 10; }
+  #audio-corner { display: none; position: fixed; right: 20px; bottom: 20px; background: rgba(10,10,20,0.92); border: 1px solid #2a2a3a; border-radius: 14px; padding: 10px 12px 8px; flex-direction: row; gap: 8px; align-items: flex-end; z-index: 10; touch-action: none; }
+  #audio-corner.unlocked { cursor: move; }
+  #audio-lock-btn { background: none; border: none; cursor: pointer; font-size: 13px; color: #555; padding: 0; line-height: 1; writing-mode: vertical-lr; height: 30px; align-self: flex-start; }
+  #audio-lock-btn:hover { color: #aaa; }
   .ch { display: flex; flex-direction: column; align-items: center; gap: 5px; }
   .ch-icon { font-size: 13px; line-height: 1; }
   .ch input[type=range] { writing-mode: vertical-lr; direction: rtl; -webkit-appearance: slider-vertical; width: 20px; height: 68px; accent-color: #7c5cfc; cursor: pointer; }
@@ -74,22 +77,22 @@
   <p class="subtitle">Standing Flow — Strength · Balance · Lateral Body · Forearms</p>
   <div class="phase-list">
     <div class="phase-item"><div class="phase-dot" style="background:#80cbc4"></div><span class="phase-label">Ground &amp; Centre</span><span class="phase-dur">2 min</span></div>
-    <div class="phase-item"><div class="phase-dot" style="background:#f06292"></div><span class="phase-label">Warrior Flow</span><span class="phase-dur">5 min</span></div>
-    <div class="phase-item"><div class="phase-dot" style="background:#ffb74d"></div><span class="phase-label">Triangle &amp; Balance</span><span class="phase-dur">5 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#f06292"></div><span class="phase-label">Standing Strength</span><span class="phase-dur">3 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#ffb74d"></div><span class="phase-label">Triangle &amp; Balance</span><span class="phase-dur">4 min</span></div>
     <div class="phase-item"><div class="phase-dot" style="background:#81c784"></div><span class="phase-label">Backbend &amp; Forearms</span><span class="phase-dur">2 min</span></div>
-    <div class="phase-item" style="border:none"><div class="phase-dot" style="background:#ba68c8"></div><span class="phase-label">Rest</span><span class="phase-dur">2 min</span></div>
+    <div class="phase-item" style="border:none"><div class="phase-dot" style="background:#ba68c8"></div><span class="phase-label">Rest</span><span class="phase-dur">3 min</span></div>
   </div>
   <div style="width:100%;max-width:320px;display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;border-top:1px solid #1a1a28;margin-top:4px;">
     <span style="font-size:13px;color:#555;">Total</span>
     <span style="font-size:15px;font-weight:600;color:#aaa;">~15 min</span>
   </div>
-  <button class="btn-start" onclick="startSession()">Begin Session</button>
+  <button class="btn-start" onclick="goToSession()">Go to Session</button>
 </div>
 
 <div id="session-screen">
   <div class="top-bar">
     <span class="phase-badge" id="phase-badge">Ground &amp; Centre</span>
-    <span class="progress-text" id="progress-text">1 / 18</span>
+    <span class="progress-text" id="progress-text">1 / 20</span>
     <button class="btn-exit" onclick="exitSession()">✕ Exit</button>
   </div>
   <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
@@ -99,17 +102,17 @@
       <span style="font-size:40px;">📷</span><span style="font-size:12px;letter-spacing:1px;text-transform:uppercase;">Image needed</span>
     </div>
   </div>
-  <div class="pose-name" id="pose-name">Mountain Pose</div>
+  <div class="pose-name" id="pose-name">Chair Pose</div>
   <div class="pose-side" id="pose-side"></div>
   <div class="pose-cue" id="pose-cue"></div>
   <div class="bottom-row">
-    <div class="br-main">
+    <div class="br-main" id="br-main">
       <div class="timer-ring-wrap">
         <svg width="110" height="110" viewBox="0 0 110 110">
           <circle class="timer-bg" cx="55" cy="55" r="47"/>
           <circle class="timer-fill" id="timer-ring" cx="55" cy="55" r="47" stroke="#7c5cfc" stroke-dasharray="295.3" stroke-dashoffset="0"/>
         </svg>
-        <div class="timer-num" id="timer-num">60</div>
+        <div class="timer-num" id="timer-num">45</div>
         <div class="timer-label">secs</div>
       </div>
       <div class="controls">
@@ -118,12 +121,17 @@
         <button class="btn-nav" onclick="nextPose()">→</button>
       </div>
     </div>
-    <div id="audio-corner">
+          <div id="preview-btns" style="display:none;flex-direction:column;gap:12px;align-items:center;width:100%;max-width:280px;padding:20px 0 10px;">
+        <button class="btn-start" onclick="beginSession()">&#9654; Begin Session</button>
+        <button style="background:none;border:1px solid #333;color:#888;border-radius:14px;padding:12px 40px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:280px;" onclick="exitSession()">&#8592; Return to Hub</button>
+      </div>
+      <div id="audio-corner">
       <div class="ch"><span class="ch-icon">🎵</span><input type="range" id="music-vol" min="0" max="100" value="35" oninput="setMusicVol(this.value)"><button class="ch-mute" id="music-mute" onclick="toggleMusicMute()">🔊</button></div>
       <div class="ch"><span class="ch-icon">🔔</span><input type="range" id="gong-vol" min="0" max="100" value="100" oninput="setGongVol(this.value)"><button class="ch-mute" id="gong-mute" onclick="toggleGongMute()">🔊</button></div>
       <div class="ch"><span class="ch-icon">🗣️</span><input type="range" id="voice-vol" min="0" max="100" value="55" oninput="setVoiceVol(this.value)"><button class="ch-mute" id="voice-mute" onclick="toggleVoiceMute()">🔊</button></div>
       <div class="ch-divider"></div>
       <button id="mute-all-btn" class="ch-muteall" onclick="toggleMuteAll()">MUTE ALL</button>
+      <button id="audio-lock-btn" onclick="toggleAudioLock()" title="Lock / unlock position">🔒</button>
     </div>
   </div>
 </div>
@@ -140,74 +148,105 @@
   <h2>Session Complete</h2>
   <p>Standing strength restored. Lateral body opened. Balance sharpened. Thoracic extended. Forearms freed. The most energising of the four sessions — do this one when you need to wake up.</p>
   <button class="btn-restart" onclick="restart()">Start Again</button>
+  <button onclick="(window.parent.goBack ? window.parent.goBack() : window.location.href='index.html')" style="background:none;border:1px solid #333;color:#888;border-radius:14px;padding:13px 40px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:320px;margin-top:10px;">← Return to Hub</button>
 </div>
 
 <script>
 const PHASES = [
-  { name: "Ground & Centre",      color: "#80cbc4", fillColor: "#0d2020" },
-  { name: "Warrior Flow",         color: "#f06292", fillColor: "#2d1020" },
-  { name: "Triangle & Balance",   color: "#ffb74d", fillColor: "#2d2010" },
-  { name: "Backbend & Forearms",  color: "#81c784", fillColor: "#1a2d1a" },
-  { name: "Rest",                 color: "#ba68c8", fillColor: "#201a2d" },
+  { name: "Ground & Centre",     color: "#80cbc4", fillColor: "#0d2020" },
+  { name: "Standing Strength",   color: "#f06292", fillColor: "#2d1020" },
+  { name: "Triangle & Balance",  color: "#ffb74d", fillColor: "#2d2010" },
+  { name: "Backbend & Forearms", color: "#81c784", fillColor: "#1a2d1a" },
+  { name: "Rest",                color: "#ba68c8", fillColor: "#201a2d" },
 ];
 
 const IMAGES = {
-  mountain:        "yoga_images/mountain.jpg",
-  chair_pose:      "yoga_images/chair_pose.avif",
-  warrior1_left:   "yoga_images/warrior1_left.avif",
-  warrior1_right:  "yoga_images/warrior1_right.jpg",
-  warrior2_left:   "yoga_images/warrior2_left.webp",
-  warrior2_right:  "yoga_images/warrior2_right.webp",
-  rev_warrior_left: "yoga_images/rev_warrior_left.jpg",
-  rev_warrior_right:"yoga_images/rev_warrior_right.jpg",
-  triangle_left:   "yoga_images/triangle_left.jpg",
-  triangle_right:  "yoga_images/triangle_right.jpg",
-  side_angle_left: "yoga_images/side_angle_left.jpg",
-  side_angle_right:"yoga_images/side_angle_right.jpg",
-  tree_left:       "yoga_images/tree_left.avif",
-  tree_right:      "yoga_images/tree_right.avif",
-  fish_pose:       "yoga_images/fish_pose.jpeg",
-  forearm_left:    "yoga_images/forearm-stretch.webp",
-  forearm_right:   "yoga_images/right-forearm-stretches.jpg",
-  childs_pose:     "yoga_images/childs_pose.jpg",
+  chair_pose:              "yoga_images/chair_pose.avif",
+  standing_side_bend_left: "yoga_images/standing_side_bend_left.jpg",
+  standing_side_bend_right:"yoga_images/standing_side_bend_right.png",
+  crescent_left:           "yoga_images/crescent_left.jpg",
+  crescent_right:          "yoga_images/crescent_right.webp",
+  horse_stance:            "yoga_images/horse_stance.webp",
+  standing_backbend:       "yoga_images/standing_backbend.jpg",
+  triangle_left:           "yoga_images/triangle_left.jpg",
+  triangle_right:          "yoga_images/triangle_right.jpg",
+  side_angle_left:         "yoga_images/side_angle_left.jpg",
+  side_angle_right:        "yoga_images/side_angle_right.jpg",
+  tree_left:               "yoga_images/tree_left.avif",
+  tree_right:              "yoga_images/tree_right.avif",
+  fish_pose:               "yoga_images/fish_pose.jpeg",
+  eagle_arms:              "yoga_images/eagle_arms.jpg",
+  forearm_left:            "yoga_images/forearm-stretch.webp",
+  forearm_right:           "yoga_images/right-forearm-stretches.jpg",
+  reclining_hero:          "yoga_images/reclining_hero.jpg",
+  crocodile_pose:          "yoga_images/crocodile_pose.jpg",
+  seated_meditation:       "yoga_images/seated_meditation.jpg",
 };
 
 const POSES = [
   // GROUND & CENTRE
-  { name: "Mountain Pose", duration: 45, cue: "Stand with feet hip-width. Lift your toes, spread them, and lower. Press all four corners of each foot into the floor. Roll shoulders back, lift the crown of your head. You've been hunched over a desk — start by just standing properly.", phase: 0, draw: "mountain" },
   { name: "Chair Pose", duration: 45, cue: "Feet together or hip-width. Bend knees and sit back as if toward a chair. Arms up, core engaged. The quads and glutes do zero work sitting all day — 45 seconds of Chair Pose reminds them they exist.", phase: 0, draw: "chair_pose" },
-  // WARRIOR FLOW
-  { name: "Warrior I", duration: 50, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right foot at 45°. Hips square forward. Arms up, shoulders down. Deep hip flexor stretch in the back leg — the opposite of sitting with hips flexed all day.", phase: 1, draw: "warrior1_left" },
-  { name: "Warrior I", duration: 50, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, left foot at 45°. Square the hips as much as possible. Keep the front knee tracking over the second toe. Strong back leg.", phase: 1, draw: "warrior1_right" },
-  { name: "Warrior II", duration: 50, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right foot parallel to the back. Arms wide, gaze over left hand. Open hip stance — the opposite of the closed, hunched desk position. Sink the front thigh toward parallel.", phase: 1, draw: "warrior2_left" },
-  { name: "Warrior II", duration: 50, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, left foot back. Arms wide, gaze forward. Keep the back arm reaching actively — it opens the entire chest and shoulder girdle.", phase: 1, draw: "warrior2_right" },
-  { name: "Reverse Warrior", duration: 40, side: "LEFT SIDE", cue: "From Warrior II, flip the left palm up and reach the arm back and up. Right hand slides down the back leg. Opens the left side of the ribcage and thoracic spine — completely underused at a desk.", phase: 1, draw: "rev_warrior_left" },
-  { name: "Reverse Warrior", duration: 40, side: "RIGHT SIDE", cue: "Flip the right palm, reach up and back. Left hand on back leg. Feel the right side of the torso open completely. Breathe into it.", phase: 1, draw: "rev_warrior_right" },
+  { name: "Standing Side Bend", duration: 40, side: "LEFT SIDE", cue: "Stand tall, feet hip-width. Reach left arm up and arc the torso to the right. The entire left side body opens — lat, oblique, intercostal — muscles that never get stretched sitting at a desk.", phase: 0, draw: "standing_side_bend_left" },
+  { name: "Standing Side Bend", duration: 40, side: "RIGHT SIDE", cue: "Right arm up, arc to the left. Keep both feet grounded. Most people notice a difference side to side — the dominant arm side is often tighter.", phase: 0, draw: "standing_side_bend_right" },
+  // STANDING STRENGTH
+  { name: "Crescent Lunge", duration: 45, side: "LEFT FOOT FORWARD", cue: "Left foot forward in a high lunge — back knee straight, heel lifted. Sweep arms overhead. The front hip hinges deeply while the core fires to hold you upright — more demanding than Low Lunge, works the whole kinetic chain.", phase: 1, draw: "crescent_left" },
+  { name: "Crescent Lunge", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, back knee straight. Arms reach up — feel the line from back heel through fingertips. The hip flexor of the back leg gets a strong dynamic stretch while the front leg quads and glutes work hard.", phase: 1, draw: "crescent_right" },
+  { name: "Horse Stance", duration: 45, cue: "Feet wide, toes turned out 45°. Bend both knees and sink until thighs approach parallel. Hands at heart. Inner thighs, glutes, and deep hip rotators all fire simultaneously — a squat pattern with the hips fully externally rotated.", phase: 1, draw: "horse_stance" },
+  { name: "Standing Backbend", duration: 40, cue: "Stand tall, hands on lower back, fingertips pointing down. Inhale and draw elbows toward each other. Exhale and lean back, opening the chest skyward. The lumbar is supported by your hands. Look up only if the neck is comfortable.", phase: 1, draw: "standing_backbend" },
   // TRIANGLE & BALANCE
-  { name: "Triangle Pose", duration: 50, side: "LEFT SIDE", cue: "Straight left leg, hinge sideways, reach left hand toward shin or a block. Right arm up, gaze at right thumb. Full lateral stretch — the spine almost never moves sideways at a desk.", phase: 2, draw: "triangle_left" },
-  { name: "Triangle Pose", duration: 50, side: "RIGHT SIDE", cue: "Straight right leg, hinge right, left arm up. Keep both sides of the torso long. Feel the stretch from the right outer foot all the way up through the left fingertips.", phase: 2, draw: "triangle_right" },
+  { name: "Triangle Pose", duration: 45, side: "LEFT SIDE", cue: "Straight left leg, hinge sideways, reach left hand toward shin or a block. Right arm up, gaze at right thumb. Full lateral stretch — the spine almost never moves sideways at a desk.", phase: 2, draw: "triangle_left" },
+  { name: "Triangle Pose", duration: 45, side: "RIGHT SIDE", cue: "Straight right leg, hinge right, left arm up. Keep both sides of the torso long. Feel the stretch from the right outer foot all the way up through the left fingertips.", phase: 2, draw: "triangle_right" },
   { name: "Side Angle Pose", duration: 40, side: "LEFT SIDE", cue: "Left knee bent, lean left, left forearm to left thigh. Right arm overhead, creating a long diagonal line. Opens the right oblique and intercostal muscles — the forgotten desk-worker stretch.", phase: 2, draw: "side_angle_left" },
   { name: "Side Angle Pose", duration: 40, side: "RIGHT SIDE", cue: "Right knee bent, lean right, right forearm to thigh. Left arm overhead. Keep the left hip pressing forward — don't collapse into the bent side.", phase: 2, draw: "side_angle_right" },
   { name: "Tree Pose", duration: 45, side: "LEFT LEG", cue: "Left foot planted. Right foot to left ankle, calf, or inner thigh (avoid the knee). Hands at chest or overhead. Balance challenges the deep hip stabilisers — dormant from sitting all day.", phase: 2, draw: "tree_left" },
   { name: "Tree Pose", duration: 45, side: "RIGHT LEG", cue: "Right foot planted. Left foot to right ankle, calf, or thigh. Find a fixed gaze point — it helps balance. The small foot and ankle muscles are reactivating after hours of being still.", phase: 2, draw: "tree_right" },
   // BACKBEND & FOREARMS
   { name: "Fish Pose", duration: 45, cue: "Lie on your back, hands under hips palms down. Press elbows into floor and arch the upper back, resting the top of the head lightly on the mat. The strongest passive thoracic opener available — the direct antidote to screen-rounding.", phase: 3, draw: "fish_pose" },
+  { name: "Eagle Arms", duration: 40, cue: "Stand or sit. Cross right elbow under left, wrap right forearm around left, palms touching. Lift elbows to shoulder height and push them forward. Opens the posterior shoulder and upper back — the most direct stretch for muscles overloaded by hunching toward a screen.", phase: 3, draw: "eagle_arms" },
   { name: "Forearm Flexor Stretch", duration: 30, side: "LEFT ARM", cue: "Left arm forward, palm up. Right hand pulls fingers back toward you. Hold steady — don't bounce. If you type a lot, you'll really feel this one.", phase: 3, draw: "forearm_left" },
   { name: "Forearm Flexor Stretch", duration: 30, side: "RIGHT ARM", cue: "Right arm forward, palm up. Left hand pulls fingers back gently. The forearm flexors are under continuous load from typing — they deserve the full hold.", phase: 3, draw: "forearm_right" },
   // REST
-  { name: "Child's Pose", duration: 90, cue: "Knees wide, big toes together, arms extended forward. Forehead down. Full decompression — breathe into the back body and feel it expand on every inhale. After a standing flow, this rest is earned.", phase: 4, draw: "childs_pose" },
+  { name: "Reclining Hero", duration: 60, cue: "From kneeling, sit back between your heels (use a block under the hips if needed). Lean back onto forearms or all the way down. The quad and hip flexor get a completely different stretch than anything standing — full passive extension of the knee joint and front of the hip. Stay up if knees are uncomfortable.", phase: 4, draw: "reclining_hero" },
+  { name: "Crocodile Pose", duration: 45, cue: "Lie face down. Stack your forearms under your forehead. Feet hip-width, toes turned out. Completely release all effort. The front body — belly, chest, hip flexors — decompresses into the floor. After a standing flow, the spine loves being supported from the front.", phase: 4, draw: "crocodile_pose" },
+  { name: "Seated Meditation", duration: 60, cue: "Sit comfortably — cross-legged, on your heels, or in a chair. Hands on knees, eyes closed. Follow the breath for the full 60 seconds without fixing or controlling it. The body has worked; let the nervous system catch up.", phase: 4, draw: "seated_meditation" },
 ];
 
 let currentIdx=0,timeLeft=0,totalDuration=0,paused=false,tickInterval=null;
-function startSession(){getAudioCtx();ytPlay();document.getElementById('start-screen').style.display='none';document.getElementById('session-screen').style.display='flex';document.getElementById('audio-corner').style.display='flex';currentIdx=0;loadPose(0);clearInterval(tickInterval);startCountdown(0,5,'Get Ready');}
-function loadPose(idx){clearInterval(tickInterval);const pose=POSES[idx],phase=PHASES[pose.phase];const badge=document.getElementById('phase-badge');badge.textContent=phase.name;badge.style.background=phase.color+'22';badge.style.color=phase.color;document.getElementById('progress-text').textContent=`${idx+1} / ${POSES.length}`;const pct=(idx/POSES.length)*100;const fill=document.getElementById('progress-fill');fill.style.width=pct+'%';fill.style.background=phase.color;const imgSrc=IMAGES[pose.draw],imgEl=document.getElementById('pose-img'),missingEl=document.getElementById('pose-img-missing');if(imgSrc){const t=new Image();t.onload=()=>{imgEl.src=imgSrc;imgEl.style.display='block';missingEl.style.display='none';};t.onerror=()=>{imgEl.style.display='none';missingEl.style.display='flex';};t.src=imgSrc;}else{imgEl.style.display='none';missingEl.style.display='flex';}document.getElementById('pose-name').textContent=pose.name;document.getElementById('pose-side').textContent=pose.side||'';document.getElementById('pose-cue').textContent=pose.cue;announcePose(pose);timeLeft=pose.duration;totalDuration=pose.duration;paused=false;document.getElementById('btn-pause').textContent='⏸';updateTimerDisplay();startTick();}
+function goToSession(){getAudioCtx();ytPlay();document.getElementById('start-screen').style.display='none';document.getElementById('session-screen').style.display='flex';document.getElementById('audio-corner').style.display='flex';currentIdx=0;displayPose(0);document.getElementById('br-main').style.display='none';document.getElementById('preview-btns').style.display='flex';}
+function beginSession(){document.getElementById('preview-btns').style.display='none';document.getElementById('br-main').style.display='flex';startGetReady(5);}
+function displayPose(idx){clearInterval(tickInterval);currentIdx=idx;const pose=POSES[idx],phase=PHASES[pose.phase];const badge=document.getElementById('phase-badge');badge.textContent=phase.name;badge.style.background=phase.color+'22';badge.style.color=phase.color;document.getElementById('progress-text').textContent=`${Math.round((idx+1)/POSES.length*100)}% (${idx+1}/${POSES.length})`;const pct=(idx/POSES.length)*100;const fill=document.getElementById('progress-fill');fill.style.width=pct+'%';fill.style.background=phase.color;const imgSrc=IMAGES[pose.draw],imgEl=document.getElementById('pose-img'),missingEl=document.getElementById('pose-img-missing');if(imgSrc){const t=new Image();t.onload=()=>{imgEl.src=imgSrc;imgEl.style.display='block';missingEl.style.display='none';};t.onerror=()=>{imgEl.style.display='none';missingEl.style.display='flex';};t.src=imgSrc;}else{imgEl.style.display='none';missingEl.style.display='flex';}document.getElementById('pose-name').textContent=pose.name;document.getElementById('pose-side').textContent=pose.side||'';document.getElementById('pose-cue').textContent=pose.cue;announcePose(pose);timeLeft=pose.duration;totalDuration=pose.duration;paused=false;document.getElementById('btn-pause').textContent='⏸';updateTimerDisplay();}
 function updateTimerDisplay(){document.getElementById('timer-num').textContent=timeLeft;const offset=295.3*(1-timeLeft/totalDuration);const ring=document.getElementById('timer-ring');ring.style.strokeDashoffset=offset;ring.style.stroke=PHASES[POSES[currentIdx].phase].color;}
-function startTick(){tickInterval=setInterval(()=>{if(!paused){timeLeft--;updateTimerDisplay();if(timeLeft<=0){clearInterval(tickInterval);playGong();if(navigator.vibrate)navigator.vibrate([200,100,200]);setTimeout(()=>{currentIdx<POSES.length-1?startCountdown(currentIdx+1):showDone();},600);}}},1000);}
-function startCountdown(nextIdx,initialCount=3,label='Next Up'){const overlay=document.getElementById('countdown-overlay');const next=POSES[nextIdx];document.getElementById('cd-name').textContent=next.name;document.getElementById('cd-side').textContent=next.side||'';const labelEl=document.querySelector('#countdown-overlay .cdlabel');if(labelEl)labelEl.textContent=label;let count=initialCount;document.getElementById('cd-num').textContent=count;overlay.style.display='flex';const cd=setInterval(()=>{count--;if(count<=0){clearInterval(cd);overlay.style.display='none';if(labelEl)labelEl.textContent='Next Up';currentIdx=nextIdx;loadPose(currentIdx);}else{document.getElementById('cd-num').textContent=count;}},1000);}
+
+function startGetReady(secs) {
+  clearInterval(tickInterval);
+  var timerLabel = document.querySelector('.timer-label');
+  var timerRing = document.getElementById('timer-ring');
+  var circumference = timerRing ? parseFloat(timerRing.getAttribute('stroke-dasharray')) || 295.3 : 295.3;
+  var origLabel = timerLabel ? timerLabel.textContent : 'secs';
+  if (timerLabel) timerLabel.textContent = 'get ready';
+  if (timerRing) timerRing.style.stroke = '#555';
+  var count = secs;
+  document.getElementById('timer-num').textContent = count;
+  if (timerRing) timerRing.style.strokeDashoffset = 0;
+  tickInterval = setInterval(function() {
+    count--;
+    if (count <= 0) {
+      clearInterval(tickInterval);
+      if (timerLabel) timerLabel.textContent = origLabel;
+      updateTimerDisplay();
+      startTick();
+    } else {
+      document.getElementById('timer-num').textContent = count;
+      if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+    }
+  }, 1000);
+}
+function startTick(){tickInterval=setInterval(()=>{if(!paused){timeLeft--;updateTimerDisplay();if(timeLeft<=0){clearInterval(tickInterval);playGong();if(navigator.vibrate)navigator.vibrate([200,100,200]);setTimeout(()=>{if(currentIdx<POSES.length-1){displayPose(currentIdx+1);startGetReady(5);}else{showDone();}},600);}}},1000);}
+function startCountdown(nextIdx,initialCount=3,label='Next Up'){const overlay=document.getElementById('countdown-overlay');const next=POSES[nextIdx];document.getElementById('cd-name').textContent=next.name;document.getElementById('cd-side').textContent=next.side||'';const labelEl=document.querySelector('#countdown-overlay .cdlabel');if(labelEl)labelEl.textContent=label;let count=initialCount;document.getElementById('cd-num').textContent=count;overlay.style.display='flex';const cd=setInterval(()=>{count--;if(count<=0){clearInterval(cd);overlay.style.display='none';if(labelEl)labelEl.textContent='Next Up';currentIdx=nextIdx;displayPose(currentIdx);}else{document.getElementById('cd-num').textContent=count;}},1000);}
 function togglePause(){paused=!paused;document.getElementById('btn-pause').textContent=paused?'▶':'⏸';if(paused)ytPause();else ytPlay();}
-function nextPose(){if(currentIdx<POSES.length-1){currentIdx++;loadPose(currentIdx);}else{showDone();}}
-function prevPose(){if(currentIdx>0){currentIdx--;loadPose(currentIdx);}}
-function exitSession(){clearInterval(tickInterval);ytPause();document.getElementById('session-screen').style.display='none';document.getElementById('start-screen').style.display='flex';}
+function nextPose(){if(currentIdx<POSES.length-1){displayPose(currentIdx+1);startGetReady(5);}else{showDone();}}
+function prevPose(){if(currentIdx>0){displayPose(currentIdx-1);startGetReady(5);}}
+function exitSession(){clearInterval(tickInterval);ytPause();document.getElementById('session-screen').style.display='none';document.getElementById('start-screen').style.display='flex';var bm=document.getElementById('br-main');var pb=document.getElementById('preview-btns');if(bm)bm.style.display='flex';if(pb)pb.style.display='none';}
 function showDone(){clearInterval(tickInterval);ytPause();document.getElementById('session-screen').style.display='none';document.getElementById('done-screen').style.display='flex';}
 function restart(){document.getElementById('done-screen').style.display='none';document.getElementById('start-screen').style.display='flex';}
 let audioCtx=null;
@@ -229,6 +268,62 @@ let allMuted=false;
 function toggleMuteAll(){allMuted=!allMuted;musicMuted=allMuted;bgMusic.muted=musicMuted;updateMuteBtn('music-mute',musicMuted);gongMuted=allMuted;updateMuteBtn('gong-mute',gongMuted);voiceMuted=allMuted;updateMuteBtn('voice-mute',voiceMuted);if(allMuted)speechSynthesis.cancel();const btn=document.getElementById('mute-all-btn');if(btn)btn.textContent=allMuted?'UNMUTE':'MUTE ALL';}
 document.getElementById('start-screen').addEventListener('click',function unlockAudio(){bgMusic.load();const ctx=getAudioCtx();if(ctx.state==='suspended')ctx.resume().catch(()=>{});document.getElementById('start-screen').removeEventListener('click',unlockAudio);},{once:true});
 try{if('wakeLock' in navigator)navigator.wakeLock.request('screen').catch(()=>{});}catch(e){}
+
+// ── Keyboard navigation ──
+document.addEventListener('keydown', function(e) {
+  var sess = document.getElementById('session-screen');
+  if (!sess || sess.style.display !== 'flex') return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); nextPose(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); prevPose(); }
+  else if (e.key === ' ') { e.preventDefault(); togglePause(); }
+});
+
+// ── Draggable audio panel ──
+(function() {
+  var panel = document.getElementById('audio-corner');
+  var locked = true, dragging = false, ox = 0, oy = 0;
+  try {
+    var sx = localStorage.getItem('audio_x'), sy = localStorage.getItem('audio_y');
+    if (sx && sy) { panel.style.right = 'auto'; panel.style.bottom = 'auto'; panel.style.left = sx; panel.style.top = sy; }
+  } catch(e) {}
+  window.toggleAudioLock = function() {
+    locked = !locked;
+    document.getElementById('audio-lock-btn').textContent = locked ? '🔒' : '🔓';
+    panel.classList.toggle('unlocked', !locked);
+  };
+  panel.addEventListener('mousedown', function(e) {
+    if (locked || e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+    dragging = true;
+    var r = panel.getBoundingClientRect();
+    ox = e.clientX - r.left; oy = e.clientY - r.top;
+    e.preventDefault();
+  });
+  panel.addEventListener('touchstart', function(e) {
+    if (locked) return;
+    dragging = true;
+    var t = e.touches[0], r = panel.getBoundingClientRect();
+    ox = t.clientX - r.left; oy = t.clientY - r.top;
+  }, {passive: true});
+  document.addEventListener('mousemove', function(e) {
+    if (!dragging) return;
+    panel.style.left = (e.clientX - ox) + 'px';
+    panel.style.top = (e.clientY - oy) + 'px';
+    panel.style.right = 'auto'; panel.style.bottom = 'auto';
+  });
+  document.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
+    var t = e.touches[0];
+    panel.style.left = (t.clientX - ox) + 'px';
+    panel.style.top = (t.clientY - oy) + 'px';
+    panel.style.right = 'auto'; panel.style.bottom = 'auto';
+  }, {passive: true});
+  function stopDrag() {
+    if (!dragging) return; dragging = false;
+    try { localStorage.setItem('audio_x', panel.style.left); localStorage.setItem('audio_y', panel.style.top); } catch(e) {}
+  }
+  document.addEventListener('mouseup', stopDrag);
+  document.addEventListener('touchend', stopDrag);
+})();
 </script>
 </body>
 </html>

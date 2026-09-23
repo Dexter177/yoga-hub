@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Desk Worker — Full Hour (A + B + C + D)</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #0a0a12; color: #f0f0f0; }
+  #start-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; max-height: 100%; padding: 16px 24px; text-align: center; overflow: hidden; }
+  #start-screen h1 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .subtitle { color: #666; font-size: 13px; margin-bottom: 14px; }
+  .btn-start { background: #7c5cfc; color: #fff; border: none; border-radius: 14px; padding: 14px 48px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; max-width: 320px; margin-top: 12px; }
+  .btn-start:active { opacity: 0.85; }
+  .phase-list { width: 100%; max-width: 320px; }
+  .phase-item { display: flex; align-items: center; gap: 12px; padding: 9px 0; border-bottom: 1px solid #1a1a28; }
+  .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .phase-label { flex: 1; text-align: left; font-size: 14px; color: #ddd; }
+  .phase-dur { font-size: 13px; color: #555; }
+  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; position: relative; padding-bottom: 144px; }
+  .top-bar { width: 100%; padding: 10px 20px 8px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+  .phase-badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
+  .progress-text { font-size: 13px; color: #666; }
+  .btn-exit { background: none; border: 1px solid #333; color: #888; border-radius: 8px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
+  .progress-wrap { width: calc(100% - 40px); height: 3px; background: #1e1e2a; border-radius: 2px; margin-bottom: 10px; flex-shrink: 0; }
+  .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+  .pose-wrap { width: calc(100% - 40px); max-width: 440px; flex: 0 0 auto; height: min(38vh, 280px); background: #15151f; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; overflow: hidden; }
+  .pose-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 20px; display: block; }
+  .pose-name { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; padding: 0 20px; flex-shrink: 0; width: calc(100% - 40px); max-width: 440px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pose-side { font-size: 13px; color: #7c5cfc; text-align: center; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.5px; min-height: 18px; flex-shrink: 0; }
+  .pose-cue { font-size: 14px; color: #999; text-align: center; padding: 0 24px; line-height: 1.55; margin-bottom: 14px; max-width: 480px; flex-shrink: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .bottom-row { position: absolute; bottom: 0; left: 0; right: 0; display: flex; align-items: flex-end; justify-content: center; width: 100%; padding: 0 20px 12px; min-height: 120px; }
+  .br-main { display: flex; align-items: center; gap: 28px; }
+  .timer-ring-wrap { position: relative; width: 110px; height: 110px; }
+  .timer-ring-wrap svg { transform: rotate(-90deg); }
+  .timer-bg { fill: none; stroke: #1e1e2a; stroke-width: 8; }
+  .timer-fill { fill: none; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset 1s linear; }
+  .timer-num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .timer-label { position: absolute; bottom: 12px; left: 0; right: 0; text-align: center; font-size: 10px; color: #666; letter-spacing: 1px; text-transform: uppercase; }
+  .controls { display: flex; gap: 16px; align-items: center; }
+  .btn-nav { width: 56px; height: 56px; border-radius: 50%; border: 1px solid #333; background: #15151f; color: #ccc; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .btn-nav:active { opacity: 0.7; }
+  .btn-pause { width: 74px; height: 74px; border-radius: 50%; border: none; background: #7c5cfc; color: #fff; font-size: 28px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+  .btn-pause:active { opacity: 0.85; }
+  #done-screen { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 100%; padding: 40px 24px; text-align: center; }
+  #done-screen h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+  #done-screen p { color: #888; font-size: 15px; line-height: 1.6; margin-bottom: 40px; }
+  .btn-restart { background: #7c5cfc; color: #fff; border: none; border-radius: 14px; padding: 16px 40px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; max-width: 320px; }
+  #audio-corner { display: none; position: fixed; right: 20px; bottom: 20px; background: rgba(10,10,20,0.92); border: 1px solid #2a2a3a; border-radius: 14px; padding: 10px 12px 8px; flex-direction: row; gap: 8px; align-items: flex-end; z-index: 10; touch-action: none; }
+  #audio-corner.unlocked { cursor: move; }
+  #audio-lock-btn { background: none; border: none; cursor: pointer; font-size: 13px; color: #555; padding: 0; line-height: 1; writing-mode: vertical-lr; height: 30px; align-self: flex-start; }
+  #audio-lock-btn:hover { color: #aaa; }
+  .ch { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+  .ch-icon { font-size: 13px; line-height: 1; }
+  .ch input[type=range] { writing-mode: vertical-lr; direction: rtl; -webkit-appearance: slider-vertical; width: 20px; height: 68px; accent-color: #7c5cfc; cursor: pointer; }
+  .ch-mute { background: none; border: none; cursor: pointer; font-size: 13px; color: #666; padding: 0; line-height: 1; }
+  .ch-mute.muted { color: #2a2a3a; }
+  .ch-divider { width: 1px; height: 72px; background: #2a2a3a; align-self: center; }
+  .ch-muteall { background: none; border: 1px solid #333; border-radius: 6px; color: #666; font-size: 9px; cursor: pointer; padding: 5px 5px; letter-spacing: 0.5px; text-transform: uppercase; writing-mode: vertical-lr; height: 60px; align-self: center; white-space: nowrap; }
+  .ch-muteall:hover { color: #aaa; border-color: #555; }
+  #countdown-overlay { display: none; position: fixed; inset: 0; background: rgba(10,10,18,0.93); z-index: 200; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+  #countdown-overlay .cdlabel { font-size: 12px; color: #555; letter-spacing: 2px; text-transform: uppercase; }
+  #countdown-overlay .cdname { font-size: 22px; font-weight: 700; color: #f0f0f0; text-align: center; padding: 0 40px; line-height: 1.3; }
+  #countdown-overlay .cdside { font-size: 13px; color: #7c5cfc; font-weight: 600; letter-spacing: 0.5px; min-height: 18px; }
+  #countdown-overlay .cdnum { font-size: 96px; font-weight: 700; color: #7c5cfc; line-height: 1; margin-top: 8px; }
+</style>
+</head>
+<body>
+<audio id="bg-music" loop preload="auto">
+  <source src="yoga_images/yoga_ambient.webm" type="audio/webm">
+</audio>
+
+<div id="start-screen">
+  <div style="font-size:36px;margin-bottom:8px;">🧘</div>
+  <h1>Desk Worker — Full Hour</h1>
+  <p class="subtitle">Complete A + B + C + D · Spine · Hips · Seated · Standing</p>
+  <div class="phase-list">
+    <div class="phase-item"><div class="phase-dot" style="background:#80cbc4"></div><span class="phase-label">Session A — Spine &amp; Floor</span><span class="phase-dur">13 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#f06292"></div><span class="phase-label">Session B — Hips &amp; Legs</span><span class="phase-dur">14 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#ffb74d"></div><span class="phase-label">Session C — Seated &amp; Supine</span><span class="phase-dur">15 min</span></div>
+    <div class="phase-item" style="border:none"><div class="phase-dot" style="background:#81c784"></div><span class="phase-label">Session D — Standing Flow</span><span class="phase-dur">14 min</span></div>
+  </div>
+  <div style="width:100%;max-width:320px;display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;border-top:1px solid #1a1a28;margin-top:4px;">
+    <span style="font-size:13px;color:#555;">Total</span>
+    <span style="font-size:15px;font-weight:600;color:#aaa;">~57 min · 79 poses</span>
+  </div>
+  <button class="btn-start" onclick="showAdGate()">Begin Full Session</button>
+</div>
+
+<div id="session-screen">
+  <div class="top-bar">
+    <span class="phase-badge" id="phase-badge">Session A</span>
+    <span class="progress-text" id="progress-text">1 / 79</span>
+    <button class="btn-exit" onclick="exitSession()">✕ Exit</button>
+  </div>
+  <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+  <div class="pose-wrap">
+    <img id="pose-img" src="" alt="yoga pose" />
+    <div id="pose-img-missing" style="display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;width:100%;height:100%;color:#444;">
+      <span style="font-size:40px;">📷</span><span style="font-size:12px;letter-spacing:1px;text-transform:uppercase;">Image needed</span>
+    </div>
+  </div>
+  <div class="pose-name" id="pose-name">Cat-Cow</div>
+  <div class="pose-side" id="pose-side"></div>
+  <div class="pose-cue" id="pose-cue"></div>
+  <div class="bottom-row">
+    <div class="br-main" id="br-main">
+      <div class="timer-ring-wrap">
+        <svg width="110" height="110" viewBox="0 0 110 110">
+          <circle class="timer-bg" cx="55" cy="55" r="47"/>
+          <circle class="timer-fill" id="timer-ring" cx="55" cy="55" r="47" stroke="#7c5cfc" stroke-dasharray="295.3" stroke-dashoffset="0"/>
+        </svg>
+        <div class="timer-num" id="timer-num">45</div>
+        <div class="timer-label">secs</div>
+      </div>
+      <div class="controls">
+        <button class="btn-nav" onclick="prevPose()">←</button>
+        <button class="btn-pause" id="btn-pause" onclick="togglePause()">⏸</button>
+        <button class="btn-nav" onclick="nextPose()">→</button>
+      </div>
+    </div>
+          <div id="preview-btns" style="display:none;flex-direction:column;gap:12px;align-items:center;width:100%;max-width:280px;padding:20px 0 10px;">
+        <button class="btn-start" onclick="beginSession()">&#9654; Begin Session</button>
+        <button style="background:none;border:1px solid #333;color:#888;border-radius:14px;padding:12px 40px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:280px;" onclick="exitSession()">&#8592; Return to Hub</button>
+      </div>
+      <div id="audio-corner">
+      <div class="ch"><span class="ch-icon">🎵</span><input type="range" id="music-vol" min="0" max="100" value="35" oninput="setMusicVol(this.value)"><button class="ch-mute" id="music-mute" onclick="toggleMusicMute()">🔊</button></div>
+      <div class="ch"><span class="ch-icon">🔔</span><input type="range" id="gong-vol" min="0" max="100" value="100" oninput="setGongVol(this.value)"><button class="ch-mute" id="gong-mute" onclick="toggleGongMute()">🔊</button></div>
+      <div class="ch"><span class="ch-icon">🗣️</span><input type="range" id="voice-vol" min="0" max="100" value="55" oninput="setVoiceVol(this.value)"><button class="ch-mute" id="voice-mute" onclick="toggleVoiceMute()">🔊</button></div>
+      <div class="ch-divider"></div>
+      <button id="mute-all-btn" class="ch-muteall" onclick="toggleMuteAll()">MUTE ALL</button>
+      <button id="audio-lock-btn" onclick="toggleAudioLock()" title="Lock / unlock position">🔒</button>
+    </div>
+  </div>
+</div>
+
+<div id="countdown-overlay">
+  <div class="cdlabel">Next Up</div>
+  <div class="cdname" id="cd-name"></div>
+  <div class="cdside" id="cd-side"></div>
+  <div class="cdnum" id="cd-num">3</div>
+</div>
+
+<div id="done-screen">
+  <div style="font-size:64px;margin-bottom:20px;">✅</div>
+  <h2>Full Session Complete</h2>
+  <p>Spine decompressed. Hips opened. Shoulders released. Standing chain activated. That's every desk-worker problem addressed in one hour.</p>
+  <button class="btn-restart" onclick="restart()">Start Again</button>
+  <button onclick="(window.parent.goBack ? window.parent.goBack() : window.location.href='index.html')" style="background:none;border:1px solid #333;color:#888;border-radius:14px;padding:13px 40px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:320px;margin-top:10px;">← Return to Hub</button>
+</div>
+
+<script>
+const PHASES = [
+  { name: "Session A — Spine & Floor",   color: "#80cbc4", fillColor: "#0d2020" },
+  { name: "Session B — Hips & Legs",     color: "#f06292", fillColor: "#2d1020" },
+  { name: "Session C — Seated & Supine", color: "#ffb74d", fillColor: "#2d2010" },
+  { name: "Session D — Standing Flow",   color: "#81c784", fillColor: "#1a2d1a" },
+];
+
+const IMAGES = {
+  // Session A
+  catcow:         "yoga_images/catcow.webp",
+  thread_left:    "yoga_images/thread_left.png",
+  thread_right:   "yoga_images/thread_right.jpeg",
+  sphinx:         "yoga_images/sphinx.jpeg",
+  locust:         "yoga_images/locust.avif",
+  updog:          "yoga_images/updog.webp",
+  childs_pose:    "yoga_images/childs_pose.jpg",
+  plank:          "yoga_images/plank.jpg",
+  bridge:         "yoga_images/bridge.avif",
+  knees_to_chest: "yoga_images/knees_to_chest.jpg",
+  twist_right:    "yoga_images/twist_right.jpg",
+  twist_left:     "yoga_images/twist_left.jpg",
+  happy_baby:     "yoga_images/happy_baby.avif",
+  chin_tucks:     "yoga_images/physio-chin-tucks.jpg",
+  neck_extension: "yoga_images/neck_extenstion.jpg",
+  neck_left:      "yoga_images/side-neck-stretch.webp",
+  neck_right:     "yoga_images/neck_stretche_right.webp",
+  savasana:       "yoga_images/savasana.jpg",
+  // Session B
+  downdog:              "yoga_images/downdog.jpeg",
+  half_lift:            "yoga_images/half_lift.webp",
+  forward_fold:         "yoga_images/forward_fold.webp",
+  wide_legged_fold:     "yoga_images/wide_legged_fold.jpeg",
+  low_lunge_left:       "yoga_images/low_lunge_left.webp",
+  low_lunge_right:      "yoga_images/low_lunge_right.webp",
+  lizard_left:          "yoga_images/lizard_left.jpg",
+  lizard_right:         "yoga_images/lizard_right.jpg",
+  pigeon_left:          "yoga_images/pigeon_left.jpg",
+  pigeon_right:         "yoga_images/pigeon_right.gif",
+  garland_squat:        "yoga_images/garland_squat.jpg",
+  frog_pose:            "yoga_images/frog_pose.png",
+  quad_left:            "yoga_images/standing_quad_left.jpg",
+  quad_right:           "yoga_images/standing_quad_right.jpg",
+  calf_left:            "yoga_images/calf_stretch_left.avif",
+  calf_right:           "yoga_images/calf_stretch_right.avif",
+  wrist_circles:        "yoga_images/Wrist-Circles-Stretch.gif",
+  supine_figure4_left:  "yoga_images/supine_figure4_left.jpg",
+  supine_figure4_right: "yoga_images/supine_figure4_right.webp",
+  legs_up_wall:         "yoga_images/legs_up_wall.avif",
+  // Session C
+  butterfly:                  "yoga_images/butterfly.webp",
+  seated_fold:                "yoga_images/seated_fold.jpg",
+  head_knee_left:             "yoga_images/head_knee_left.jpg",
+  head_knee_right:            "yoga_images/head_knee_right.jpg",
+  seated_twist_left:          "yoga_images/seated_twist_left.webp",
+  seated_twist_right:         "yoga_images/seated_twist_right.jpg",
+  boat_pose:                  "yoga_images/boat_pose.jpg",
+  camel:                      "yoga_images/camel.jpg",
+  chest_opener:               "yoga_images/chest_opener.png",
+  cross_body_left:            "yoga_images/cross_body_arm_left.jpg",
+  cross_body_right:           "yoga_images/cross_body_arm_right.webp",
+  prayer_stretch:             "yoga_images/prayer-stretch-page.webp",
+  shoulder_circles:           "yoga_images/shoulder-circles.webp",
+  reverse_prayer:             "yoga_images/Reverse-prayer-pose-jpg.webp",
+  reclined_butterfly:         "yoga_images/reclined_butterfly.jpg",
+  supine_thoracic:            "yoga_images/supine_thoracic.webp",
+  banana_left:                "yoga_images/banana_left.jpg",
+  banana_right:               "yoga_images/banana_right.jpg",
+  windshield_wipers:          "yoga_images/windshield_wipers.jpg",
+  reclined_hand_to_toe_left:  "yoga_images/reclined_hand_to_toe_left.webp",
+  reclined_hand_to_toe_right: "yoga_images/reclined_hand_to_toe_right.jpg",
+  // Session D
+  chair_pose:               "yoga_images/chair_pose.avif",
+  standing_side_bend_left:  "yoga_images/standing_side_bend_left.jpg",
+  standing_side_bend_right: "yoga_images/standing_side_bend_right.png",
+  crescent_left:            "yoga_images/crescent_left.jpg",
+  crescent_right:           "yoga_images/crescent_right.webp",
+  horse_stance:             "yoga_images/horse_stance.webp",
+  standing_backbend:        "yoga_images/standing_backbend.jpg",
+  triangle_left:            "yoga_images/triangle_left.jpg",
+  triangle_right:           "yoga_images/triangle_right.jpg",
+  side_angle_left:          "yoga_images/side_angle_left.jpg",
+  side_angle_right:         "yoga_images/side_angle_right.jpg",
+  tree_left:                "yoga_images/tree_left.avif",
+  tree_right:               "yoga_images/tree_right.avif",
+  fish_pose:                "yoga_images/fish_pose.jpeg",
+  eagle_arms:               "yoga_images/eagle_arms.jpg",
+  forearm_left:             "yoga_images/forearm-stretch.webp",
+  forearm_right:            "yoga_images/right-forearm-stretches.jpg",
+  reclining_hero:           "yoga_images/reclining_hero.jpg",
+  crocodile_pose:           "yoga_images/crocodile_pose.jpg",
+  seated_meditation:        "yoga_images/seated_meditation.jpg",
+};
+
+const POSES = [
+  // ── SESSION A — SPINE & FLOOR ──
+  { name: "Cat-Cow", duration: 45, cue: "Hands under shoulders, knees under hips. Inhale: arch back, drop belly, lift head. Exhale: round spine, tuck chin. Do ×8 slow — warms every lumbar disc before you ask anything of them.", phase: 0, draw: "catcow" },
+  { name: "Thread the Needle", duration: 45, side: "LEFT SIDE", cue: "From all-fours, slide left arm under right arm along the floor. Rest temple down. Breathe into the right shoulder blade — thoracic rotation is the first thing desk work locks out.", phase: 0, draw: "thread_left" },
+  { name: "Thread the Needle", duration: 45, side: "RIGHT SIDE", cue: "Switch sides. Slide right arm under left. Stack hips level. Each exhale lets you rotate a fraction further into the mid-back.", phase: 0, draw: "thread_right" },
+  { name: "Sphinx Pose", duration: 45, cue: "Lie face down. Forearms on mat, elbows under shoulders. Press down and lift the chest — passive backbend, no effort from the lower back. Directly reverses mid-back rounding from hours at a screen.", phase: 0, draw: "sphinx" },
+  { name: "Locust Pose", duration: 45, cue: "Arms alongside body, palms down. Inhale and lift chest, arms and legs simultaneously. Hold 3 seconds, lower. Repeat ×4. The posterior chain completely disengages from sitting — this reactivates it.", phase: 0, draw: "locust" },
+  { name: "Upward Dog", duration: 45, cue: "Press palms into floor, straighten arms, lift chest and thighs off mat. Shoulders roll back and down. Active thoracic extension — the strongest counter-movement to a desk-rounded upper back.", phase: 0, draw: "updog" },
+  { name: "Child's Pose", duration: 45, cue: "Knees wide, big toes together, arms extended forward. Forehead down. Full decompression of the lumbar and sacrum — breathe into the back body and feel it expand with every inhale.", phase: 0, draw: "childs_pose" },
+  { name: "Plank Hold", duration: 45, cue: "Hands under shoulders, body in one line from heels to skull. Engage your core and squeeze your glutes. Sitting all day switches off both — this switches them back on. Keep breathing.", phase: 0, draw: "plank" },
+  { name: "Bridge Pose", duration: 45, cue: "Feet hip-width, knees bent. Press feet into floor and drive hips up. Squeeze glutes hard — hold 8 seconds, lower slowly, pause, repeat ×3. Glute amnesia is one of the biggest consequences of desk work. This is the direct fix.", phase: 0, draw: "bridge" },
+  { name: "Knees to Chest", duration: 45, cue: "Lie on back. Hug both knees to chest. Rock gently side to side. Releases the compression built up in the lumbar discs from hours in a chair.", phase: 0, draw: "knees_to_chest" },
+  { name: "Supine Twist", duration: 45, side: "LEFT KNEE DOWN", cue: "Right knee to chest, cross it left. Right arm out, gaze right. Don't force the twist — let gravity take it. Feel this unwind the lumbar, not just the lower back.", phase: 0, draw: "twist_right" },
+  { name: "Supine Twist", duration: 45, side: "RIGHT KNEE DOWN", cue: "Left knee crosses right. Left arm out. Each exhale lets you sink a fraction deeper. Complete spinal rotation you won't get from any chair stretch.", phase: 0, draw: "twist_left" },
+  { name: "Happy Baby", duration: 45, cue: "On your back. Knees wide, grab outer feet. Ankles over knees. Rock side to side. Releases the sacroiliac joint and inner groin — both compressed from sitting all day.", phase: 0, draw: "happy_baby" },
+  { name: "Chin Tucks", duration: 35, cue: "Sitting or lying tall, draw chin straight back (double chin). Hold 3 seconds, release. Repeat ×8. Directly reverses forward head posture from screen time.", phase: 0, draw: "chin_tucks" },
+  { name: "Neck Extension", duration: 35, cue: "Tuck chin, then slowly lift face toward the ceiling. Return to neutral. Repeat ×8. Desk work locks the neck in forward flexion — this is how you get the backward range back.", phase: 0, draw: "neck_extension" },
+  { name: "Neck Stretch", duration: 35, side: "LEFT SIDE", cue: "Drop left ear toward left shoulder. Right shoulder stays relaxed — don't shrug. The upper trap is chronically overloaded by screen work. Give it the full hold.", phase: 0, draw: "neck_left" },
+  { name: "Neck Stretch", duration: 35, side: "RIGHT SIDE", cue: "Drop right ear to right shoulder. Breathe into the left side of the neck. Feel the stretch travel all the way down to the trap.", phase: 0, draw: "neck_right" },
+  // ── SESSION B — HIPS & LEGS ──
+  { name: "Downward Dog", duration: 45, cue: "Hips high, heels toward floor. Pedal feet slowly. Head fully hangs — neck free. Decompresses the shoulder joint and wakes up the hamstrings before they have to work.", phase: 1, draw: "downdog" },
+  { name: "Half Lift", duration: 45, cue: "From forward fold, press fingertips to shins or floor. Lengthen the spine forward — flat back, hips over heels. Feel the hamstrings engage and the lower back decompress before you fold deeper.", phase: 1, draw: "half_lift" },
+  { name: "Standing Forward Fold", duration: 45, cue: "Feet hip-width. Hinge from hips, fold forward. Bend knees as needed. Let head and neck hang completely — decompress the spine with gravity. Full posterior chain from calves to skull.", phase: 1, draw: "forward_fold" },
+  { name: "Wide-Legged Forward Fold", duration: 45, cue: "Step feet wide, toes forward. Hinge and fold, hands to floor. The adductors and inner hamstrings are almost never stretched at a desk — hold and breathe, let gravity do the work.", phase: 1, draw: "wide_legged_fold" },
+  { name: "Low Lunge", duration: 45, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right knee down. Arms overhead, hips square. Sink forward — your hip flexors are shortened all day sitting. Let them actually lengthen.", phase: 1, draw: "low_lunge_left" },
+  { name: "Low Lunge", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, left knee down. Arms up. Square hips forward. Don't rush — the right hip flexor needs as much time as the left.", phase: 1, draw: "low_lunge_right" },
+  { name: "Lizard Pose", duration: 45, side: "LEFT FOOT FORWARD", cue: "From Low Lunge, bring left foot outside left hand and lower onto forearms if available. The psoas and hip capsule open in a completely different plane than Low Lunge. If you only do one hip flexor stretch, make it this one.", phase: 1, draw: "lizard_left" },
+  { name: "Lizard Pose", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot outside right hand, forearms down. Hips drop toward the floor. The deeper you go, the more the inner groin releases alongside the hip flexor — a dual stretch that Low Lunge can't quite match.", phase: 1, draw: "lizard_right" },
+  { name: "Pigeon Pose", duration: 45, side: "LEFT LEG FORWARD", cue: "Slide left shin across the mat. Ease hips down. Walk hands forward. Breathe into the outer left hip. Glute medius and piriformis — both seized from sitting.", phase: 1, draw: "pigeon_left" },
+  { name: "Pigeon Pose", duration: 45, side: "RIGHT LEG FORWARD", cue: "Slide right shin across. Ease hips to floor. Chest down. Stay and breathe — the outer right hip needs the full hold to release.", phase: 1, draw: "pigeon_right" },
+  { name: "Garland Squat", duration: 45, cue: "Feet wider than hips, toes out. Lower into a deep squat, hands in prayer at chest. This is the deepest hip flexor stretch available — the position humans sat in before chairs existed.", phase: 1, draw: "garland_squat" },
+  { name: "Frog Pose", duration: 45, cue: "From hands and knees, spread knees wide and turn feet out so inner feet rest on the mat. Lower onto forearms. Hips sink back and down. The adductors and inner groin are completely missed by any standing work — this is how you find them.", phase: 1, draw: "frog_pose" },
+  { name: "Standing Quad Stretch", duration: 30, side: "LEFT LEG", cue: "Stand on right foot, left heel to glute. Hold ankle, knees together, hips forward. The quad shortens from sitting bent all day — give it back its full length.", phase: 1, draw: "quad_left" },
+  { name: "Standing Quad Stretch", duration: 30, side: "RIGHT LEG", cue: "Switch. Right heel to glute, knees level. Fingertips on a wall if needed. Feel the full stretch through the front of the thigh.", phase: 1, draw: "quad_right" },
+  { name: "Calf Stretch", duration: 30, side: "LEFT LEG", cue: "Left foot steps back, heel flat on floor. Lean forward. Calves tighten when the foot stays planted under a desk all day — give them the stretch.", phase: 1, draw: "calf_left" },
+  { name: "Calf Stretch", duration: 30, side: "RIGHT LEG", cue: "Right foot back, heel flat. Slightly bend the back knee to hit the deeper soleus muscle underneath the calf.", phase: 1, draw: "calf_right" },
+  { name: "Wrist Circles", duration: 30, cue: "Extend both arms forward. Slow full circles — 5 forward, 5 backward. The wrist joint needs full rotation, not just the typing plane it's stuck in all day.", phase: 1, draw: "wrist_circles" },
+  { name: "Supine Figure-4", duration: 45, side: "LEFT HIP", cue: "Lie on back. Cross left ankle over right thigh just above the knee. Flex the left foot. Either stay here or draw the right knee toward your chest. Targets the piriformis and external hip rotators — the muscles that lock up from sitting.", phase: 1, draw: "supine_figure4_left" },
+  { name: "Supine Figure-4", duration: 45, side: "RIGHT HIP", cue: "Cross right ankle over left thigh, flex right foot. Draw the left knee in. This is the lying version of Pigeon — accessible to everyone and often more effective because the pelvis stays level.", phase: 1, draw: "supine_figure4_right" },
+  { name: "Legs Up the Wall", duration: 45, cue: "Hips to a wall, legs straight up. Arms open, palms up. Eyes closed. Blood drains back from feet and ankles — reversing the pooling from sitting all day. Stay completely still.", phase: 1, draw: "legs_up_wall" },
+  // ── SESSION C — SEATED & SUPINE ──
+  { name: "Butterfly Pose", duration: 45, cue: "Sit. Soles of feet together, knees fall open. Hold feet, sit tall. The inner groin and adductors are held shortened all day with legs together under a desk. Let gravity do the work.", phase: 2, draw: "butterfly" },
+  { name: "Seated Forward Fold", duration: 45, cue: "Legs extended, feet flexed. Hinge from hips, reach forward. Keep spine long first — then fold. Full posterior chain stretch from heels to skull. Don't round the back just to reach further.", phase: 2, draw: "seated_fold" },
+  { name: "Head-to-Knee Pose", duration: 45, side: "LEFT LEG", cue: "Left leg extended, right foot to inner left thigh. Rotate torso toward left leg and fold. Unilateral hamstring stretch — catches the asymmetries that bilateral folds miss.", phase: 2, draw: "head_knee_left" },
+  { name: "Head-to-Knee Pose", duration: 45, side: "RIGHT LEG", cue: "Right leg extended, left foot to inner right thigh. Fold forward. Keep the extended foot flexed — feel the stretch travel up through the back of the knee.", phase: 2, draw: "head_knee_right" },
+  { name: "Seated Spinal Twist", duration: 45, side: "LEFT TWIST", cue: "Sit tall. Cross right foot over left thigh. Left elbow outside right knee, right hand behind. Rotate right. Thoracic rotation is completely absent from desk work — grow taller on each inhale, rotate further on each exhale.", phase: 2, draw: "seated_twist_left" },
+  { name: "Seated Spinal Twist", duration: 45, side: "RIGHT TWIST", cue: "Switch. Left foot over right thigh. Right elbow outside left knee. Rotate left. Both hips stay grounded. Feel this in the mid-back — not just the lower back.", phase: 2, draw: "seated_twist_right" },
+  { name: "Boat Pose", duration: 45, cue: "Sit, knees bent, lean back slightly until spine is long. Lift feet — shins parallel or legs straight. Core holds it all. The hip flexors and deep core get zero challenge sitting passively all day — this changes that.", phase: 2, draw: "boat_pose" },
+  { name: "Camel Pose", duration: 45, cue: "Kneel with hips over knees. Hands on lower back. Inhale and lift the chest, lean back — look up if comfortable. The deepest thoracic extension available. A direct antidote to hours of forward rounding.", phase: 2, draw: "camel" },
+  { name: "Chest Opener", duration: 40, cue: "Interlace fingers behind back. Straighten arms, squeeze shoulder blades together, lift chest, look slightly up. Counter all that forward rounding from the screen.", phase: 2, draw: "chest_opener" },
+  { name: "Cross-Body Shoulder", duration: 40, side: "LEFT ARM", cue: "Left arm straight across chest. Right hand hooks behind the upper arm and pulls gently. Targets the posterior deltoid — overloaded by reaching forward to a keyboard all day.", phase: 2, draw: "cross_body_left" },
+  { name: "Cross-Body Shoulder", duration: 40, side: "RIGHT ARM", cue: "Right arm across chest, left hand behind the upper arm. Keep shoulders level. The rear shoulder is the most neglected spot for desk workers.", phase: 2, draw: "cross_body_right" },
+  { name: "Prayer Stretch", duration: 35, cue: "Palms together in front of chest. Push hands slowly downward toward waist, keeping palms touching. Hold when you feel the stretch in the forearms.", phase: 2, draw: "prayer_stretch" },
+  { name: "Shoulder Circles", duration: 35, cue: "Roll both shoulders backwards ×10, then forward ×10. The upper traps and levator scapulae seize up from mouse use — full circles mobilise the entire girdle.", phase: 2, draw: "shoulder_circles" },
+  { name: "Reverse Prayer", duration: 35, cue: "Backs of hands together, fingers pointing down. Push gently downward. Hits the extensor muscles on top of the forearms — often the most neglected wrist stretch.", phase: 2, draw: "reverse_prayer" },
+  { name: "Reclined Butterfly", duration: 45, cue: "Lie on your back, soles of feet together, knees fall open. Arms out, palms up. Close your eyes. The inner groin opens passively with gravity — zero effort required. Just breathe.", phase: 2, draw: "reclined_butterfly" },
+  { name: "Supine Thoracic Extension", duration: 45, cue: "Place a rolled blanket or mat edge across the mid-back at the shoulder blades. Lie over it, arms out, palms up. The thoracic spine is locked into flexion all day — this gently reverses it. Move the roll up one vertebra after 20 seconds.", phase: 2, draw: "supine_thoracic" },
+  { name: "Banana Pose", duration: 45, side: "LEFT SIDE", cue: "Lie flat. Shift both legs to the right and both arms overhead to the right, creating a banana curve. The left side body — lat, oblique, hip — gets a full-length stretch you can't reach in any standing position. Keep both hips on the floor.", phase: 2, draw: "banana_left" },
+  { name: "Banana Pose", duration: 45, side: "RIGHT SIDE", cue: "Shift both legs and arms to the left. The right lat and intercostals open. Lateral chain work is almost always skipped by desk workers — this reaches where nothing else does.", phase: 2, draw: "banana_right" },
+  { name: "Windshield Wipers", duration: 45, cue: "Lie on back, knees bent, feet hip-width apart. Let both knees fall slowly to one side, return to center, then fall to the other. 8–10 full sweeps. Mobilises the hips and lumbar in rotation without any effort — the perfect passive decompressor.", phase: 2, draw: "windshield_wipers" },
+  { name: "Reclined Hand-to-Big-Toe", duration: 40, side: "LEFT LEG", cue: "Lie on your back. Extend the left leg up toward the ceiling, holding the big toe, a strap around the foot, or the back of the thigh. Right leg stays flat on the floor. The entire posterior chain — hamstring, calf, back of the knee — opens from the floor up. No bouncing. Steady breath, let gravity do the work.", phase: 2, draw: "reclined_hand_to_toe_left" },
+  { name: "Reclined Hand-to-Big-Toe", duration: 40, side: "RIGHT LEG", cue: "Right leg extends up, left leg flat. Hold wherever comfortable — big toe, strap, or back of the thigh. This is the most effective supine hamstring stretch available because the pelvis stays level on the floor. You'll feel the difference between sides immediately.", phase: 2, draw: "reclined_hand_to_toe_right" },
+  // ── SESSION D — STANDING FLOW ──
+  { name: "Chair Pose", duration: 45, cue: "Feet together or hip-width. Bend knees and sit back as if toward a chair. Arms up, core engaged. The quads and glutes do zero work sitting all day — 45 seconds of Chair Pose reminds them they exist.", phase: 3, draw: "chair_pose" },
+  { name: "Standing Side Bend", duration: 40, side: "LEFT SIDE", cue: "Stand tall, feet hip-width. Reach left arm up and arc the torso to the right. The entire left side body opens — lat, oblique, intercostal — muscles that never get stretched sitting at a desk.", phase: 3, draw: "standing_side_bend_left" },
+  { name: "Standing Side Bend", duration: 40, side: "RIGHT SIDE", cue: "Right arm up, arc to the left. Keep both feet grounded. Most people notice a difference side to side — the dominant arm side is often tighter.", phase: 3, draw: "standing_side_bend_right" },
+  { name: "Crescent Lunge", duration: 45, side: "LEFT FOOT FORWARD", cue: "Left foot forward in a high lunge — back knee straight, heel lifted. Sweep arms overhead. The front hip hinges deeply while the core fires to hold you upright — more demanding than Low Lunge, works the whole kinetic chain.", phase: 3, draw: "crescent_left" },
+  { name: "Crescent Lunge", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, back knee straight. Arms reach up — feel the line from back heel through fingertips. The hip flexor of the back leg gets a strong dynamic stretch while the front leg quads and glutes work hard.", phase: 3, draw: "crescent_right" },
+  { name: "Horse Stance", duration: 45, cue: "Feet wide, toes turned out 45°. Bend both knees and sink until thighs approach parallel. Hands at heart. Inner thighs, glutes, and deep hip rotators all fire simultaneously — a squat pattern with the hips fully externally rotated.", phase: 3, draw: "horse_stance" },
+  { name: "Standing Backbend", duration: 40, cue: "Stand tall, hands on lower back, fingertips pointing down. Inhale and draw elbows toward each other. Exhale and lean back, opening the chest skyward. The lumbar is supported by your hands. Look up only if the neck is comfortable.", phase: 3, draw: "standing_backbend" },
+  { name: "Triangle Pose", duration: 45, side: "LEFT SIDE", cue: "Straight left leg, hinge sideways, reach left hand toward shin or a block. Right arm up, gaze at right thumb. Full lateral stretch — the spine almost never moves sideways at a desk.", phase: 3, draw: "triangle_left" },
+  { name: "Triangle Pose", duration: 45, side: "RIGHT SIDE", cue: "Straight right leg, hinge right, left arm up. Keep both sides of the torso long. Feel the stretch from the right outer foot all the way up through the left fingertips.", phase: 3, draw: "triangle_right" },
+  { name: "Side Angle Pose", duration: 40, side: "LEFT SIDE", cue: "Left knee bent, lean left, left forearm to left thigh. Right arm overhead, creating a long diagonal line. Opens the right oblique and intercostal muscles — the forgotten desk-worker stretch.", phase: 3, draw: "side_angle_left" },
+  { name: "Side Angle Pose", duration: 40, side: "RIGHT SIDE", cue: "Right knee bent, lean right, right forearm to thigh. Left arm overhead. Keep the left hip pressing forward — don't collapse into the bent side.", phase: 3, draw: "side_angle_right" },
+  { name: "Tree Pose", duration: 45, side: "LEFT LEG", cue: "Left foot planted. Right foot to left ankle, calf, or inner thigh (avoid the knee). Hands at chest or overhead. Balance challenges the deep hip stabilisers — dormant from sitting all day.", phase: 3, draw: "tree_left" },
+  { name: "Tree Pose", duration: 45, side: "RIGHT LEG", cue: "Right foot planted. Left foot to right ankle, calf, or thigh. Find a fixed gaze point — it helps balance. The small foot and ankle muscles are reactivating after hours of being still.", phase: 3, draw: "tree_right" },
+  { name: "Fish Pose", duration: 45, cue: "Lie on your back, hands under hips palms down. Press elbows into floor and arch the upper back, resting the top of the head lightly on the mat. The strongest passive thoracic opener available — the direct antidote to screen-rounding.", phase: 3, draw: "fish_pose" },
+  { name: "Eagle Arms", duration: 40, cue: "Stand or sit. Cross right elbow under left, wrap right forearm around left, palms touching. Lift elbows to shoulder height and push them forward. Opens the posterior shoulder and upper back — the most direct stretch for muscles overloaded by hunching toward a screen.", phase: 3, draw: "eagle_arms" },
+  { name: "Forearm Flexor Stretch", duration: 30, side: "LEFT ARM", cue: "Left arm forward, palm up. Right hand pulls fingers back toward you. Hold steady — don't bounce. If you type a lot, you'll really feel this one.", phase: 3, draw: "forearm_left" },
+  { name: "Forearm Flexor Stretch", duration: 30, side: "RIGHT ARM", cue: "Right arm forward, palm up. Left hand pulls fingers back gently. The forearm flexors are under continuous load from typing — they deserve the full hold.", phase: 3, draw: "forearm_right" },
+  { name: "Reclining Hero", duration: 60, cue: "From kneeling, sit back between your heels (use a block under the hips if needed). Lean back onto forearms or all the way down. The quad and hip flexor get a completely different stretch than anything standing — full passive extension of the knee joint and front of the hip. Stay up if knees are uncomfortable.", phase: 3, draw: "reclining_hero" },
+  { name: "Crocodile Pose", duration: 45, cue: "Lie face down. Stack your forearms under your forehead. Feet hip-width, toes turned out. Completely release all effort. The front body — belly, chest, hip flexors — decompresses into the floor. After a standing flow, the spine loves being supported from the front.", phase: 3, draw: "crocodile_pose" },
+  { name: "Seated Meditation", duration: 60, cue: "Sit comfortably — cross-legged, on your heels, or in a chair. Hands on knees, eyes closed. Follow the breath for the full 60 seconds without fixing or controlling it. The body has worked; let the nervous system catch up.", phase: 3, draw: "seated_meditation" },
+  { name: "Savasana", duration: 90, cue: "Lie flat. Legs loose, arms at 45°, palms up. Eyes closed. Don't move. An entire hour of work — every disc decompressed, every hip opened, every shoulder released. Let it all integrate. The mat is doing the work now.", phase: 3, draw: "savasana" },
+];
+
+let currentIdx = 0, timeLeft = 0, totalDuration = 0, paused = false, tickInterval = null;
+
+function goToSession() {
+  getAudioCtx(); ytPlay();
+  document.getElementById('start-screen').style.display = 'none';
+  document.getElementById('session-screen').style.display = 'flex';
+  document.getElementById('audio-corner').style.display = 'flex';
+  currentIdx = 0; displayPose(0);
+  document.getElementById('br-main').style.display = 'none';
+  document.getElementById('preview-btns').style.display = 'flex';
+}
+
+function beginSession() {
+  document.getElementById('preview-btns').style.display = 'none';
+  document.getElementById('br-main').style.display = 'flex';
+  startGetReady(5);
+}
+
+function displayPose(idx) {
+  clearInterval(tickInterval);
+  currentIdx = idx;
+  const pose = POSES[idx], phase = PHASES[pose.phase];
+  const badge = document.getElementById('phase-badge');
+  badge.textContent = phase.name; badge.style.background = phase.color + '22'; badge.style.color = phase.color;
+  document.getElementById('progress-text').textContent = `${Math.round((idx + 1) / POSES.length * 100)}% (${idx + 1}/${POSES.length})`;
+  const pct = (idx / POSES.length) * 100;
+  const fill = document.getElementById('progress-fill');
+  fill.style.width = pct + '%'; fill.style.background = phase.color;
+  const imgSrc = IMAGES[pose.draw], imgEl = document.getElementById('pose-img'), missingEl = document.getElementById('pose-img-missing');
+  if (imgSrc) {
+    const t = new Image();
+    t.onload  = () => { imgEl.src = imgSrc; imgEl.style.display = 'block'; missingEl.style.display = 'none'; };
+    t.onerror = () => { imgEl.style.display = 'none'; missingEl.style.display = 'flex'; };
+    t.src = imgSrc;
+  } else { imgEl.style.display = 'none'; missingEl.style.display = 'flex'; }
+  document.getElementById('pose-name').textContent = pose.name;
+  document.getElementById('pose-side').textContent = pose.side || '';
+  document.getElementById('pose-cue').textContent = pose.cue;
+  announcePose(pose);
+  timeLeft = pose.duration; totalDuration = pose.duration; paused = false;
+  document.getElementById('btn-pause').textContent = '⏸';
+  updateTimerDisplay();
+}
+
+function updateTimerDisplay() {
+  document.getElementById('timer-num').textContent = timeLeft;
+  const offset = 295.3 * (1 - timeLeft / totalDuration);
+  const ring = document.getElementById('timer-ring');
+  ring.style.strokeDashoffset = offset; ring.style.stroke = PHASES[POSES[currentIdx].phase].color;
+}
+
+function startGetReady(secs) {
+  clearInterval(tickInterval);
+  var timerLabel = document.querySelector('.timer-label');
+  var timerRing = document.getElementById('timer-ring');
+  var circumference = timerRing ? parseFloat(timerRing.getAttribute('stroke-dasharray')) || 295.3 : 295.3;
+  var origLabel = timerLabel ? timerLabel.textContent : 'secs';
+  if (timerLabel) timerLabel.textContent = 'get ready';
+  if (timerRing) timerRing.style.stroke = '#555';
+  var count = secs;
+  document.getElementById('timer-num').textContent = count;
+  if (timerRing) timerRing.style.strokeDashoffset = 0;
+  tickInterval = setInterval(function() {
+    count--;
+    if (count <= 0) {
+      clearInterval(tickInterval);
+      if (timerLabel) timerLabel.textContent = origLabel;
+      updateTimerDisplay();
+      startTick();
+    } else {
+      document.getElementById('timer-num').textContent = count;
+      if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+    }
+  }, 1000);
+} else {
+      document.getElementById('timer-num').textContent = count;
+      if (timerRing) timerRing.style.strokeDashoffset = 295.3 * (1 - count / secs);
+    }
+  }, 1000);
+}
+
+function startTick() {
+  tickInterval = setInterval(() => {
+    if (!paused) {
+      timeLeft--; updateTimerDisplay();
+      if (timeLeft <= 0) {
+        clearInterval(tickInterval); playGong();
+        if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+        setTimeout(() => { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(5); } else { showDone(); } }, 600);
+      }
+    }
+  }, 1000);
+}
+
+function startCountdown(nextIdx, initialCount = 3, label = 'Next Up') {
+  const overlay = document.getElementById('countdown-overlay');
+  const next = POSES[nextIdx];
+  document.getElementById('cd-name').textContent = next.name;
+  document.getElementById('cd-side').textContent = next.side || '';
+  const labelEl = document.querySelector('#countdown-overlay .cdlabel');
+  if (labelEl) labelEl.textContent = label;
+  let count = initialCount;
+  document.getElementById('cd-num').textContent = count;
+  overlay.style.display = 'flex';
+  const cd = setInterval(() => {
+    count--;
+    if (count <= 0) {
+      clearInterval(cd); overlay.style.display = 'none';
+      if (labelEl) labelEl.textContent = 'Next Up';
+      currentIdx = nextIdx; displayPose(currentIdx);
+    } else { document.getElementById('cd-num').textContent = count; }
+  }, 1000);
+}
+
+function togglePause() { paused = !paused; document.getElementById('btn-pause').textContent = paused ? '▶' : '⏸'; if (paused) ytPause(); else ytPlay(); }
+function nextPose() { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(5); } else { showDone(); } }
+function prevPose() { if (currentIdx > 0) { displayPose(currentIdx - 1); startGetReady(5); } }
+function exitSession() { clearInterval(tickInterval); ytPause(); document.getElementById('session-screen').style.display = 'none'; document.getElementById('start-screen').style.display = 'flex'; var bm=document.getElementById('br-main'); var pb=document.getElementById('preview-btns'); if(bm) bm.style.display='flex'; if(pb) pb.style.display='none'; }
+function showDone() { clearInterval(tickInterval); ytPause(); document.getElementById('session-screen').style.display = 'none'; document.getElementById('done-screen').style.display = 'flex'; }
+function restart() { document.getElementById('done-screen').style.display = 'none'; document.getElementById('start-screen').style.display = 'flex'; }
+
+let audioCtx = null;
+function getAudioCtx() { if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); return audioCtx; }
+function playGong() {
+  if (gongMuted) return;
+  try {
+    const ctx = getAudioCtx(); if (ctx.state === 'suspended') ctx.resume();
+    const now = ctx.currentTime, vol = Math.max(0.0001, gongVolState);
+    [[90,0.55*vol],[180,0.28*vol],[270,0.14*vol],[360,0.08*vol],[540,0.04*vol]].forEach(([freq,gain]) => {
+      const osc = ctx.createOscillator(), g = ctx.createGain();
+      osc.connect(g); g.connect(ctx.destination); osc.type = 'sine'; osc.frequency.value = freq;
+      g.gain.setValueAtTime(0,now); g.gain.linearRampToValueAtTime(gain,now+0.01); g.gain.exponentialRampToValueAtTime(0.0001,now+3.0);
+      osc.start(now); osc.stop(now+3.0);
+    });
+  } catch(e) {}
+}
+function announcePose(pose) {
+  if (!('speechSynthesis' in window) || voiceMuted) return;
+  speechSynthesis.cancel();
+  const text = pose.side ? `${pose.name}. ${pose.side.toLowerCase()}` : pose.name;
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-GB'; utter.rate = 0.88; utter.pitch = 1.1; utter.volume = voiceVolState;
+  const FEMALE = ['Samantha','Karen','Victoria','Moira','Fiona','Tessa','Zira','Hazel','Susan','Catherine','Emily','Serena','female','woman'];
+  const trySpeak = () => { const v = speechSynthesis.getVoices(); const fv = v.find(x => FEMALE.some(n => x.name.toLowerCase().includes(n.toLowerCase()))) || v.find(x => x.lang.startsWith('en')); if (fv) utter.voice = fv; speechSynthesis.speak(utter); };
+  if (speechSynthesis.getVoices().length) { trySpeak(); } else { speechSynthesis.onvoiceschanged = trySpeak; }
+}
+
+const bgMusic = document.getElementById('bg-music');
+function ytPlay() { bgMusic.volume = musicVolState/100; bgMusic.muted = musicMuted; bgMusic.play().catch(()=>{}); }
+function ytPause() { bgMusic.pause(); }
+
+let musicVolState=35,musicMuted=false,gongVolState=1.0,gongMuted=false,voiceVolState=0.55,voiceMuted=false;
+function setMusicVol(v) { musicVolState=parseInt(v); bgMusic.volume=musicVolState/100; bgMusic.muted=false; musicMuted=false; updateMuteBtn('music-mute',false); }
+function toggleMusicMute() { musicMuted=!musicMuted; bgMusic.muted=musicMuted; updateMuteBtn('music-mute',musicMuted); }
+function setGongVol(v) { gongVolState=parseInt(v)/100; }
+function toggleGongMute() { gongMuted=!gongMuted; updateMuteBtn('gong-mute',gongMuted); }
+function setVoiceVol(v) { voiceVolState=parseInt(v)/100; }
+function toggleVoiceMute() { voiceMuted=!voiceMuted; updateMuteBtn('voice-mute',voiceMuted); }
+function updateMuteBtn(id,muted) { const btn=document.getElementById(id); if(!btn) return; btn.textContent=muted?'🔇':'🔊'; btn.classList.toggle('muted',muted); }
+let allMuted=false;
+function toggleMuteAll() { allMuted=!allMuted; musicMuted=allMuted; bgMusic.muted=musicMuted; updateMuteBtn('music-mute',musicMuted); gongMuted=allMuted; updateMuteBtn('gong-mute',gongMuted); voiceMuted=allMuted; updateMuteBtn('voice-mute',voiceMuted); if(allMuted) speechSynthesis.cancel(); const btn=document.getElementById('mute-all-btn'); if(btn) btn.textContent=allMuted?'UNMUTE':'MUTE ALL'; }
+document.getElementById('start-screen').addEventListener('click',function unlockAudio(){ bgMusic.load(); const ctx=getAudioCtx(); if(ctx.state==='suspended') ctx.resume().catch(()=>{}); document.getElementById('start-screen').removeEventListener('click',unlockAudio); },{once:true});
+try { if('wakeLock' in navigator) navigator.wakeLock.request('screen').catch(()=>{}); } catch(e){}
+
+// ── Keyboard navigation ──
+document.addEventListener('keydown', function(e) {
+  var sess = document.getElementById('session-screen');
+  if (!sess || sess.style.display !== 'flex') return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); nextPose(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); prevPose(); }
+  else if (e.key === ' ') { e.preventDefault(); togglePause(); }
+});
+
+// ── Draggable audio panel ──
+(function() {
+  var panel = document.getElementById('audio-corner');
+  var locked = true, dragging = false, ox = 0, oy = 0;
+  try {
+    var sx = localStorage.getItem('audio_x'), sy = localStorage.getItem('audio_y');
+    if (sx && sy) { panel.style.right = 'auto'; panel.style.bottom = 'auto'; panel.style.left = sx; panel.style.top = sy; }
+  } catch(e) {}
+  window.toggleAudioLock = function() {
+    locked = !locked;
+    document.getElementById('audio-lock-btn').textContent = locked ? '🔒' : '🔓';
+    panel.classList.toggle('unlocked', !locked);
+  };
+  panel.addEventListener('mousedown', function(e) {
+    if (locked || e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+    dragging = true;
+    var r = panel.getBoundingClientRect();
+    ox = e.clientX - r.left; oy = e.clientY - r.top;
+    e.preventDefault();
+  });
+  panel.addEventListener('touchstart', function(e) {
+    if (locked) return;
+    dragging = true;
+    var t = e.touches[0], r = panel.getBoundingClientRect();
+    ox = t.clientX - r.left; oy = t.clientY - r.top;
+  }, {passive: true});
+  document.addEventListener('mousemove', function(e) {
+    if (!dragging) return;
+    panel.style.left = (e.clientX - ox) + 'px';
+    panel.style.top = (e.clientY - oy) + 'px';
+    panel.style.right = 'auto'; panel.style.bottom = 'auto';
+  });
+  document.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
+    var t = e.touches[0];
+    panel.style.left = (t.clientX - ox) + 'px';
+    panel.style.top = (t.clientY - oy) + 'px';
+    panel.style.right = 'auto'; panel.style.bottom = 'auto';
+  }, {passive: true});
+  function stopDrag() {
+    if (!dragging) return; dragging = false;
+    try { localStorage.setItem('audio_x', panel.style.left); localStorage.setItem('audio_y', panel.style.top); } catch(e) {}
+  }
+  document.addEventListener('mouseup', stopDrag);
+  document.addEventListener('touchend', stopDrag);
+})();
+
+// ── Ad Gate ──
+var adTimer = null;
+
+function showAdGate() {
+  var gate = document.getElementById('ad-gate');
+  gate.style.display = 'flex';
+  var secs = 15;
+  document.getElementById('ad-countdown').textContent = secs;
+  var startBtn = document.getElementById('ad-start-btn');
+  var skipBtn  = document.getElementById('ad-skip-btn');
+  startBtn.disabled = true;
+  startBtn.style.opacity = '0.35';
+  startBtn.style.cursor = 'not-allowed';
+  skipBtn.style.display = 'none';
+  skipBtn.textContent = 'Skip →';
+
+  // ══════════════════════════════════════════════════════════════
+  // REPLACE THIS BLOCK with your AdSense Rewarded Ad SDK call.
+  // When the ad finishes / user earns reward → call proceedToSession()
+  // ══════════════════════════════════════════════════════════════
+  clearInterval(adTimer);
+  adTimer = setInterval(function() {
+    secs--;
+    document.getElementById('ad-countdown').textContent = secs > 0 ? secs : '✓';
+    if (secs === 10) { skipBtn.style.display = 'block'; }
+    if (secs <= 0) {
+      clearInterval(adTimer);
+      startBtn.disabled = false;
+      startBtn.style.opacity = '1';
+      startBtn.style.cursor = 'pointer';
+      skipBtn.style.display = 'none';
+    }
+  }, 1000);
+}
+
+function skipAd() { clearInterval(adTimer); proceedToSession(); }
+
+function proceedToSession() {
+  document.getElementById('ad-gate').style.display = 'none';
+  goToSession();
+}
+</script>
+
+<!-- ── Ad Gate Overlay ── -->
+<div id="ad-gate" style="display:none;position:fixed;inset:0;background:rgba(8,8,16,0.97);z-index:300;flex-direction:column;align-items:center;justify-content:center;padding:28px;gap:0;">
+  <div style="max-width:400px;width:100%;display:flex;flex-direction:column;align-items:center;gap:18px;">
+
+    <div style="font-size:11px;color:#444;letter-spacing:2px;text-transform:uppercase;margin-bottom:-4px;">Free · Supported by ads</div>
+    <div style="font-size:20px;font-weight:700;color:#f0f0f0;text-align:center;line-height:1.3;">Watch a short ad to start<br><span style="color:#7c5cfc;">your Full Hour session</span></div>
+
+    <!-- ═══════════════════════════════════════════════════════
+         AD SLOT — replace this div with your AdSense code
+         e.g. <ins class="adsbygoogle" ...></ins>
+         Call proceedToSession() in your ad's onComplete callback
+         ═══════════════════════════════════════════════════════ -->
+    <div style="width:100%;height:210px;background:#12121e;border:1px dashed #2a2a3a;border-radius:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;position:relative;">
+      <div style="position:absolute;top:10px;left:14px;font-size:10px;color:#2a2a3a;letter-spacing:1.5px;text-transform:uppercase;">Advertisement</div>
+      <div style="font-size:40px;">🧘</div>
+      <div style="font-size:14px;color:#555;text-align:center;line-height:1.5;">Yoga gear, supplements &amp; apps<br>you might love</div>
+      <div style="position:absolute;bottom:10px;right:14px;font-size:10px;color:#222;">Ad placeholder · swap with AdSense</div>
+    </div>
+    <!-- END AD SLOT -->
+
+    <div style="display:flex;align-items:center;gap:14px;width:100%;margin-top:2px;">
+      <div style="display:flex;flex-direction:column;align-items:center;gap:2px;min-width:48px;">
+        <div id="ad-countdown" style="font-size:34px;font-weight:700;color:#7c5cfc;line-height:1;">15</div>
+        <div style="font-size:9px;color:#333;letter-spacing:1px;text-transform:uppercase;">secs</div>
+      </div>
+      <button id="ad-start-btn" onclick="proceedToSession()" disabled
+        style="flex:1;background:#7c5cfc;color:#fff;border:none;border-radius:14px;padding:15px;font-size:16px;font-weight:600;transition:opacity 0.4s,cursor 0.4s;">
+        Start Session →
+      </button>
+    </div>
+
+    <button id="ad-skip-btn" onclick="skipAd()"
+      style="display:none;background:none;border:none;color:#555;font-size:13px;cursor:pointer;padding:4px 0;text-decoration:underline;text-underline-offset:3px;">
+      Skip →
+    </button>
+
+    <div style="font-size:11px;color:#2a2a3a;text-align:center;line-height:1.5;">Sessions A–D are always free.<br>This combined session is supported by a short ad.</div>
+  </div>
+</div>
+
+</body>
+</html>

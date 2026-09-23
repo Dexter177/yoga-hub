@@ -18,19 +18,19 @@
   .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .phase-label { flex: 1; text-align: left; font-size: 14px; color: #ddd; }
   .phase-dur { font-size: 13px; color: #555; }
-  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; }
+  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; position: relative; padding-bottom: 144px; }
   .top-bar { width: 100%; padding: 10px 20px 8px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .phase-badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
   .progress-text { font-size: 13px; color: #666; }
   .btn-exit { background: none; border: 1px solid #333; color: #888; border-radius: 8px; padding: 4px 12px; font-size: 12px; cursor: pointer; }
   .progress-wrap { width: calc(100% - 40px); height: 3px; background: #1e1e2a; border-radius: 2px; margin-bottom: 10px; flex-shrink: 0; }
   .progress-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
-  .pose-wrap { width: calc(100% - 40px); max-width: 440px; flex: 1 1 auto; min-height: 60px; max-height: min(42vh, 360px); background: #15151f; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; overflow: hidden; }
+  .pose-wrap { width: calc(100% - 40px); max-width: 440px; flex: 0 0 auto; height: min(38vh, 280px); background: #15151f; border-radius: 20px; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; overflow: hidden; }
   .pose-wrap img { width: 100%; height: 100%; object-fit: contain; border-radius: 20px; display: block; }
-  .pose-name { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; padding: 0 20px; flex-shrink: 0; }
+  .pose-name { font-size: 26px; font-weight: 700; text-align: center; margin-bottom: 4px; padding: 0 20px; flex-shrink: 0; width: calc(100% - 40px); max-width: 440px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .pose-side { font-size: 13px; color: #7c5cfc; text-align: center; margin-bottom: 10px; font-weight: 600; letter-spacing: 0.5px; min-height: 18px; flex-shrink: 0; }
-  .pose-cue { font-size: 14px; color: #999; text-align: center; padding: 0 24px; line-height: 1.55; margin-bottom: 14px; max-width: 480px; flex-shrink: 0; display: block; overflow: visible; }
-  .bottom-row { position: relative; display: flex; align-items: flex-end; justify-content: center; flex-shrink: 0; margin-bottom: 12px; width: 100%; padding: 0 20px; min-height: 120px; }
+  .pose-cue { font-size: 14px; color: #999; text-align: center; padding: 0 24px; line-height: 1.55; margin-bottom: 14px; max-width: 480px; flex-shrink: 0; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+  .bottom-row { position: absolute; bottom: 0; left: 0; right: 0; display: flex; align-items: flex-end; justify-content: center; width: 100%; padding: 0 20px 12px; min-height: 120px; }
   .br-main { display: flex; align-items: center; gap: 28px; }
   .timer-ring-wrap { position: relative; width: 110px; height: 110px; }
   .timer-ring-wrap svg { transform: rotate(-90deg); }
@@ -47,7 +47,10 @@
   #done-screen h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
   #done-screen p { color: #888; font-size: 15px; line-height: 1.6; margin-bottom: 40px; }
   .btn-restart { background: #7c5cfc; color: #fff; border: none; border-radius: 14px; padding: 16px 40px; font-size: 16px; font-weight: 600; cursor: pointer; width: 100%; max-width: 320px; }
-  #audio-corner { display: none; position: absolute; right: 20px; bottom: 0; background: rgba(10,10,20,0.92); border: 1px solid #2a2a3a; border-radius: 14px; padding: 10px 12px 8px; flex-direction: row; gap: 8px; align-items: flex-end; z-index: 10; }
+  #audio-corner { display: none; position: fixed; right: 20px; bottom: 20px; background: rgba(10,10,20,0.92); border: 1px solid #2a2a3a; border-radius: 14px; padding: 10px 12px 8px; flex-direction: row; gap: 8px; align-items: flex-end; z-index: 10; touch-action: none; }
+  #audio-corner.unlocked { cursor: move; }
+  #audio-lock-btn { background: none; border: none; cursor: pointer; font-size: 13px; color: #555; padding: 0; line-height: 1; writing-mode: vertical-lr; height: 30px; align-self: flex-start; }
+  #audio-lock-btn:hover { color: #aaa; }
   .ch { display: flex; flex-direction: column; align-items: center; gap: 5px; }
   .ch-icon { font-size: 13px; line-height: 1; }
   .ch input[type=range] { writing-mode: vertical-lr; direction: rtl; -webkit-appearance: slider-vertical; width: 20px; height: 68px; accent-color: #7c5cfc; cursor: pointer; }
@@ -73,23 +76,23 @@
   <h1>Desk Worker C</h1>
   <p class="subtitle">Seated &amp; Supine — Groin · Hamstrings · Core · Shoulders</p>
   <div class="phase-list">
-    <div class="phase-item"><div class="phase-dot" style="background:#80cbc4"></div><span class="phase-label">Seated Groin</span><span class="phase-dur">2 min</span></div>
-    <div class="phase-item"><div class="phase-dot" style="background:#f06292"></div><span class="phase-label">Seated Hamstrings</span><span class="phase-dur">4 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#80cbc4"></div><span class="phase-label">Seated Groin</span><span class="phase-dur">1 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#f06292"></div><span class="phase-label">Seated Hamstrings</span><span class="phase-dur">2 min</span></div>
     <div class="phase-item"><div class="phase-dot" style="background:#ffb74d"></div><span class="phase-label">Core &amp; Kneeling</span><span class="phase-dur">3 min</span></div>
-    <div class="phase-item"><div class="phase-dot" style="background:#81c784"></div><span class="phase-label">Upper Body</span><span class="phase-dur">3 min</span></div>
-    <div class="phase-item" style="border:none"><div class="phase-dot" style="background:#ba68c8"></div><span class="phase-label">Supine Rest</span><span class="phase-dur">2 min</span></div>
+    <div class="phase-item"><div class="phase-dot" style="background:#81c784"></div><span class="phase-label">Upper Body</span><span class="phase-dur">4 min</span></div>
+    <div class="phase-item" style="border:none"><div class="phase-dot" style="background:#ba68c8"></div><span class="phase-label">Supine Rest</span><span class="phase-dur">5 min</span></div>
   </div>
   <div style="width:100%;max-width:320px;display:flex;justify-content:space-between;align-items:center;padding:10px 0 0;border-top:1px solid #1a1a28;margin-top:4px;">
     <span style="font-size:13px;color:#555;">Total</span>
     <span style="font-size:15px;font-weight:600;color:#aaa;">~15 min</span>
   </div>
-  <button class="btn-start" onclick="startSession()">Begin Session</button>
+  <button class="btn-start" onclick="goToSession()">Go to Session</button>
 </div>
 
 <div id="session-screen">
   <div class="top-bar">
     <span class="phase-badge" id="phase-badge">Seated Groin</span>
-    <span class="progress-text" id="progress-text">1 / 15</span>
+    <span class="progress-text" id="progress-text">1 / 21</span>
     <button class="btn-exit" onclick="exitSession()">✕ Exit</button>
   </div>
   <div class="progress-wrap"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
@@ -103,13 +106,13 @@
   <div class="pose-side" id="pose-side"></div>
   <div class="pose-cue" id="pose-cue"></div>
   <div class="bottom-row">
-    <div class="br-main">
+    <div class="br-main" id="br-main">
       <div class="timer-ring-wrap">
         <svg width="110" height="110" viewBox="0 0 110 110">
           <circle class="timer-bg" cx="55" cy="55" r="47"/>
           <circle class="timer-fill" id="timer-ring" cx="55" cy="55" r="47" stroke="#7c5cfc" stroke-dasharray="295.3" stroke-dashoffset="0"/>
         </svg>
-        <div class="timer-num" id="timer-num">60</div>
+        <div class="timer-num" id="timer-num">45</div>
         <div class="timer-label">secs</div>
       </div>
       <div class="controls">
@@ -118,12 +121,17 @@
         <button class="btn-nav" onclick="nextPose()">→</button>
       </div>
     </div>
-    <div id="audio-corner">
+          <div id="preview-btns" style="display:none;flex-direction:column;gap:12px;align-items:center;width:100%;max-width:280px;padding:20px 0 10px;">
+        <button class="btn-start" onclick="beginSession()">&#9654; Begin Session</button>
+        <button style="background:none;border:1px solid #333;color:#888;border-radius:14px;padding:12px 40px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:280px;" onclick="exitSession()">&#8592; Return to Hub</button>
+      </div>
+      <div id="audio-corner">
       <div class="ch"><span class="ch-icon">🎵</span><input type="range" id="music-vol" min="0" max="100" value="35" oninput="setMusicVol(this.value)"><button class="ch-mute" id="music-mute" onclick="toggleMusicMute()">🔊</button></div>
       <div class="ch"><span class="ch-icon">🔔</span><input type="range" id="gong-vol" min="0" max="100" value="100" oninput="setGongVol(this.value)"><button class="ch-mute" id="gong-mute" onclick="toggleGongMute()">🔊</button></div>
       <div class="ch"><span class="ch-icon">🗣️</span><input type="range" id="voice-vol" min="0" max="100" value="55" oninput="setVoiceVol(this.value)"><button class="ch-mute" id="voice-mute" onclick="toggleVoiceMute()">🔊</button></div>
       <div class="ch-divider"></div>
       <button id="mute-all-btn" class="ch-muteall" onclick="toggleMuteAll()">MUTE ALL</button>
+      <button id="audio-lock-btn" onclick="toggleAudioLock()" title="Lock / unlock position">🔒</button>
     </div>
   </div>
 </div>
@@ -140,46 +148,53 @@
   <h2>Session Complete</h2>
   <p>Inner groin opened. Hamstrings freed. Thoracic rotation restored. Shoulders and wrists decompressed. One of the most neglected sessions — and one of the most valuable.</p>
   <button class="btn-restart" onclick="restart()">Start Again</button>
+  <button onclick="(window.parent.goBack ? window.parent.goBack() : window.location.href='index.html')" style="background:none;border:1px solid #333;color:#888;border-radius:14px;padding:13px 40px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:320px;margin-top:10px;">← Return to Hub</button>
 </div>
 
 <script>
 const PHASES = [
-  { name: "Seated Groin",    color: "#80cbc4", fillColor: "#0d2020" },
+  { name: "Seated Groin",      color: "#80cbc4", fillColor: "#0d2020" },
   { name: "Seated Hamstrings", color: "#f06292", fillColor: "#2d1020" },
-  { name: "Core & Kneeling", color: "#ffb74d", fillColor: "#2d2010" },
-  { name: "Upper Body",      color: "#81c784", fillColor: "#1a2d1a" },
-  { name: "Supine Rest",     color: "#ba68c8", fillColor: "#201a2d" },
+  { name: "Core & Kneeling",   color: "#ffb74d", fillColor: "#2d2010" },
+  { name: "Upper Body",        color: "#81c784", fillColor: "#1a2d1a" },
+  { name: "Supine Rest",       color: "#ba68c8", fillColor: "#201a2d" },
 ];
 
 const IMAGES = {
-  butterfly:         "yoga_images/butterfly.webp",
-  seated_fold:       "yoga_images/seated_fold.jpg",
-  head_knee_left:    "yoga_images/head_knee_left.jpg",
-  head_knee_right:   "yoga_images/head_knee_right.jpg",
-  seated_twist_left: "yoga_images/seated_twist_left.webp",
-  seated_twist_right:"yoga_images/seated_twist_right.jpg",
-  boat_pose:         "yoga_images/boat_pose.jpg",
-  camel:             "yoga_images/camel.jpg",
-  chest_opener:      "yoga_images/chest_opener.png",
-  cross_body_left:   "yoga_images/cross_body_arm_left.jpg",
-  cross_body_right:  "yoga_images/cross_body_arm_right.webp",
-  prayer_stretch:    "yoga_images/prayer-stretch-page.webp",
-  shoulder_circles:  "yoga_images/shoulder-circles.webp",
-  reverse_prayer:    "yoga_images/Reverse-prayer-pose-jpg.webp",
-  reclined_butterfly:"yoga_images/reclined_butterfly.jpg",
+  butterfly:          "yoga_images/butterfly.webp",
+  seated_fold:        "yoga_images/seated_fold.jpg",
+  head_knee_left:     "yoga_images/head_knee_left.jpg",
+  head_knee_right:    "yoga_images/head_knee_right.jpg",
+  seated_twist_left:  "yoga_images/seated_twist_left.webp",
+  seated_twist_right: "yoga_images/seated_twist_right.jpg",
+  boat_pose:          "yoga_images/boat_pose.jpg",
+  camel:              "yoga_images/camel.jpg",
+  chest_opener:       "yoga_images/chest_opener.png",
+  cross_body_left:    "yoga_images/cross_body_arm_left.jpg",
+  cross_body_right:   "yoga_images/cross_body_arm_right.webp",
+  prayer_stretch:     "yoga_images/prayer-stretch-page.webp",
+  shoulder_circles:   "yoga_images/shoulder-circles.webp",
+  reverse_prayer:     "yoga_images/Reverse-prayer-pose-jpg.webp",
+  reclined_butterfly:   "yoga_images/reclined_butterfly.jpg",
+  supine_thoracic:      "yoga_images/supine_thoracic.webp",
+  banana_left:          "yoga_images/banana_left.jpg",
+  banana_right:         "yoga_images/banana_right.jpg",
+  windshield_wipers:    "yoga_images/windshield_wipers.jpg",
+  reclined_hand_to_toe_left:  "yoga_images/reclined_hand_to_toe_left.webp",
+  reclined_hand_to_toe_right: "yoga_images/reclined_hand_to_toe_right.jpg",
 };
 
 const POSES = [
   // SEATED GROIN
-  { name: "Butterfly Pose", duration: 120, cue: "Sit. Soles of feet together, knees fall open. Hold feet, sit tall. The inner groin and adductors are held shortened all day with legs together under a desk. Let gravity do the work — don't force the knees down.", phase: 0, draw: "butterfly" },
+  { name: "Butterfly Pose", duration: 45, cue: "Sit. Soles of feet together, knees fall open. Hold feet, sit tall. The inner groin and adductors are held shortened all day with legs together under a desk. Let gravity do the work.", phase: 0, draw: "butterfly" },
   // SEATED HAMSTRINGS
-  { name: "Seated Forward Fold", duration: 90, cue: "Legs extended, feet flexed. Hinge from hips, reach forward. Keep spine long first — then fold. Full posterior chain stretch from heels to skull. Don't round the back just to reach further.", phase: 1, draw: "seated_fold" },
-  { name: "Head-to-Knee Pose", duration: 75, side: "LEFT LEG", cue: "Left leg extended, right foot to inner left thigh. Rotate torso toward the left leg and fold. Unilateral hamstring stretch — catches the asymmetries that bilateral folds miss.", phase: 1, draw: "head_knee_left" },
-  { name: "Head-to-Knee Pose", duration: 75, side: "RIGHT LEG", cue: "Right leg extended, left foot to inner right thigh. Fold forward. Keep the extended foot flexed — feel the stretch travel up through the back of the knee.", phase: 1, draw: "head_knee_right" },
+  { name: "Seated Forward Fold", duration: 45, cue: "Legs extended, feet flexed. Hinge from hips, reach forward. Keep spine long first — then fold. Full posterior chain stretch from heels to skull. Don't round the back just to reach further.", phase: 1, draw: "seated_fold" },
+  { name: "Head-to-Knee Pose", duration: 45, side: "LEFT LEG", cue: "Left leg extended, right foot to inner left thigh. Rotate torso toward left leg and fold. Unilateral hamstring stretch — catches the asymmetries that bilateral folds miss.", phase: 1, draw: "head_knee_left" },
+  { name: "Head-to-Knee Pose", duration: 45, side: "RIGHT LEG", cue: "Right leg extended, left foot to inner right thigh. Fold forward. Keep the extended foot flexed — feel the stretch travel up through the back of the knee.", phase: 1, draw: "head_knee_right" },
   // CORE & KNEELING
   { name: "Seated Spinal Twist", duration: 45, side: "LEFT TWIST", cue: "Sit tall. Cross right foot over left thigh. Left elbow outside right knee, right hand behind. Rotate right. Thoracic rotation is completely absent from desk work — grow taller on each inhale, rotate further on each exhale.", phase: 2, draw: "seated_twist_left" },
   { name: "Seated Spinal Twist", duration: 45, side: "RIGHT TWIST", cue: "Switch. Left foot over right thigh. Right elbow outside left knee. Rotate left. Both hips stay grounded. Feel this in the mid-back — not just the lower back.", phase: 2, draw: "seated_twist_right" },
-  { name: "Boat Pose", duration: 60, cue: "Sit, knees bent, lean back slightly until spine is long. Lift feet — shins parallel or legs straight. Core holds it all. The hip flexors and deep core get zero challenge sitting passively all day — this changes that.", phase: 2, draw: "boat_pose" },
+  { name: "Boat Pose", duration: 45, cue: "Sit, knees bent, lean back slightly until spine is long. Lift feet — shins parallel or legs straight. Core holds it all. The hip flexors and deep core get zero challenge sitting passively all day — this changes that.", phase: 2, draw: "boat_pose" },
   { name: "Camel Pose", duration: 45, cue: "Kneel with hips over knees. Hands on lower back. Inhale and lift the chest, lean back — look up if comfortable. The deepest thoracic extension available. A direct antidote to hours of forward rounding.", phase: 2, draw: "camel" },
   // UPPER BODY
   { name: "Chest Opener", duration: 40, cue: "Interlace fingers behind back. Straighten arms, squeeze shoulder blades together, lift chest, look slightly up. Counter all that forward rounding from the screen.", phase: 3, draw: "chest_opener" },
@@ -189,19 +204,51 @@ const POSES = [
   { name: "Shoulder Circles", duration: 35, cue: "Roll both shoulders backwards ×10, then forward ×10. The upper traps and levator scapulae seize up from mouse use — full circles mobilise the entire girdle.", phase: 3, draw: "shoulder_circles" },
   { name: "Reverse Prayer", duration: 35, cue: "Backs of hands together, fingers pointing down. Push gently downward. Hits the extensor muscles on top of the forearms — often the most neglected wrist stretch.", phase: 3, draw: "reverse_prayer" },
   // SUPINE REST
-  { name: "Reclined Butterfly", duration: 120, cue: "Lie on your back, soles of feet together, knees fall open. Arms out, palms up. Close your eyes. The inner groin opens passively with gravity — zero effort required. Just breathe.", phase: 4, draw: "reclined_butterfly" },
+  { name: "Reclined Butterfly", duration: 45, cue: "Lie on your back, soles of feet together, knees fall open. Arms out, palms up. Close your eyes. The inner groin opens passively with gravity — zero effort required. Just breathe.", phase: 4, draw: "reclined_butterfly" },
+  { name: "Supine Thoracic Extension", duration: 45, cue: "Place a rolled blanket or mat edge across the mid-back at the shoulder blades. Lie over it, arms out, palms up. The thoracic spine is locked into flexion all day — this gently reverses it. Move the roll up one vertebra after 20 seconds.", phase: 4, draw: "supine_thoracic" },
+  { name: "Banana Pose", duration: 45, side: "LEFT SIDE", cue: "Lie flat. Shift both legs to the right and both arms overhead to the right, creating a banana curve. The left side body — lat, oblique, hip — gets a full-length stretch you can't reach in any standing position. Keep both hips on the floor.", phase: 4, draw: "banana_left" },
+  { name: "Banana Pose", duration: 45, side: "RIGHT SIDE", cue: "Shift both legs and arms to the left. The right lat and intercostals open. Lateral chain work is almost always skipped by desk workers — this reaches where nothing else does.", phase: 4, draw: "banana_right" },
+  { name: "Windshield Wipers", duration: 45, cue: "Lie on back, knees bent, feet hip-width apart. Let both knees fall slowly to one side, return to center, then fall to the other. 8–10 full sweeps. Mobilises the hips and lumbar in rotation without any effort — the perfect passive decompressor.", phase: 4, draw: "windshield_wipers" },
+  { name: "Reclined Hand-to-Big-Toe", duration: 40, side: "LEFT LEG", cue: "Lie on your back. Extend the left leg up toward the ceiling, holding the big toe, a strap around the foot, or the back of the thigh. Right leg stays flat on the floor. The entire posterior chain — hamstring, calf, back of the knee — opens from the floor up. No bouncing. Steady breath, let gravity do the work.", phase: 4, draw: "reclined_hand_to_toe_left" },
+  { name: "Reclined Hand-to-Big-Toe", duration: 40, side: "RIGHT LEG", cue: "Right leg extends up, left leg flat. Hold wherever comfortable — big toe, strap, or back of the thigh. This is the most effective supine hamstring stretch available because the pelvis stays level on the floor. You'll feel the difference between sides immediately.", phase: 4, draw: "reclined_hand_to_toe_right" },
 ];
 
 let currentIdx=0,timeLeft=0,totalDuration=0,paused=false,tickInterval=null;
-function startSession(){getAudioCtx();ytPlay();document.getElementById('start-screen').style.display='none';document.getElementById('session-screen').style.display='flex';document.getElementById('audio-corner').style.display='flex';currentIdx=0;loadPose(0);clearInterval(tickInterval);startCountdown(0,5,'Get Ready');}
-function loadPose(idx){clearInterval(tickInterval);const pose=POSES[idx],phase=PHASES[pose.phase];const badge=document.getElementById('phase-badge');badge.textContent=phase.name;badge.style.background=phase.color+'22';badge.style.color=phase.color;document.getElementById('progress-text').textContent=`${idx+1} / ${POSES.length}`;const pct=(idx/POSES.length)*100;const fill=document.getElementById('progress-fill');fill.style.width=pct+'%';fill.style.background=phase.color;const imgSrc=IMAGES[pose.draw],imgEl=document.getElementById('pose-img'),missingEl=document.getElementById('pose-img-missing');if(imgSrc){const t=new Image();t.onload=()=>{imgEl.src=imgSrc;imgEl.style.display='block';missingEl.style.display='none';};t.onerror=()=>{imgEl.style.display='none';missingEl.style.display='flex';};t.src=imgSrc;}else{imgEl.style.display='none';missingEl.style.display='flex';}document.getElementById('pose-name').textContent=pose.name;document.getElementById('pose-side').textContent=pose.side||'';document.getElementById('pose-cue').textContent=pose.cue;announcePose(pose);timeLeft=pose.duration;totalDuration=pose.duration;paused=false;document.getElementById('btn-pause').textContent='⏸';updateTimerDisplay();startTick();}
+function goToSession(){getAudioCtx();ytPlay();document.getElementById('start-screen').style.display='none';document.getElementById('session-screen').style.display='flex';document.getElementById('audio-corner').style.display='flex';currentIdx=0;displayPose(0);document.getElementById('br-main').style.display='none';document.getElementById('preview-btns').style.display='flex';}
+function beginSession(){document.getElementById('preview-btns').style.display='none';document.getElementById('br-main').style.display='flex';startGetReady(5);}
+function displayPose(idx){clearInterval(tickInterval);currentIdx=idx;const pose=POSES[idx],phase=PHASES[pose.phase];const badge=document.getElementById('phase-badge');badge.textContent=phase.name;badge.style.background=phase.color+'22';badge.style.color=phase.color;document.getElementById('progress-text').textContent=`${Math.round((idx+1)/POSES.length*100)}% (${idx+1}/${POSES.length})`;const pct=(idx/POSES.length)*100;const fill=document.getElementById('progress-fill');fill.style.width=pct+'%';fill.style.background=phase.color;const imgSrc=IMAGES[pose.draw],imgEl=document.getElementById('pose-img'),missingEl=document.getElementById('pose-img-missing');if(imgSrc){const t=new Image();t.onload=()=>{imgEl.src=imgSrc;imgEl.style.display='block';missingEl.style.display='none';};t.onerror=()=>{imgEl.style.display='none';missingEl.style.display='flex';};t.src=imgSrc;}else{imgEl.style.display='none';missingEl.style.display='flex';}document.getElementById('pose-name').textContent=pose.name;document.getElementById('pose-side').textContent=pose.side||'';document.getElementById('pose-cue').textContent=pose.cue;announcePose(pose);timeLeft=pose.duration;totalDuration=pose.duration;paused=false;document.getElementById('btn-pause').textContent='⏸';updateTimerDisplay();}
 function updateTimerDisplay(){document.getElementById('timer-num').textContent=timeLeft;const offset=295.3*(1-timeLeft/totalDuration);const ring=document.getElementById('timer-ring');ring.style.strokeDashoffset=offset;ring.style.stroke=PHASES[POSES[currentIdx].phase].color;}
-function startTick(){tickInterval=setInterval(()=>{if(!paused){timeLeft--;updateTimerDisplay();if(timeLeft<=0){clearInterval(tickInterval);playGong();if(navigator.vibrate)navigator.vibrate([200,100,200]);setTimeout(()=>{currentIdx<POSES.length-1?startCountdown(currentIdx+1):showDone();},600);}}},1000);}
-function startCountdown(nextIdx,initialCount=3,label='Next Up'){const overlay=document.getElementById('countdown-overlay');const next=POSES[nextIdx];document.getElementById('cd-name').textContent=next.name;document.getElementById('cd-side').textContent=next.side||'';const labelEl=document.querySelector('#countdown-overlay .cdlabel');if(labelEl)labelEl.textContent=label;let count=initialCount;document.getElementById('cd-num').textContent=count;overlay.style.display='flex';const cd=setInterval(()=>{count--;if(count<=0){clearInterval(cd);overlay.style.display='none';if(labelEl)labelEl.textContent='Next Up';currentIdx=nextIdx;loadPose(currentIdx);}else{document.getElementById('cd-num').textContent=count;}},1000);}
+
+function startGetReady(secs) {
+  clearInterval(tickInterval);
+  var timerLabel = document.querySelector('.timer-label');
+  var timerRing = document.getElementById('timer-ring');
+  var circumference = timerRing ? parseFloat(timerRing.getAttribute('stroke-dasharray')) || 295.3 : 295.3;
+  var origLabel = timerLabel ? timerLabel.textContent : 'secs';
+  if (timerLabel) timerLabel.textContent = 'get ready';
+  if (timerRing) timerRing.style.stroke = '#555';
+  var count = secs;
+  document.getElementById('timer-num').textContent = count;
+  if (timerRing) timerRing.style.strokeDashoffset = 0;
+  tickInterval = setInterval(function() {
+    count--;
+    if (count <= 0) {
+      clearInterval(tickInterval);
+      if (timerLabel) timerLabel.textContent = origLabel;
+      updateTimerDisplay();
+      startTick();
+    } else {
+      document.getElementById('timer-num').textContent = count;
+      if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+    }
+  }, 1000);
+}
+function startTick(){tickInterval=setInterval(()=>{if(!paused){timeLeft--;updateTimerDisplay();if(timeLeft<=0){clearInterval(tickInterval);playGong();if(navigator.vibrate)navigator.vibrate([200,100,200]);setTimeout(()=>{if(currentIdx<POSES.length-1){displayPose(currentIdx+1);startGetReady(5);}else{showDone();}},600);}}},1000);}
+function startCountdown(nextIdx,initialCount=3,label='Next Up'){const overlay=document.getElementById('countdown-overlay');const next=POSES[nextIdx];document.getElementById('cd-name').textContent=next.name;document.getElementById('cd-side').textContent=next.side||'';const labelEl=document.querySelector('#countdown-overlay .cdlabel');if(labelEl)labelEl.textContent=label;let count=initialCount;document.getElementById('cd-num').textContent=count;overlay.style.display='flex';const cd=setInterval(()=>{count--;if(count<=0){clearInterval(cd);overlay.style.display='none';if(labelEl)labelEl.textContent='Next Up';currentIdx=nextIdx;displayPose(currentIdx);}else{document.getElementById('cd-num').textContent=count;}},1000);}
 function togglePause(){paused=!paused;document.getElementById('btn-pause').textContent=paused?'▶':'⏸';if(paused)ytPause();else ytPlay();}
-function nextPose(){if(currentIdx<POSES.length-1){currentIdx++;loadPose(currentIdx);}else{showDone();}}
-function prevPose(){if(currentIdx>0){currentIdx--;loadPose(currentIdx);}}
-function exitSession(){clearInterval(tickInterval);ytPause();document.getElementById('session-screen').style.display='none';document.getElementById('start-screen').style.display='flex';}
+function nextPose(){if(currentIdx<POSES.length-1){displayPose(currentIdx+1);startGetReady(5);}else{showDone();}}
+function prevPose(){if(currentIdx>0){displayPose(currentIdx-1);startGetReady(5);}}
+function exitSession(){clearInterval(tickInterval);ytPause();document.getElementById('session-screen').style.display='none';document.getElementById('start-screen').style.display='flex';var bm=document.getElementById('br-main');var pb=document.getElementById('preview-btns');if(bm)bm.style.display='flex';if(pb)pb.style.display='none';}
 function showDone(){clearInterval(tickInterval);ytPause();document.getElementById('session-screen').style.display='none';document.getElementById('done-screen').style.display='flex';}
 function restart(){document.getElementById('done-screen').style.display='none';document.getElementById('start-screen').style.display='flex';}
 let audioCtx=null;
@@ -223,6 +270,62 @@ let allMuted=false;
 function toggleMuteAll(){allMuted=!allMuted;musicMuted=allMuted;bgMusic.muted=musicMuted;updateMuteBtn('music-mute',musicMuted);gongMuted=allMuted;updateMuteBtn('gong-mute',gongMuted);voiceMuted=allMuted;updateMuteBtn('voice-mute',voiceMuted);if(allMuted)speechSynthesis.cancel();const btn=document.getElementById('mute-all-btn');if(btn)btn.textContent=allMuted?'UNMUTE':'MUTE ALL';}
 document.getElementById('start-screen').addEventListener('click',function unlockAudio(){bgMusic.load();const ctx=getAudioCtx();if(ctx.state==='suspended')ctx.resume().catch(()=>{});document.getElementById('start-screen').removeEventListener('click',unlockAudio);},{once:true});
 try{if('wakeLock' in navigator)navigator.wakeLock.request('screen').catch(()=>{});}catch(e){}
+
+// ── Keyboard navigation ──
+document.addEventListener('keydown', function(e) {
+  var sess = document.getElementById('session-screen');
+  if (!sess || sess.style.display !== 'flex') return;
+  if (e.key === 'ArrowRight') { e.preventDefault(); nextPose(); }
+  else if (e.key === 'ArrowLeft') { e.preventDefault(); prevPose(); }
+  else if (e.key === ' ') { e.preventDefault(); togglePause(); }
+});
+
+// ── Draggable audio panel ──
+(function() {
+  var panel = document.getElementById('audio-corner');
+  var locked = true, dragging = false, ox = 0, oy = 0;
+  try {
+    var sx = localStorage.getItem('audio_x'), sy = localStorage.getItem('audio_y');
+    if (sx && sy) { panel.style.right = 'auto'; panel.style.bottom = 'auto'; panel.style.left = sx; panel.style.top = sy; }
+  } catch(e) {}
+  window.toggleAudioLock = function() {
+    locked = !locked;
+    document.getElementById('audio-lock-btn').textContent = locked ? '🔒' : '🔓';
+    panel.classList.toggle('unlocked', !locked);
+  };
+  panel.addEventListener('mousedown', function(e) {
+    if (locked || e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+    dragging = true;
+    var r = panel.getBoundingClientRect();
+    ox = e.clientX - r.left; oy = e.clientY - r.top;
+    e.preventDefault();
+  });
+  panel.addEventListener('touchstart', function(e) {
+    if (locked) return;
+    dragging = true;
+    var t = e.touches[0], r = panel.getBoundingClientRect();
+    ox = t.clientX - r.left; oy = t.clientY - r.top;
+  }, {passive: true});
+  document.addEventListener('mousemove', function(e) {
+    if (!dragging) return;
+    panel.style.left = (e.clientX - ox) + 'px';
+    panel.style.top = (e.clientY - oy) + 'px';
+    panel.style.right = 'auto'; panel.style.bottom = 'auto';
+  });
+  document.addEventListener('touchmove', function(e) {
+    if (!dragging) return;
+    var t = e.touches[0];
+    panel.style.left = (t.clientX - ox) + 'px';
+    panel.style.top = (t.clientY - oy) + 'px';
+    panel.style.right = 'auto'; panel.style.bottom = 'auto';
+  }, {passive: true});
+  function stopDrag() {
+    if (!dragging) return; dragging = false;
+    try { localStorage.setItem('audio_x', panel.style.left); localStorage.setItem('audio_y', panel.style.top); } catch(e) {}
+  }
+  document.addEventListener('mouseup', stopDrag);
+  document.addEventListener('touchend', stopDrag);
+})();
 </script>
 </body>
 </html>

@@ -299,7 +299,7 @@
     <span style="font-size:15px;font-weight:600;color:#aaa;">21 min</span>
   </div>
 
-  <button class="btn-start" onclick="startSession()">Begin Session</button>
+  <button class="btn-start" onclick="goToSession()">Go to Session</button>
 </div>
 
 <!-- ======== SESSION SCREEN ======== -->
@@ -334,7 +334,11 @@
     <div class="timer-label">seconds</div>
   </div>
 
-  <div class="controls">
+      <div id="preview-btns" style="display:none;flex-direction:column;gap:12px;align-items:center;width:100%;max-width:280px;padding:20px 0 10px;">
+        <button class="btn-start" onclick="beginSession()">&#9654; Begin Session</button>
+        <button style="background:none;border:1px solid #333;color:#888;border-radius:14px;padding:12px 40px;font-size:15px;font-weight:600;cursor:pointer;width:100%;max-width:280px;" onclick="exitSession()">&#8592; Return to Hub</button>
+      </div>
+        <div class="controls" id="br-main">
     <button class="btn-nav" onclick="prevPose()">←</button>
     <button class="btn-pause" id="btn-pause" onclick="togglePause()">⏸</button>
     <button class="btn-nav" onclick="nextPose()">→</button>
@@ -481,17 +485,26 @@ let tickInterval = null;
 
 function totalPoses() { return POSES.length; }
 
-function startSession() {
-  getAudioCtx(); // unlock audio on user gesture
+function goToSession() {
+  getAudioCtx();
   ytPlay();
   document.getElementById('start-screen').style.display = 'none';
   document.getElementById('session-screen').style.display = 'flex';
   currentIdx = 0;
-  loadPose(0);
+  displayPose(0);
+  document.getElementById('br-main').style.display = 'none';
+  document.getElementById('preview-btns').style.display = 'flex';
 }
 
-function loadPose(idx) {
+function beginSession() {
+  document.getElementById('preview-btns').style.display = 'none';
+  document.getElementById('br-main').style.display = 'flex';
+  startGetReady(5);
+}
+
+function displayPose(idx) {
   clearInterval(tickInterval);
+  currentIdx = idx;
   const pose = POSES[idx];
   const phase = PHASES[pose.phase];
 
@@ -525,7 +538,6 @@ function loadPose(idx) {
   paused = false;
   document.getElementById('btn-pause').textContent = '⏸';
   updateTimerDisplay();
-  startTick();
 }
 
 function updateTimerDisplay() {
@@ -536,6 +548,36 @@ function updateTimerDisplay() {
   const ring = document.getElementById('timer-ring');
   ring.style.strokeDashoffset = offset;
   ring.style.stroke = PHASES[POSES[currentIdx].phase].color;
+}
+
+function startGetReady(secs) {
+  clearInterval(tickInterval);
+  var timerLabel = document.querySelector('.timer-label');
+  var timerRing = document.getElementById('timer-ring');
+  var circumference = timerRing ? parseFloat(timerRing.getAttribute('stroke-dasharray')) || 295.3 : 295.3;
+  var origLabel = timerLabel ? timerLabel.textContent : 'secs';
+  if (timerLabel) timerLabel.textContent = 'get ready';
+  if (timerRing) timerRing.style.stroke = '#555';
+  var count = secs;
+  document.getElementById('timer-num').textContent = count;
+  if (timerRing) timerRing.style.strokeDashoffset = 0;
+  tickInterval = setInterval(function() {
+    count--;
+    if (count <= 0) {
+      clearInterval(tickInterval);
+      if (timerLabel) timerLabel.textContent = origLabel;
+      updateTimerDisplay();
+      startTick();
+    } else {
+      document.getElementById('timer-num').textContent = count;
+      if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+    }
+  }, 1000);
+} else {
+      document.getElementById('timer-num').textContent = count;
+      if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+    }
+  }, 1000);
 }
 
 function startTick() {
@@ -549,7 +591,7 @@ function startTick() {
         if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
         setTimeout(() => {
           if (currentIdx < POSES.length - 1) {
-            startCountdown(currentIdx + 1);
+            displayPose(currentIdx + 1); startGetReady(5);
           } else {
             showDone();
           }
@@ -579,7 +621,7 @@ function startCountdown(nextIdx) {
       clearInterval(cdInterval);
       overlay.style.display = 'none';
       currentIdx = nextIdx;
-      loadPose(currentIdx);
+      displayPose(currentIdx);
     } else {
       numEl.textContent = count;
     }
@@ -593,8 +635,7 @@ function togglePause() {
 
 function nextPose() {
   if (currentIdx < POSES.length - 1) {
-    currentIdx++;
-    loadPose(currentIdx);
+    displayPose(currentIdx + 1); startGetReady(5);
   } else {
     showDone();
   }
@@ -602,8 +643,7 @@ function nextPose() {
 
 function prevPose() {
   if (currentIdx > 0) {
-    currentIdx--;
-    loadPose(currentIdx);
+    displayPose(currentIdx - 1); startGetReady(5);
   }
 }
 
@@ -612,6 +652,8 @@ function exitSession() {
   ytPause();
   document.getElementById('session-screen').style.display = 'none';
   document.getElementById('start-screen').style.display = 'flex';
+  var bm=document.getElementById('br-main'); var pb=document.getElementById('preview-btns');
+  if(bm) bm.style.display='flex'; if(pb) pb.style.display='none';
 }
 
 function showDone() {
