@@ -459,7 +459,6 @@ function goToSession() {
   getAudioCtx(); ytPlay();
   document.getElementById('start-screen').style.display = 'none';
   document.getElementById('session-screen').style.display = 'flex';
-  document.getElementById('audio-corner').style.display = 'flex';
   currentIdx = 0; displayPose(0);
   document.getElementById('br-main').style.display = 'none';
   document.getElementById('preview-btns').style.display = 'flex';
@@ -468,6 +467,7 @@ function goToSession() {
 function beginSession() {
   document.getElementById('preview-btns').style.display = 'none';
   document.getElementById('br-main').style.display = 'flex';
+  document.getElementById('audio-corner').style.display = 'flex';
   startGetReady(5);
 }
 
@@ -487,10 +487,10 @@ function displayPose(idx) {
   const imgEl = document.getElementById('pose-img');
   const missingEl = document.getElementById('pose-img-missing');
   if (imgSrc) {
-    const testImg = new Image();
-    testImg.onload  = () => { imgEl.src = imgSrc; imgEl.style.display = 'block'; missingEl.style.display = 'none'; };
-    testImg.onerror = () => { imgEl.style.display = 'none'; missingEl.style.display = 'flex'; };
-    testImg.src = imgSrc;
+    imgEl.src = imgSrc;
+    imgEl.style.display = 'block';
+    missingEl.style.display = 'none';
+    imgEl.onerror = () => { imgEl.style.display = 'none'; missingEl.style.display = 'flex'; };
   } else {
     imgEl.style.display = 'none'; missingEl.style.display = 'flex';
   }
