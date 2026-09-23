@@ -404,11 +404,6 @@ function startGetReady(secs) {
       if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
     }
   }, 1000);
-} else {
-      document.getElementById('timer-num').textContent = count;
-      if (timerRing) timerRing.style.strokeDashoffset = 295.3 * (1 - count / secs);
-    }
-  }, 1000);
 }
 
 function startTick() {
