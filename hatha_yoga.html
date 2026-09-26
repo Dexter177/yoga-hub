@@ -468,7 +468,7 @@ function beginSession() {
   document.getElementById('preview-btns').style.display = 'none';
   document.getElementById('br-main').style.display = 'flex';
   document.getElementById('audio-corner').style.display = 'flex';
-  startGetReady(5);
+  startGetReady(3);
 }
 
 function displayPose(idx) {
@@ -514,25 +514,23 @@ function updateTimerDisplay() {
 
 function startGetReady(secs) {
   clearInterval(tickInterval);
-  var timerLabel = document.querySelector('.timer-label');
   var timerRing = document.getElementById('timer-ring');
   var circumference = timerRing ? parseFloat(timerRing.getAttribute('stroke-dasharray')) || 295.3 : 295.3;
-  var origLabel = timerLabel ? timerLabel.textContent : 'secs';
-  if (timerLabel) timerLabel.textContent = 'get ready';
   if (timerRing) timerRing.style.stroke = '#555';
   var count = secs;
   document.getElementById('timer-num').textContent = count;
   if (timerRing) timerRing.style.strokeDashoffset = 0;
   tickInterval = setInterval(function() {
-    count--;
-    if (count <= 0) {
-      clearInterval(tickInterval);
-      if (timerLabel) timerLabel.textContent = origLabel;
-      updateTimerDisplay();
-      startTick();
-    } else {
-      document.getElementById('timer-num').textContent = count;
-      if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+    if (!paused) {
+      count--;
+      if (count <= 0) {
+        clearInterval(tickInterval);
+        updateTimerDisplay();
+        startTick();
+      } else {
+        document.getElementById('timer-num').textContent = count;
+        if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+      }
     }
   }, 1000);
 } else {
@@ -550,7 +548,7 @@ function startTick() {
         clearInterval(tickInterval); playGong();
         if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
         setTimeout(() => {
-          if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(5); } else { showDone(); }
+          if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(3); } else { showDone(); }
         }, 600);
       }
     }
@@ -566,11 +564,13 @@ function startCountdown(nextIdx) {
   let count = 3; numEl.textContent = count;
   overlay.style.display = 'flex';
   const cdInterval = setInterval(() => {
-    count--;
-    if (count <= 0) {
-      clearInterval(cdInterval); overlay.style.display = 'none';
-      currentIdx = nextIdx; displayPose(currentIdx);
-    } else { numEl.textContent = count; }
+    if (!paused) {
+      count--;
+      if (count <= 0) {
+        clearInterval(cdInterval); overlay.style.display = 'none';
+        currentIdx = nextIdx; displayPose(currentIdx);
+      } else { numEl.textContent = count; }
+    }
   }, 1000);
 }
 
@@ -579,8 +579,8 @@ function togglePause() {
   document.getElementById('btn-pause').textContent = paused ? '▶' : '⏸';
   if (paused) ytPause(); else ytPlay();
 }
-function nextPose() { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(5); } else { showDone(); } }
-function prevPose() { if (currentIdx > 0) { displayPose(currentIdx - 1); startGetReady(5); } }
+function nextPose() { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(3); } else { showDone(); } }
+function prevPose() { if (currentIdx > 0) { displayPose(currentIdx - 1); startGetReady(3); } }
 function exitSession() { clearInterval(tickInterval); ytPause(); document.getElementById('session-screen').style.display = 'none'; document.getElementById('start-screen').style.display = 'flex'; var bm=document.getElementById('br-main'); var pb=document.getElementById('preview-btns'); if(bm) bm.style.display='flex'; if(pb) pb.style.display='none'; }
 function showDone() { clearInterval(tickInterval); ytPause(); document.getElementById('session-screen').style.display = 'none'; document.getElementById('done-screen').style.display = 'flex'; }
 function restart() { document.getElementById('done-screen').style.display = 'none'; document.getElementById('start-screen').style.display = 'flex'; }

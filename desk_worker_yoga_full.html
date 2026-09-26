@@ -18,7 +18,7 @@
   .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .phase-label { flex: 1; text-align: left; font-size: 14px; color: #ddd; }
   .phase-dur { font-size: 13px; color: #555; }
-  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; position: relative; padding-bottom: 144px; }
+  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; position: relative; padding-bottom: 190px; }
   .top-bar { width: 100%; padding: 10px 20px 8px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .phase-badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
   .progress-text { font-size: 13px; color: #666; }
@@ -246,88 +246,88 @@ const IMAGES = {
 
 const POSES = [
   // ── SESSION A — SPINE & FLOOR ──
-  { name: "Cat-Cow", duration: 45, cue: "Hands under shoulders, knees under hips. Inhale: arch back, drop belly, lift head. Exhale: round spine, tuck chin. Do ×8 slow — warms every lumbar disc before you ask anything of them.", phase: 0, draw: "catcow" },
-  { name: "Thread the Needle", duration: 45, side: "LEFT SIDE", cue: "From all-fours, slide left arm under right arm along the floor. Rest temple down. Breathe into the right shoulder blade — thoracic rotation is the first thing desk work locks out.", phase: 0, draw: "thread_left" },
+  { name: "Cat-Cow", duration: 45, cue: "Hands under shoulders, knees under hips. Inhale: arch back, drop belly, lift head. Exhale: round spine, tuck chin.", phase: 0, draw: "catcow" },
+  { name: "Thread the Needle", duration: 45, side: "LEFT SIDE", cue: "From all-fours, slide left arm under right arm along the floor. Rest temple down.", phase: 0, draw: "thread_left" },
   { name: "Thread the Needle", duration: 45, side: "RIGHT SIDE", cue: "Switch sides. Slide right arm under left. Stack hips level. Each exhale lets you rotate a fraction further into the mid-back.", phase: 0, draw: "thread_right" },
-  { name: "Sphinx Pose", duration: 45, cue: "Lie face down. Forearms on mat, elbows under shoulders. Press down and lift the chest — passive backbend, no effort from the lower back. Directly reverses mid-back rounding from hours at a screen.", phase: 0, draw: "sphinx" },
-  { name: "Locust Pose", duration: 45, cue: "Arms alongside body, palms down. Inhale and lift chest, arms and legs simultaneously. Hold 3 seconds, lower. Repeat ×4. The posterior chain completely disengages from sitting — this reactivates it.", phase: 0, draw: "locust" },
-  { name: "Upward Dog", duration: 45, cue: "Press palms into floor, straighten arms, lift chest and thighs off mat. Shoulders roll back and down. Active thoracic extension — the strongest counter-movement to a desk-rounded upper back.", phase: 0, draw: "updog" },
-  { name: "Child's Pose", duration: 45, cue: "Knees wide, big toes together, arms extended forward. Forehead down. Full decompression of the lumbar and sacrum — breathe into the back body and feel it expand with every inhale.", phase: 0, draw: "childs_pose" },
-  { name: "Plank Hold", duration: 45, cue: "Hands under shoulders, body in one line from heels to skull. Engage your core and squeeze your glutes. Sitting all day switches off both — this switches them back on. Keep breathing.", phase: 0, draw: "plank" },
-  { name: "Bridge Pose", duration: 45, cue: "Feet hip-width, knees bent. Press feet into floor and drive hips up. Squeeze glutes hard — hold 8 seconds, lower slowly, pause, repeat ×3. Glute amnesia is one of the biggest consequences of desk work. This is the direct fix.", phase: 0, draw: "bridge" },
+  { name: "Sphinx Pose", duration: 45, cue: "Lie face down. Forearms on mat, elbows under shoulders. Press down and lift the chest — passive backbend, no effort from the lower back.", phase: 0, draw: "sphinx" },
+  { name: "Locust Pose", duration: 45, cue: "Arms alongside body, palms down. Inhale and lift chest, arms and legs simultaneously. Hold 3 seconds, lower. Repeat ×4.", phase: 0, draw: "locust" },
+  { name: "Upward Dog", duration: 45, cue: "Press palms into floor, straighten arms, lift chest and thighs off mat. Shoulders roll back and down.", phase: 0, draw: "updog" },
+  { name: "Child's Pose", duration: 45, cue: "Knees wide, big toes together, arms extended forward. Forehead down.", phase: 0, draw: "childs_pose" },
+  { name: "Plank Hold", duration: 45, cue: "Hands under shoulders, body in one line from heels to skull. Engage your core and squeeze your glutes.", phase: 0, draw: "plank" },
+  { name: "Bridge Pose", duration: 45, cue: "Feet hip-width, knees bent. Press feet into floor and drive hips up. Squeeze glutes hard — hold 8 seconds, lower slowly, pause, repeat ×3.", phase: 0, draw: "bridge" },
   { name: "Knees to Chest", duration: 45, cue: "Lie on back. Hug both knees to chest. Rock gently side to side. Releases the compression built up in the lumbar discs from hours in a chair.", phase: 0, draw: "knees_to_chest" },
-  { name: "Supine Twist", duration: 45, side: "LEFT KNEE DOWN", cue: "Right knee to chest, cross it left. Right arm out, gaze right. Don't force the twist — let gravity take it. Feel this unwind the lumbar, not just the lower back.", phase: 0, draw: "twist_right" },
-  { name: "Supine Twist", duration: 45, side: "RIGHT KNEE DOWN", cue: "Left knee crosses right. Left arm out. Each exhale lets you sink a fraction deeper. Complete spinal rotation you won't get from any chair stretch.", phase: 0, draw: "twist_left" },
-  { name: "Happy Baby", duration: 45, cue: "On your back. Knees wide, grab outer feet. Ankles over knees. Rock side to side. Releases the sacroiliac joint and inner groin — both compressed from sitting all day.", phase: 0, draw: "happy_baby" },
-  { name: "Chin Tucks", duration: 35, cue: "Sitting or lying tall, draw chin straight back (double chin). Hold 3 seconds, release. Repeat ×8. Directly reverses forward head posture from screen time.", phase: 0, draw: "chin_tucks" },
-  { name: "Neck Extension", duration: 35, cue: "Tuck chin, then slowly lift face toward the ceiling. Return to neutral. Repeat ×8. Desk work locks the neck in forward flexion — this is how you get the backward range back.", phase: 0, draw: "neck_extension" },
-  { name: "Neck Stretch", duration: 35, side: "LEFT SIDE", cue: "Drop left ear toward left shoulder. Right shoulder stays relaxed — don't shrug. The upper trap is chronically overloaded by screen work. Give it the full hold.", phase: 0, draw: "neck_left" },
+  { name: "Supine Twist", duration: 45, side: "LEFT KNEE DOWN", cue: "Right knee to chest, cross it left. Right arm out, gaze right. Don't force the twist — let gravity take it.", phase: 0, draw: "twist_right" },
+  { name: "Supine Twist", duration: 45, side: "RIGHT KNEE DOWN", cue: "Left knee crosses right. Left arm out. Each exhale lets you sink a fraction deeper.", phase: 0, draw: "twist_left" },
+  { name: "Happy Baby", duration: 45, cue: "On your back. Knees wide, grab outer feet. Ankles over knees. Rock side to side.", phase: 0, draw: "happy_baby" },
+  { name: "Chin Tucks", duration: 35, cue: "Sitting or lying tall, draw chin straight back (double chin). Hold 3 seconds, release. Repeat ×8.", phase: 0, draw: "chin_tucks" },
+  { name: "Neck Extension", duration: 35, cue: "Tuck chin, then slowly lift face toward the ceiling. Return to neutral. Repeat ×8.", phase: 0, draw: "neck_extension" },
+  { name: "Neck Stretch", duration: 35, side: "LEFT SIDE", cue: "Drop left ear toward left shoulder. Right shoulder stays relaxed — don't shrug. The upper trap is chronically overloaded by screen work.", phase: 0, draw: "neck_left" },
   { name: "Neck Stretch", duration: 35, side: "RIGHT SIDE", cue: "Drop right ear to right shoulder. Breathe into the left side of the neck. Feel the stretch travel all the way down to the trap.", phase: 0, draw: "neck_right" },
   // ── SESSION B — HIPS & LEGS ──
-  { name: "Downward Dog", duration: 45, cue: "Hips high, heels toward floor. Pedal feet slowly. Head fully hangs — neck free. Decompresses the shoulder joint and wakes up the hamstrings before they have to work.", phase: 1, draw: "downdog" },
-  { name: "Half Lift", duration: 45, cue: "From forward fold, press fingertips to shins or floor. Lengthen the spine forward — flat back, hips over heels. Feel the hamstrings engage and the lower back decompress before you fold deeper.", phase: 1, draw: "half_lift" },
-  { name: "Standing Forward Fold", duration: 45, cue: "Feet hip-width. Hinge from hips, fold forward. Bend knees as needed. Let head and neck hang completely — decompress the spine with gravity. Full posterior chain from calves to skull.", phase: 1, draw: "forward_fold" },
-  { name: "Wide-Legged Forward Fold", duration: 45, cue: "Step feet wide, toes forward. Hinge and fold, hands to floor. The adductors and inner hamstrings are almost never stretched at a desk — hold and breathe, let gravity do the work.", phase: 1, draw: "wide_legged_fold" },
-  { name: "Low Lunge", duration: 45, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right knee down. Arms overhead, hips square. Sink forward — your hip flexors are shortened all day sitting. Let them actually lengthen.", phase: 1, draw: "low_lunge_left" },
+  { name: "Downward Dog", duration: 45, cue: "Hips high, heels toward floor. Pedal feet slowly. Head fully hangs — neck free.", phase: 1, draw: "downdog" },
+  { name: "Half Lift", duration: 45, cue: "From forward fold, press fingertips to shins or floor. Lengthen the spine forward — flat back, hips over heels.", phase: 1, draw: "half_lift" },
+  { name: "Standing Forward Fold", duration: 45, cue: "Feet hip-width. Hinge from hips, fold forward. Bend knees as needed. Let head and neck hang completely — decompress the spine with gravity.", phase: 1, draw: "forward_fold" },
+  { name: "Wide-Legged Forward Fold", duration: 45, cue: "Step feet wide, toes forward. Hinge and fold, hands to floor. The adductors and inner hamstrings are almost never stretched at a desk", phase: 1, draw: "wide_legged_fold" },
+  { name: "Low Lunge", duration: 45, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right knee down. Arms overhead, hips square. Sink forward — your hip flexors are shortened all day sitting.", phase: 1, draw: "low_lunge_left" },
   { name: "Low Lunge", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, left knee down. Arms up. Square hips forward. Don't rush — the right hip flexor needs as much time as the left.", phase: 1, draw: "low_lunge_right" },
-  { name: "Lizard Pose", duration: 45, side: "LEFT FOOT FORWARD", cue: "From Low Lunge, bring left foot outside left hand and lower onto forearms if available. The psoas and hip capsule open in a completely different plane than Low Lunge. If you only do one hip flexor stretch, make it this one.", phase: 1, draw: "lizard_left" },
-  { name: "Lizard Pose", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot outside right hand, forearms down. Hips drop toward the floor. The deeper you go, the more the inner groin releases alongside the hip flexor — a dual stretch that Low Lunge can't quite match.", phase: 1, draw: "lizard_right" },
-  { name: "Pigeon Pose", duration: 45, side: "LEFT LEG FORWARD", cue: "Slide left shin across the mat. Ease hips down. Walk hands forward. Breathe into the outer left hip. Glute medius and piriformis — both seized from sitting.", phase: 1, draw: "pigeon_left" },
+  { name: "Lizard Pose", duration: 45, side: "LEFT FOOT FORWARD", cue: "From Low Lunge, bring left foot outside left hand and lower onto forearms if available.", phase: 1, draw: "lizard_left" },
+  { name: "Lizard Pose", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot outside right hand, forearms down. Hips drop toward the floor.", phase: 1, draw: "lizard_right" },
+  { name: "Pigeon Pose", duration: 45, side: "LEFT LEG FORWARD", cue: "Slide left shin across the mat. Ease hips down. Walk hands forward. Breathe into the outer left hip.", phase: 1, draw: "pigeon_left" },
   { name: "Pigeon Pose", duration: 45, side: "RIGHT LEG FORWARD", cue: "Slide right shin across. Ease hips to floor. Chest down. Stay and breathe — the outer right hip needs the full hold to release.", phase: 1, draw: "pigeon_right" },
-  { name: "Garland Squat", duration: 45, cue: "Feet wider than hips, toes out. Lower into a deep squat, hands in prayer at chest. This is the deepest hip flexor stretch available — the position humans sat in before chairs existed.", phase: 1, draw: "garland_squat" },
-  { name: "Frog Pose", duration: 45, cue: "From hands and knees, spread knees wide and turn feet out so inner feet rest on the mat. Lower onto forearms. Hips sink back and down. The adductors and inner groin are completely missed by any standing work — this is how you find them.", phase: 1, draw: "frog_pose" },
-  { name: "Standing Quad Stretch", duration: 30, side: "LEFT LEG", cue: "Stand on right foot, left heel to glute. Hold ankle, knees together, hips forward. The quad shortens from sitting bent all day — give it back its full length.", phase: 1, draw: "quad_left" },
+  { name: "Garland Squat", duration: 45, cue: "Feet wider than hips, toes out. Lower into a deep squat, hands in prayer at chest.", phase: 1, draw: "garland_squat" },
+  { name: "Frog Pose", duration: 45, cue: "From hands and knees, spread knees wide and turn feet out so inner feet rest on the mat. Lower onto forearms. Hips sink back and down.", phase: 1, draw: "frog_pose" },
+  { name: "Standing Quad Stretch", duration: 30, side: "LEFT LEG", cue: "Stand on right foot, left heel to glute. Hold ankle, knees together, hips forward.", phase: 1, draw: "quad_left" },
   { name: "Standing Quad Stretch", duration: 30, side: "RIGHT LEG", cue: "Switch. Right heel to glute, knees level. Fingertips on a wall if needed. Feel the full stretch through the front of the thigh.", phase: 1, draw: "quad_right" },
-  { name: "Calf Stretch", duration: 30, side: "LEFT LEG", cue: "Left foot steps back, heel flat on floor. Lean forward. Calves tighten when the foot stays planted under a desk all day — give them the stretch.", phase: 1, draw: "calf_left" },
+  { name: "Calf Stretch", duration: 30, side: "LEFT LEG", cue: "Left foot steps back, heel flat on floor. Lean forward. Calves tighten when the foot stays planted under a desk all day", phase: 1, draw: "calf_left" },
   { name: "Calf Stretch", duration: 30, side: "RIGHT LEG", cue: "Right foot back, heel flat. Slightly bend the back knee to hit the deeper soleus muscle underneath the calf.", phase: 1, draw: "calf_right" },
-  { name: "Wrist Circles", duration: 30, cue: "Extend both arms forward. Slow full circles — 5 forward, 5 backward. The wrist joint needs full rotation, not just the typing plane it's stuck in all day.", phase: 1, draw: "wrist_circles" },
-  { name: "Supine Figure-4", duration: 45, side: "LEFT HIP", cue: "Lie on back. Cross left ankle over right thigh just above the knee. Flex the left foot. Either stay here or draw the right knee toward your chest. Targets the piriformis and external hip rotators — the muscles that lock up from sitting.", phase: 1, draw: "supine_figure4_left" },
-  { name: "Supine Figure-4", duration: 45, side: "RIGHT HIP", cue: "Cross right ankle over left thigh, flex right foot. Draw the left knee in. This is the lying version of Pigeon — accessible to everyone and often more effective because the pelvis stays level.", phase: 1, draw: "supine_figure4_right" },
-  { name: "Legs Up the Wall", duration: 45, cue: "Hips to a wall, legs straight up. Arms open, palms up. Eyes closed. Blood drains back from feet and ankles — reversing the pooling from sitting all day. Stay completely still.", phase: 1, draw: "legs_up_wall" },
+  { name: "Wrist Circles", duration: 30, cue: "Extend both arms forward. Slow full circles — 5 forward, 5 backward.", phase: 1, draw: "wrist_circles" },
+  { name: "Supine Figure-4", duration: 45, side: "LEFT HIP", cue: "Lie on back. Cross left ankle over right thigh just above the knee. Flex the left foot.", phase: 1, draw: "supine_figure4_left" },
+  { name: "Supine Figure-4", duration: 45, side: "RIGHT HIP", cue: "Cross right ankle over left thigh, flex right foot. Draw the left knee in.", phase: 1, draw: "supine_figure4_right" },
+  { name: "Legs Up the Wall", duration: 45, cue: "Hips to a wall, legs straight up. Arms open, palms up. Eyes closed.", phase: 1, draw: "legs_up_wall" },
   // ── SESSION C — SEATED & SUPINE ──
-  { name: "Butterfly Pose", duration: 45, cue: "Sit. Soles of feet together, knees fall open. Hold feet, sit tall. The inner groin and adductors are held shortened all day with legs together under a desk. Let gravity do the work.", phase: 2, draw: "butterfly" },
-  { name: "Seated Forward Fold", duration: 45, cue: "Legs extended, feet flexed. Hinge from hips, reach forward. Keep spine long first — then fold. Full posterior chain stretch from heels to skull. Don't round the back just to reach further.", phase: 2, draw: "seated_fold" },
-  { name: "Head-to-Knee Pose", duration: 45, side: "LEFT LEG", cue: "Left leg extended, right foot to inner left thigh. Rotate torso toward left leg and fold. Unilateral hamstring stretch — catches the asymmetries that bilateral folds miss.", phase: 2, draw: "head_knee_left" },
-  { name: "Head-to-Knee Pose", duration: 45, side: "RIGHT LEG", cue: "Right leg extended, left foot to inner right thigh. Fold forward. Keep the extended foot flexed — feel the stretch travel up through the back of the knee.", phase: 2, draw: "head_knee_right" },
-  { name: "Seated Spinal Twist", duration: 45, side: "LEFT TWIST", cue: "Sit tall. Cross right foot over left thigh. Left elbow outside right knee, right hand behind. Rotate right. Thoracic rotation is completely absent from desk work — grow taller on each inhale, rotate further on each exhale.", phase: 2, draw: "seated_twist_left" },
-  { name: "Seated Spinal Twist", duration: 45, side: "RIGHT TWIST", cue: "Switch. Left foot over right thigh. Right elbow outside left knee. Rotate left. Both hips stay grounded. Feel this in the mid-back — not just the lower back.", phase: 2, draw: "seated_twist_right" },
-  { name: "Boat Pose", duration: 45, cue: "Sit, knees bent, lean back slightly until spine is long. Lift feet — shins parallel or legs straight. Core holds it all. The hip flexors and deep core get zero challenge sitting passively all day — this changes that.", phase: 2, draw: "boat_pose" },
-  { name: "Camel Pose", duration: 45, cue: "Kneel with hips over knees. Hands on lower back. Inhale and lift the chest, lean back — look up if comfortable. The deepest thoracic extension available. A direct antidote to hours of forward rounding.", phase: 2, draw: "camel" },
-  { name: "Chest Opener", duration: 40, cue: "Interlace fingers behind back. Straighten arms, squeeze shoulder blades together, lift chest, look slightly up. Counter all that forward rounding from the screen.", phase: 2, draw: "chest_opener" },
-  { name: "Cross-Body Shoulder", duration: 40, side: "LEFT ARM", cue: "Left arm straight across chest. Right hand hooks behind the upper arm and pulls gently. Targets the posterior deltoid — overloaded by reaching forward to a keyboard all day.", phase: 2, draw: "cross_body_left" },
+  { name: "Butterfly Pose", duration: 45, cue: "Sit. Soles of feet together, knees fall open. Hold feet, sit tall.", phase: 2, draw: "butterfly" },
+  { name: "Seated Forward Fold", duration: 45, cue: "Legs extended, feet flexed. Hinge from hips, reach forward. Keep spine long first — then fold.", phase: 2, draw: "seated_fold" },
+  { name: "Head-to-Knee Pose", duration: 45, side: "LEFT LEG", cue: "Left leg extended, right foot to inner left thigh. Rotate torso toward left leg and fold.", phase: 2, draw: "head_knee_left" },
+  { name: "Head-to-Knee Pose", duration: 45, side: "RIGHT LEG", cue: "Right leg extended, left foot to inner right thigh. Fold forward.", phase: 2, draw: "head_knee_right" },
+  { name: "Seated Spinal Twist", duration: 45, side: "LEFT TWIST", cue: "Sit tall. Cross right foot over left thigh. Left elbow outside right knee, right hand behind. Rotate right.", phase: 2, draw: "seated_twist_left" },
+  { name: "Seated Spinal Twist", duration: 45, side: "RIGHT TWIST", cue: "Switch. Left foot over right thigh. Right elbow outside left knee. Rotate left. Both hips stay grounded.", phase: 2, draw: "seated_twist_right" },
+  { name: "Boat Pose", duration: 45, cue: "Sit, knees bent, lean back slightly until spine is long. Lift feet — shins parallel or legs straight. Core holds it all.", phase: 2, draw: "boat_pose" },
+  { name: "Camel Pose", duration: 45, cue: "Kneel with hips over knees. Hands on lower back. Inhale and lift the chest, lean back — look up if comfortable.", phase: 2, draw: "camel" },
+  { name: "Chest Opener", duration: 40, cue: "Interlace fingers behind back. Straighten arms, squeeze shoulder blades together, lift chest, look slightly up.", phase: 2, draw: "chest_opener" },
+  { name: "Cross-Body Shoulder", duration: 40, side: "LEFT ARM", cue: "Left arm straight across chest. Right hand hooks behind the upper arm and pulls gently.", phase: 2, draw: "cross_body_left" },
   { name: "Cross-Body Shoulder", duration: 40, side: "RIGHT ARM", cue: "Right arm across chest, left hand behind the upper arm. Keep shoulders level. The rear shoulder is the most neglected spot for desk workers.", phase: 2, draw: "cross_body_right" },
-  { name: "Prayer Stretch", duration: 35, cue: "Palms together in front of chest. Push hands slowly downward toward waist, keeping palms touching. Hold when you feel the stretch in the forearms.", phase: 2, draw: "prayer_stretch" },
-  { name: "Shoulder Circles", duration: 35, cue: "Roll both shoulders backwards ×10, then forward ×10. The upper traps and levator scapulae seize up from mouse use — full circles mobilise the entire girdle.", phase: 2, draw: "shoulder_circles" },
-  { name: "Reverse Prayer", duration: 35, cue: "Backs of hands together, fingers pointing down. Push gently downward. Hits the extensor muscles on top of the forearms — often the most neglected wrist stretch.", phase: 2, draw: "reverse_prayer" },
-  { name: "Reclined Butterfly", duration: 45, cue: "Lie on your back, soles of feet together, knees fall open. Arms out, palms up. Close your eyes. The inner groin opens passively with gravity — zero effort required. Just breathe.", phase: 2, draw: "reclined_butterfly" },
-  { name: "Supine Thoracic Extension", duration: 45, cue: "Place a rolled blanket or mat edge across the mid-back at the shoulder blades. Lie over it, arms out, palms up. The thoracic spine is locked into flexion all day — this gently reverses it. Move the roll up one vertebra after 20 seconds.", phase: 2, draw: "supine_thoracic" },
-  { name: "Banana Pose", duration: 45, side: "LEFT SIDE", cue: "Lie flat. Shift both legs to the right and both arms overhead to the right, creating a banana curve. The left side body — lat, oblique, hip — gets a full-length stretch you can't reach in any standing position. Keep both hips on the floor.", phase: 2, draw: "banana_left" },
-  { name: "Banana Pose", duration: 45, side: "RIGHT SIDE", cue: "Shift both legs and arms to the left. The right lat and intercostals open. Lateral chain work is almost always skipped by desk workers — this reaches where nothing else does.", phase: 2, draw: "banana_right" },
-  { name: "Windshield Wipers", duration: 45, cue: "Lie on back, knees bent, feet hip-width apart. Let both knees fall slowly to one side, return to center, then fall to the other. 8–10 full sweeps. Mobilises the hips and lumbar in rotation without any effort — the perfect passive decompressor.", phase: 2, draw: "windshield_wipers" },
-  { name: "Reclined Hand-to-Big-Toe", duration: 40, side: "LEFT LEG", cue: "Lie on your back. Extend the left leg up toward the ceiling, holding the big toe, a strap around the foot, or the back of the thigh. Right leg stays flat on the floor. The entire posterior chain — hamstring, calf, back of the knee — opens from the floor up. No bouncing. Steady breath, let gravity do the work.", phase: 2, draw: "reclined_hand_to_toe_left" },
-  { name: "Reclined Hand-to-Big-Toe", duration: 40, side: "RIGHT LEG", cue: "Right leg extends up, left leg flat. Hold wherever comfortable — big toe, strap, or back of the thigh. This is the most effective supine hamstring stretch available because the pelvis stays level on the floor. You'll feel the difference between sides immediately.", phase: 2, draw: "reclined_hand_to_toe_right" },
+  { name: "Prayer Stretch", duration: 35, cue: "Palms together in front of chest. Push hands slowly downward toward waist, keeping palms touching.", phase: 2, draw: "prayer_stretch" },
+  { name: "Shoulder Circles", duration: 35, cue: "Roll both shoulders backwards ×10, then forward ×10. The upper traps and levator scapulae seize up from mouse use", phase: 2, draw: "shoulder_circles" },
+  { name: "Reverse Prayer", duration: 35, cue: "Backs of hands together, fingers pointing down. Push gently downward.", phase: 2, draw: "reverse_prayer" },
+  { name: "Reclined Butterfly", duration: 45, cue: "Lie on your back, soles of feet together, knees fall open. Arms out, palms up. Close your eyes.", phase: 2, draw: "reclined_butterfly" },
+  { name: "Supine Thoracic Extension", duration: 45, cue: "Place a rolled blanket or mat edge across the mid-back at the shoulder blades. Lie over it, arms out, palms up.", phase: 2, draw: "supine_thoracic" },
+  { name: "Banana Pose", duration: 45, side: "LEFT SIDE", cue: "Lie flat. Shift both legs to the right and both arms overhead to the right, creating a banana curve.", phase: 2, draw: "banana_left" },
+  { name: "Banana Pose", duration: 45, side: "RIGHT SIDE", cue: "Shift both legs and arms to the left. The right lat and intercostals open.", phase: 2, draw: "banana_right" },
+  { name: "Windshield Wipers", duration: 45, cue: "Lie on back, knees bent, feet hip-width apart. Let both knees fall slowly to one side, return to center, then fall to the other.", phase: 2, draw: "windshield_wipers" },
+  { name: "Reclined Hand-to-Big-Toe", duration: 40, side: "LEFT LEG", cue: "Lie on your back. Extend the left leg up toward the ceiling, holding the big toe, a strap around the foot, or the back of the thigh.", phase: 2, draw: "reclined_hand_to_toe_left" },
+  { name: "Reclined Hand-to-Big-Toe", duration: 40, side: "RIGHT LEG", cue: "Right leg extends up, left leg flat. Hold wherever comfortable — big toe, strap, or back of the thigh.", phase: 2, draw: "reclined_hand_to_toe_right" },
   // ── SESSION D — STANDING FLOW ──
-  { name: "Chair Pose", duration: 45, cue: "Feet together or hip-width. Bend knees and sit back as if toward a chair. Arms up, core engaged. The quads and glutes do zero work sitting all day — 45 seconds of Chair Pose reminds them they exist.", phase: 3, draw: "chair_pose" },
-  { name: "Standing Side Bend", duration: 40, side: "LEFT SIDE", cue: "Stand tall, feet hip-width. Reach left arm up and arc the torso to the right. The entire left side body opens — lat, oblique, intercostal — muscles that never get stretched sitting at a desk.", phase: 3, draw: "standing_side_bend_left" },
-  { name: "Standing Side Bend", duration: 40, side: "RIGHT SIDE", cue: "Right arm up, arc to the left. Keep both feet grounded. Most people notice a difference side to side — the dominant arm side is often tighter.", phase: 3, draw: "standing_side_bend_right" },
-  { name: "Crescent Lunge", duration: 45, side: "LEFT FOOT FORWARD", cue: "Left foot forward in a high lunge — back knee straight, heel lifted. Sweep arms overhead. The front hip hinges deeply while the core fires to hold you upright — more demanding than Low Lunge, works the whole kinetic chain.", phase: 3, draw: "crescent_left" },
-  { name: "Crescent Lunge", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, back knee straight. Arms reach up — feel the line from back heel through fingertips. The hip flexor of the back leg gets a strong dynamic stretch while the front leg quads and glutes work hard.", phase: 3, draw: "crescent_right" },
-  { name: "Horse Stance", duration: 45, cue: "Feet wide, toes turned out 45°. Bend both knees and sink until thighs approach parallel. Hands at heart. Inner thighs, glutes, and deep hip rotators all fire simultaneously — a squat pattern with the hips fully externally rotated.", phase: 3, draw: "horse_stance" },
-  { name: "Standing Backbend", duration: 40, cue: "Stand tall, hands on lower back, fingertips pointing down. Inhale and draw elbows toward each other. Exhale and lean back, opening the chest skyward. The lumbar is supported by your hands. Look up only if the neck is comfortable.", phase: 3, draw: "standing_backbend" },
-  { name: "Triangle Pose", duration: 45, side: "LEFT SIDE", cue: "Straight left leg, hinge sideways, reach left hand toward shin or a block. Right arm up, gaze at right thumb. Full lateral stretch — the spine almost never moves sideways at a desk.", phase: 3, draw: "triangle_left" },
-  { name: "Triangle Pose", duration: 45, side: "RIGHT SIDE", cue: "Straight right leg, hinge right, left arm up. Keep both sides of the torso long. Feel the stretch from the right outer foot all the way up through the left fingertips.", phase: 3, draw: "triangle_right" },
-  { name: "Side Angle Pose", duration: 40, side: "LEFT SIDE", cue: "Left knee bent, lean left, left forearm to left thigh. Right arm overhead, creating a long diagonal line. Opens the right oblique and intercostal muscles — the forgotten desk-worker stretch.", phase: 3, draw: "side_angle_left" },
-  { name: "Side Angle Pose", duration: 40, side: "RIGHT SIDE", cue: "Right knee bent, lean right, right forearm to thigh. Left arm overhead. Keep the left hip pressing forward — don't collapse into the bent side.", phase: 3, draw: "side_angle_right" },
-  { name: "Tree Pose", duration: 45, side: "LEFT LEG", cue: "Left foot planted. Right foot to left ankle, calf, or inner thigh (avoid the knee). Hands at chest or overhead. Balance challenges the deep hip stabilisers — dormant from sitting all day.", phase: 3, draw: "tree_left" },
-  { name: "Tree Pose", duration: 45, side: "RIGHT LEG", cue: "Right foot planted. Left foot to right ankle, calf, or thigh. Find a fixed gaze point — it helps balance. The small foot and ankle muscles are reactivating after hours of being still.", phase: 3, draw: "tree_right" },
-  { name: "Fish Pose", duration: 45, cue: "Lie on your back, hands under hips palms down. Press elbows into floor and arch the upper back, resting the top of the head lightly on the mat. The strongest passive thoracic opener available — the direct antidote to screen-rounding.", phase: 3, draw: "fish_pose" },
-  { name: "Eagle Arms", duration: 40, cue: "Stand or sit. Cross right elbow under left, wrap right forearm around left, palms touching. Lift elbows to shoulder height and push them forward. Opens the posterior shoulder and upper back — the most direct stretch for muscles overloaded by hunching toward a screen.", phase: 3, draw: "eagle_arms" },
-  { name: "Forearm Flexor Stretch", duration: 30, side: "LEFT ARM", cue: "Left arm forward, palm up. Right hand pulls fingers back toward you. Hold steady — don't bounce. If you type a lot, you'll really feel this one.", phase: 3, draw: "forearm_left" },
-  { name: "Forearm Flexor Stretch", duration: 30, side: "RIGHT ARM", cue: "Right arm forward, palm up. Left hand pulls fingers back gently. The forearm flexors are under continuous load from typing — they deserve the full hold.", phase: 3, draw: "forearm_right" },
-  { name: "Reclining Hero", duration: 60, cue: "From kneeling, sit back between your heels (use a block under the hips if needed). Lean back onto forearms or all the way down. The quad and hip flexor get a completely different stretch than anything standing — full passive extension of the knee joint and front of the hip. Stay up if knees are uncomfortable.", phase: 3, draw: "reclining_hero" },
-  { name: "Crocodile Pose", duration: 45, cue: "Lie face down. Stack your forearms under your forehead. Feet hip-width, toes turned out. Completely release all effort. The front body — belly, chest, hip flexors — decompresses into the floor. After a standing flow, the spine loves being supported from the front.", phase: 3, draw: "crocodile_pose" },
-  { name: "Seated Meditation", duration: 60, cue: "Sit comfortably — cross-legged, on your heels, or in a chair. Hands on knees, eyes closed. Follow the breath for the full 60 seconds without fixing or controlling it. The body has worked; let the nervous system catch up.", phase: 3, draw: "seated_meditation" },
-  { name: "Savasana", duration: 90, cue: "Lie flat. Legs loose, arms at 45°, palms up. Eyes closed. Don't move. An entire hour of work — every disc decompressed, every hip opened, every shoulder released. Let it all integrate. The mat is doing the work now.", phase: 3, draw: "savasana" },
+  { name: "Chair Pose", duration: 45, cue: "Feet together or hip-width. Bend knees and sit back as if toward a chair. Arms up, core engaged.", phase: 3, draw: "chair_pose" },
+  { name: "Standing Side Bend", duration: 40, side: "LEFT SIDE", cue: "Stand tall, feet hip-width. Reach left arm up and arc the torso to the right.", phase: 3, draw: "standing_side_bend_left" },
+  { name: "Standing Side Bend", duration: 40, side: "RIGHT SIDE", cue: "Right arm up, arc to the left. Keep both feet grounded. Most people notice a difference side to side", phase: 3, draw: "standing_side_bend_right" },
+  { name: "Crescent Lunge", duration: 45, side: "LEFT FOOT FORWARD", cue: "Left foot forward in a high lunge — back knee straight, heel lifted. Sweep arms overhead.", phase: 3, draw: "crescent_left" },
+  { name: "Crescent Lunge", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, back knee straight. Arms reach up — feel the line from back heel through fingertips.", phase: 3, draw: "crescent_right" },
+  { name: "Horse Stance", duration: 45, cue: "Feet wide, toes turned out 45°. Bend both knees and sink until thighs approach parallel. Hands at heart.", phase: 3, draw: "horse_stance" },
+  { name: "Standing Backbend", duration: 40, cue: "Stand tall, hands on lower back, fingertips pointing down. Inhale and draw elbows toward each other.", phase: 3, draw: "standing_backbend" },
+  { name: "Triangle Pose", duration: 45, side: "LEFT SIDE", cue: "Straight left leg, hinge sideways, reach left hand toward shin or a block. Right arm up, gaze at right thumb.", phase: 3, draw: "triangle_left" },
+  { name: "Triangle Pose", duration: 45, side: "RIGHT SIDE", cue: "Straight right leg, hinge right, left arm up. Keep both sides of the torso long.", phase: 3, draw: "triangle_right" },
+  { name: "Side Angle Pose", duration: 40, side: "LEFT SIDE", cue: "Left knee bent, lean left, left forearm to left thigh. Right arm overhead, creating a long diagonal line.", phase: 3, draw: "side_angle_left" },
+  { name: "Side Angle Pose", duration: 40, side: "RIGHT SIDE", cue: "Right knee bent, lean right, right forearm to thigh. Left arm overhead.", phase: 3, draw: "side_angle_right" },
+  { name: "Tree Pose", duration: 45, side: "LEFT LEG", cue: "Left foot planted. Right foot to left ankle, calf, or inner thigh (avoid the knee). Hands at chest or overhead.", phase: 3, draw: "tree_left" },
+  { name: "Tree Pose", duration: 45, side: "RIGHT LEG", cue: "Right foot planted. Left foot to right ankle, calf, or thigh. Find a fixed gaze point — it helps balance.", phase: 3, draw: "tree_right" },
+  { name: "Fish Pose", duration: 45, cue: "Lie on your back, hands under hips palms down. Press elbows into floor and arch the upper back", phase: 3, draw: "fish_pose" },
+  { name: "Eagle Arms", duration: 40, cue: "Stand or sit. Cross right elbow under left, wrap right forearm around left, palms touching.", phase: 3, draw: "eagle_arms" },
+  { name: "Forearm Flexor Stretch", duration: 30, side: "LEFT ARM", cue: "Left arm forward, palm up. Right hand pulls fingers back toward you. Hold steady — don't bounce.", phase: 3, draw: "forearm_left" },
+  { name: "Forearm Flexor Stretch", duration: 30, side: "RIGHT ARM", cue: "Right arm forward, palm up. Left hand pulls fingers back gently.", phase: 3, draw: "forearm_right" },
+  { name: "Reclining Hero", duration: 60, cue: "From kneeling, sit back between your heels (use a block under the hips if needed). Lean back onto forearms or all the way down.", phase: 3, draw: "reclining_hero" },
+  { name: "Crocodile Pose", duration: 45, cue: "Lie face down. Stack your forearms under your forehead. Feet hip-width, toes turned out. Completely release all effort.", phase: 3, draw: "crocodile_pose" },
+  { name: "Seated Meditation", duration: 60, cue: "Sit comfortably — cross-legged, on your heels, or in a chair. Hands on knees, eyes closed.", phase: 3, draw: "seated_meditation" },
+  { name: "Savasana", duration: 90, cue: "Lie flat. Legs loose, arms at 45°, palms up. Eyes closed. Don't move.", phase: 3, draw: "savasana" },
 ];
 
 let currentIdx = 0, timeLeft = 0, totalDuration = 0, paused = false, tickInterval = null;
@@ -345,7 +345,7 @@ function beginSession() {
   document.getElementById('preview-btns').style.display = 'none';
   document.getElementById('br-main').style.display = 'flex';
   document.getElementById('audio-corner').style.display = 'flex';
-  startGetReady(5);
+  startGetReady(3);
 }
 
 function displayPose(idx) {
@@ -383,25 +383,23 @@ function updateTimerDisplay() {
 
 function startGetReady(secs) {
   clearInterval(tickInterval);
-  var timerLabel = document.querySelector('.timer-label');
   var timerRing = document.getElementById('timer-ring');
   var circumference = timerRing ? parseFloat(timerRing.getAttribute('stroke-dasharray')) || 295.3 : 295.3;
-  var origLabel = timerLabel ? timerLabel.textContent : 'secs';
-  if (timerLabel) timerLabel.textContent = 'get ready';
   if (timerRing) timerRing.style.stroke = '#555';
   var count = secs;
   document.getElementById('timer-num').textContent = count;
   if (timerRing) timerRing.style.strokeDashoffset = 0;
   tickInterval = setInterval(function() {
-    count--;
-    if (count <= 0) {
-      clearInterval(tickInterval);
-      if (timerLabel) timerLabel.textContent = origLabel;
-      updateTimerDisplay();
-      startTick();
-    } else {
-      document.getElementById('timer-num').textContent = count;
-      if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+    if (!paused) {
+      count--;
+      if (count <= 0) {
+        clearInterval(tickInterval);
+        updateTimerDisplay();
+        startTick();
+      } else {
+        document.getElementById('timer-num').textContent = count;
+        if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+      }
     }
   }, 1000);
 }
@@ -413,7 +411,7 @@ function startTick() {
       if (timeLeft <= 0) {
         clearInterval(tickInterval); playGong();
         if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-        setTimeout(() => { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(5); } else { showDone(); } }, 600);
+        setTimeout(() => { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(3); } else { showDone(); } }, 600);
       }
     }
   }, 1000);
@@ -430,18 +428,20 @@ function startCountdown(nextIdx, initialCount = 3, label = 'Next Up') {
   document.getElementById('cd-num').textContent = count;
   overlay.style.display = 'flex';
   const cd = setInterval(() => {
-    count--;
-    if (count <= 0) {
-      clearInterval(cd); overlay.style.display = 'none';
-      if (labelEl) labelEl.textContent = 'Next Up';
-      currentIdx = nextIdx; displayPose(currentIdx);
-    } else { document.getElementById('cd-num').textContent = count; }
+    if (!paused) {
+      count--;
+      if (count <= 0) {
+        clearInterval(cd); overlay.style.display = 'none';
+        if (labelEl) labelEl.textContent = 'Next Up';
+        currentIdx = nextIdx; displayPose(currentIdx);
+      } else { document.getElementById('cd-num').textContent = count; }
+    }
   }, 1000);
 }
 
 function togglePause() { paused = !paused; document.getElementById('btn-pause').textContent = paused ? '▶' : '⏸'; if (paused) ytPause(); else ytPlay(); }
-function nextPose() { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(5); } else { showDone(); } }
-function prevPose() { if (currentIdx > 0) { displayPose(currentIdx - 1); startGetReady(5); } }
+function nextPose() { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(3); } else { showDone(); } }
+function prevPose() { if (currentIdx > 0) { displayPose(currentIdx - 1); startGetReady(3); } }
 function exitSession() { clearInterval(tickInterval); ytPause(); document.getElementById('session-screen').style.display = 'none'; document.getElementById('start-screen').style.display = 'flex'; var bm=document.getElementById('br-main'); var pb=document.getElementById('preview-btns'); if(bm) bm.style.display='flex'; if(pb) pb.style.display='none'; }
 function showDone() { clearInterval(tickInterval); ytPause(); document.getElementById('session-screen').style.display = 'none'; document.getElementById('done-screen').style.display = 'flex'; }
 function restart() { document.getElementById('done-screen').style.display = 'none'; document.getElementById('start-screen').style.display = 'flex'; }

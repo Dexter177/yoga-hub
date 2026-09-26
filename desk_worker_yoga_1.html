@@ -18,7 +18,7 @@
   .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .phase-label { flex: 1; text-align: left; font-size: 14px; color: #ddd; }
   .phase-dur { font-size: 13px; color: #555; }
-  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; position: relative; padding-bottom: 144px; }
+  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; position: relative; padding-bottom: 190px; }
   .top-bar { width: 100%; padding: 10px 20px 8px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .phase-badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
   .progress-text { font-size: 13px; color: #666; }
@@ -183,28 +183,28 @@ const IMAGES = {
 
 const POSES = [
   // FLOOR WARM-UP
-  { name: "Cat-Cow", duration: 45, cue: "Hands under shoulders, knees under hips. Inhale: arch back, drop belly, lift head. Exhale: round spine, tuck chin. Do ×8 slow — warms every lumbar disc before you ask anything of them.", phase: 0, draw: "catcow" },
-  { name: "Thread the Needle", duration: 45, side: "LEFT SIDE", cue: "From all-fours, slide left arm under right arm along the floor. Rest temple down. Breathe into the right shoulder blade — thoracic rotation is the first thing desk work locks out.", phase: 0, draw: "thread_left" },
+  { name: "Cat-Cow", duration: 45, cue: "Hands under shoulders, knees under hips. Inhale: arch back, drop belly, lift head. Exhale: round spine, tuck chin.", phase: 0, draw: "catcow" },
+  { name: "Thread the Needle", duration: 45, side: "LEFT SIDE", cue: "From all-fours, slide left arm under right arm along the floor. Rest temple down.", phase: 0, draw: "thread_left" },
   { name: "Thread the Needle", duration: 45, side: "RIGHT SIDE", cue: "Switch sides. Slide right arm under left. Stack hips level. Each exhale lets you rotate a fraction further into the mid-back.", phase: 0, draw: "thread_right" },
   // PRONE SPINE
-  { name: "Sphinx Pose", duration: 45, cue: "Lie face down. Forearms on mat, elbows under shoulders. Press down and lift the chest — passive backbend, no effort from the lower back. Directly reverses mid-back rounding from hours at a screen.", phase: 1, draw: "sphinx" },
-  { name: "Locust Pose", duration: 45, cue: "Arms alongside body, palms down. Inhale and lift chest, arms and legs simultaneously. Hold 3 seconds, lower. Repeat ×4. The posterior chain completely disengages from sitting — this reactivates it.", phase: 1, draw: "locust" },
-  { name: "Upward Dog", duration: 45, cue: "Press palms into floor, straighten arms, lift chest and thighs off mat. Shoulders roll back and down. Active thoracic extension — the strongest counter-movement to a desk-rounded upper back.", phase: 1, draw: "updog" },
-  { name: "Child's Pose", duration: 45, cue: "Knees wide, big toes together, arms extended forward. Forehead down. Full decompression of the lumbar and sacrum — breathe into the back body and feel it expand with every inhale.", phase: 1, draw: "childs_pose" },
+  { name: "Sphinx Pose", duration: 45, cue: "Lie face down. Forearms on mat, elbows under shoulders. Press down and lift the chest — passive backbend, no effort from the lower back.", phase: 1, draw: "sphinx" },
+  { name: "Locust Pose", duration: 45, cue: "Arms alongside body, palms down. Inhale and lift chest, arms and legs simultaneously. Hold 3 seconds, lower. Repeat ×4.", phase: 1, draw: "locust" },
+  { name: "Upward Dog", duration: 45, cue: "Press palms into floor, straighten arms, lift chest and thighs off mat. Shoulders roll back and down.", phase: 1, draw: "updog" },
+  { name: "Child's Pose", duration: 45, cue: "Knees wide, big toes together, arms extended forward. Forehead down.", phase: 1, draw: "childs_pose" },
   // CORE & GLUTES
-  { name: "Plank Hold", duration: 45, cue: "Hands under shoulders, body in one line from heels to skull. Engage your core and squeeze your glutes. Sitting all day switches off both — this switches them back on. Keep breathing.", phase: 2, draw: "plank" },
-  { name: "Bridge Pose", duration: 45, cue: "Feet hip-width, knees bent. Press feet into floor and drive hips up. Squeeze glutes hard — hold 8 seconds, lower slowly, pause, repeat ×3. Glute amnesia is one of the biggest consequences of desk work. This is the direct fix.", phase: 2, draw: "bridge" },
+  { name: "Plank Hold", duration: 45, cue: "Hands under shoulders, body in one line from heels to skull. Engage your core and squeeze your glutes.", phase: 2, draw: "plank" },
+  { name: "Bridge Pose", duration: 45, cue: "Feet hip-width, knees bent. Press feet into floor and drive hips up. Squeeze glutes hard — hold 8 seconds, lower slowly, pause, repeat ×3.", phase: 2, draw: "bridge" },
   // SUPINE RECOVERY
   { name: "Knees to Chest", duration: 45, cue: "Lie on back. Hug both knees to chest. Rock gently side to side. Releases the compression built up in the lumbar discs from hours in a chair.", phase: 3, draw: "knees_to_chest" },
-  { name: "Supine Twist", duration: 45, side: "LEFT KNEE DOWN", cue: "Right knee to chest, cross it left. Right arm out, gaze right. Don't force the twist — let gravity take it. Feel this unwind the lumbar, not just the lower back.", phase: 3, draw: "twist_right" },
-  { name: "Supine Twist", duration: 45, side: "RIGHT KNEE DOWN", cue: "Left knee crosses right. Left arm out. Each exhale lets you sink a fraction deeper. Complete spinal rotation you won't get from any chair stretch.", phase: 3, draw: "twist_left" },
-  { name: "Happy Baby", duration: 45, cue: "On your back. Knees wide, grab outer feet. Ankles over knees. Rock side to side. Releases the sacroiliac joint and inner groin — both compressed from sitting all day.", phase: 3, draw: "happy_baby" },
+  { name: "Supine Twist", duration: 45, side: "LEFT KNEE DOWN", cue: "Right knee to chest, cross it left. Right arm out, gaze right. Don't force the twist — let gravity take it.", phase: 3, draw: "twist_right" },
+  { name: "Supine Twist", duration: 45, side: "RIGHT KNEE DOWN", cue: "Left knee crosses right. Left arm out. Each exhale lets you sink a fraction deeper.", phase: 3, draw: "twist_left" },
+  { name: "Happy Baby", duration: 45, cue: "On your back. Knees wide, grab outer feet. Ankles over knees. Rock side to side.", phase: 3, draw: "happy_baby" },
   // WIND DOWN
-  { name: "Chin Tucks", duration: 35, cue: "Sitting or lying tall, draw chin straight back (double chin). Hold 3 seconds, release. Repeat ×8. Directly reverses forward head posture from screen time.", phase: 4, draw: "chin_tucks" },
-  { name: "Neck Extension", duration: 35, cue: "Tuck chin, then slowly lift face toward the ceiling. Return to neutral. Repeat ×8. Desk work locks the neck in forward flexion — this is how you get the backward range back.", phase: 4, draw: "neck_extension" },
-  { name: "Neck Stretch", duration: 35, side: "LEFT SIDE", cue: "Drop left ear toward left shoulder. Right shoulder stays relaxed — don't shrug. The upper trap is chronically overloaded by screen work. Give it the full hold.", phase: 4, draw: "neck_left" },
+  { name: "Chin Tucks", duration: 35, cue: "Sitting or lying tall, draw chin straight back (double chin). Hold 3 seconds, release. Repeat ×8.", phase: 4, draw: "chin_tucks" },
+  { name: "Neck Extension", duration: 35, cue: "Tuck chin, then slowly lift face toward the ceiling. Return to neutral. Repeat ×8.", phase: 4, draw: "neck_extension" },
+  { name: "Neck Stretch", duration: 35, side: "LEFT SIDE", cue: "Drop left ear toward left shoulder. Right shoulder stays relaxed — don't shrug. The upper trap is chronically overloaded by screen work.", phase: 4, draw: "neck_left" },
   { name: "Neck Stretch", duration: 35, side: "RIGHT SIDE", cue: "Drop right ear to right shoulder. Breathe into the left side of the neck. Feel the stretch travel all the way down to the trap.", phase: 4, draw: "neck_right" },
-  { name: "Savasana", duration: 45, cue: "Lie flat. Legs loose, arms at 45°, palms up. Eyes closed. Don't move. Let everything you just opened settle and integrate. The mat is doing the work now.", phase: 4, draw: "savasana" },
+  { name: "Savasana", duration: 45, cue: "Lie flat. Legs loose, arms at 45°, palms up. Eyes closed. Don't move. Let everything you just opened settle and integrate.", phase: 4, draw: "savasana" },
 ];
 
 let currentIdx = 0, timeLeft = 0, totalDuration = 0, paused = false, tickInterval = null;
@@ -222,7 +222,7 @@ function beginSession() {
   document.getElementById('preview-btns').style.display = 'none';
   document.getElementById('br-main').style.display = 'flex';
   document.getElementById('audio-corner').style.display = 'flex';
-  startGetReady(5);
+  startGetReady(3);
 }
 
 function displayPose(idx) {
@@ -260,25 +260,23 @@ function updateTimerDisplay() {
 
 function startGetReady(secs) {
   clearInterval(tickInterval);
-  var timerLabel = document.querySelector('.timer-label');
   var timerRing = document.getElementById('timer-ring');
   var circumference = timerRing ? parseFloat(timerRing.getAttribute('stroke-dasharray')) || 295.3 : 295.3;
-  var origLabel = timerLabel ? timerLabel.textContent : 'secs';
-  if (timerLabel) timerLabel.textContent = 'get ready';
   if (timerRing) timerRing.style.stroke = '#555';
   var count = secs;
   document.getElementById('timer-num').textContent = count;
   if (timerRing) timerRing.style.strokeDashoffset = 0;
   tickInterval = setInterval(function() {
-    count--;
-    if (count <= 0) {
-      clearInterval(tickInterval);
-      if (timerLabel) timerLabel.textContent = origLabel;
-      updateTimerDisplay();
-      startTick();
-    } else {
-      document.getElementById('timer-num').textContent = count;
-      if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+    if (!paused) {
+      count--;
+      if (count <= 0) {
+        clearInterval(tickInterval);
+        updateTimerDisplay();
+        startTick();
+      } else {
+        document.getElementById('timer-num').textContent = count;
+        if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+      }
     }
   }, 1000);
 }
@@ -290,7 +288,7 @@ function startTick() {
       if (timeLeft <= 0) {
         clearInterval(tickInterval); playGong();
         if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-        setTimeout(() => { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(5); } else { showDone(); } }, 600);
+        setTimeout(() => { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(3); } else { showDone(); } }, 600);
       }
     }
   }, 1000);
@@ -307,18 +305,20 @@ function startCountdown(nextIdx, initialCount = 3, label = 'Next Up') {
   document.getElementById('cd-num').textContent = count;
   overlay.style.display = 'flex';
   const cd = setInterval(() => {
-    count--;
-    if (count <= 0) {
-      clearInterval(cd); overlay.style.display = 'none';
-      if (labelEl) labelEl.textContent = 'Next Up';
-      currentIdx = nextIdx; displayPose(currentIdx);
-    } else { document.getElementById('cd-num').textContent = count; }
+    if (!paused) {
+      count--;
+      if (count <= 0) {
+        clearInterval(cd); overlay.style.display = 'none';
+        if (labelEl) labelEl.textContent = 'Next Up';
+        currentIdx = nextIdx; displayPose(currentIdx);
+      } else { document.getElementById('cd-num').textContent = count; }
+    }
   }, 1000);
 }
 
 function togglePause() { paused = !paused; document.getElementById('btn-pause').textContent = paused ? '▶' : '⏸'; if (paused) ytPause(); else ytPlay(); }
-function nextPose() { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(5); } else { showDone(); } }
-function prevPose() { if (currentIdx > 0) { displayPose(currentIdx - 1); startGetReady(5); } }
+function nextPose() { if (currentIdx < POSES.length - 1) { displayPose(currentIdx + 1); startGetReady(3); } else { showDone(); } }
+function prevPose() { if (currentIdx > 0) { displayPose(currentIdx - 1); startGetReady(3); } }
 function exitSession() { clearInterval(tickInterval); ytPause(); document.getElementById('session-screen').style.display = 'none'; document.getElementById('start-screen').style.display = 'flex'; var bm=document.getElementById('br-main'); var pb=document.getElementById('preview-btns'); if(bm) bm.style.display='flex'; if(pb) pb.style.display='none'; }
 function showDone() { clearInterval(tickInterval); ytPause(); document.getElementById('session-screen').style.display = 'none'; document.getElementById('done-screen').style.display = 'flex'; }
 function restart() { document.getElementById('done-screen').style.display = 'none'; document.getElementById('start-screen').style.display = 'flex'; }

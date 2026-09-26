@@ -18,7 +18,7 @@
   .phase-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
   .phase-label { flex: 1; text-align: left; font-size: 14px; color: #ddd; }
   .phase-dur { font-size: 13px; color: #555; }
-  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; position: relative; padding-bottom: 144px; }
+  #session-screen { display: none; flex-direction: column; align-items: center; width: 100%; height: 100%; overflow: hidden; position: relative; padding-bottom: 190px; }
   .top-bar { width: 100%; padding: 10px 20px 8px; display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
   .phase-badge { font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; }
   .progress-text { font-size: 13px; color: #666; }
@@ -185,67 +185,65 @@ const IMAGES = {
 
 const POSES = [
   // STANDING WARM-UP
-  { name: "Downward Dog", duration: 45, cue: "Hips high, heels toward floor. Pedal feet slowly. Head fully hangs — neck free. Decompresses the shoulder joint and wakes up the hamstrings before they have to work.", phase: 0, draw: "downdog" },
-  { name: "Half Lift", duration: 45, cue: "From forward fold, press fingertips to shins or floor. Lengthen the spine forward — flat back, hips over heels. Feel the hamstrings engage and the lower back decompress before you fold deeper.", phase: 0, draw: "half_lift" },
-  { name: "Standing Forward Fold", duration: 45, cue: "Feet hip-width. Hinge from hips, fold forward. Bend knees as needed. Let head and neck hang completely — decompress the spine with gravity. Full posterior chain from calves to skull.", phase: 0, draw: "forward_fold" },
-  { name: "Wide-Legged Forward Fold", duration: 45, cue: "Step feet wide, toes forward. Hinge and fold, hands to floor. The adductors and inner hamstrings are almost never stretched at a desk — hold and breathe, let gravity do the work.", phase: 0, draw: "wide_legged_fold" },
+  { name: "Downward Dog", duration: 45, cue: "Hips high, heels toward floor. Pedal feet slowly. Head fully hangs — neck free.", phase: 0, draw: "downdog" },
+  { name: "Half Lift", duration: 45, cue: "From forward fold, press fingertips to shins or floor. Lengthen the spine forward — flat back, hips over heels.", phase: 0, draw: "half_lift" },
+  { name: "Standing Forward Fold", duration: 45, cue: "Feet hip-width. Hinge from hips, fold forward. Bend knees as needed. Let head and neck hang completely — decompress the spine with gravity.", phase: 0, draw: "forward_fold" },
+  { name: "Wide-Legged Forward Fold", duration: 45, cue: "Step feet wide, toes forward. Hinge and fold, hands to floor. The adductors and inner hamstrings are almost never stretched at a desk", phase: 0, draw: "wide_legged_fold" },
   // HIP FLEXORS
-  { name: "Low Lunge", duration: 45, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right knee down. Arms overhead, hips square. Sink forward — your hip flexors are shortened all day sitting. Let them actually lengthen.", phase: 1, draw: "low_lunge_left" },
+  { name: "Low Lunge", duration: 45, side: "LEFT FOOT FORWARD", cue: "Left foot forward, right knee down. Arms overhead, hips square. Sink forward — your hip flexors are shortened all day sitting.", phase: 1, draw: "low_lunge_left" },
   { name: "Low Lunge", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot forward, left knee down. Arms up. Square hips forward. Don't rush — the right hip flexor needs as much time as the left.", phase: 1, draw: "low_lunge_right" },
-  { name: "Lizard Pose", duration: 45, side: "LEFT FOOT FORWARD", cue: "From Low Lunge, bring left foot outside left hand and lower onto forearms if available. The psoas and hip capsule open in a completely different plane than Low Lunge. If you only do one hip flexor stretch, make it this one.", phase: 1, draw: "lizard_left" },
-  { name: "Lizard Pose", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot outside right hand, forearms down. Hips drop toward the floor. The deeper you go, the more the inner groin releases alongside the hip flexor — a dual stretch that Low Lunge can't quite match.", phase: 1, draw: "lizard_right" },
+  { name: "Lizard Pose", duration: 45, side: "LEFT FOOT FORWARD", cue: "From Low Lunge, bring left foot outside left hand and lower onto forearms if available.", phase: 1, draw: "lizard_left" },
+  { name: "Lizard Pose", duration: 45, side: "RIGHT FOOT FORWARD", cue: "Right foot outside right hand, forearms down. Hips drop toward the floor.", phase: 1, draw: "lizard_right" },
   // DEEP HIPS
-  { name: "Pigeon Pose", duration: 45, side: "LEFT LEG FORWARD", cue: "Slide left shin across the mat. Ease hips down. Walk hands forward. Breathe into the outer left hip. Glute medius and piriformis — both seized from sitting.", phase: 2, draw: "pigeon_left" },
+  { name: "Pigeon Pose", duration: 45, side: "LEFT LEG FORWARD", cue: "Slide left shin across the mat. Ease hips down. Walk hands forward. Breathe into the outer left hip.", phase: 2, draw: "pigeon_left" },
   { name: "Pigeon Pose", duration: 45, side: "RIGHT LEG FORWARD", cue: "Slide right shin across. Ease hips to floor. Chest down. Stay and breathe — the outer right hip needs the full hold to release.", phase: 2, draw: "pigeon_right" },
-  { name: "Garland Squat", duration: 45, cue: "Feet wider than hips, toes out. Lower into a deep squat, hands in prayer at chest. This is the deepest hip flexor stretch available — the position humans sat in before chairs existed.", phase: 2, draw: "garland_squat" },
-  { name: "Frog Pose", duration: 45, cue: "From hands and knees, spread knees wide and turn feet out so inner feet rest on the mat. Lower onto forearms. Hips sink back and down. The adductors and inner groin are completely missed by any standing work — this is how you find them.", phase: 2, draw: "frog_pose" },
+  { name: "Garland Squat", duration: 45, cue: "Feet wider than hips, toes out. Lower into a deep squat, hands in prayer at chest.", phase: 2, draw: "garland_squat" },
+  { name: "Frog Pose", duration: 45, cue: "From hands and knees, spread knees wide and turn feet out so inner feet rest on the mat. Lower onto forearms. Hips sink back and down.", phase: 2, draw: "frog_pose" },
   // LEGS & CALVES
-  { name: "Standing Quad Stretch", duration: 30, side: "LEFT LEG", cue: "Stand on right foot, left heel to glute. Hold ankle, knees together, hips forward. The quad shortens from sitting bent all day — give it back its full length.", phase: 3, draw: "quad_left" },
+  { name: "Standing Quad Stretch", duration: 30, side: "LEFT LEG", cue: "Stand on right foot, left heel to glute. Hold ankle, knees together, hips forward.", phase: 3, draw: "quad_left" },
   { name: "Standing Quad Stretch", duration: 30, side: "RIGHT LEG", cue: "Switch. Right heel to glute, knees level. Fingertips on a wall if needed. Feel the full stretch through the front of the thigh.", phase: 3, draw: "quad_right" },
-  { name: "Calf Stretch", duration: 30, side: "LEFT LEG", cue: "Left foot steps back, heel flat on floor. Lean forward. Calves tighten when the foot stays planted under a desk all day — give them the stretch.", phase: 3, draw: "calf_left" },
+  { name: "Calf Stretch", duration: 30, side: "LEFT LEG", cue: "Left foot steps back, heel flat on floor. Lean forward. Calves tighten when the foot stays planted under a desk all day", phase: 3, draw: "calf_left" },
   { name: "Calf Stretch", duration: 30, side: "RIGHT LEG", cue: "Right foot back, heel flat. Slightly bend the back knee to hit the deeper soleus muscle underneath the calf.", phase: 3, draw: "calf_right" },
   // DESK RECOVERY
-  { name: "Wrist Circles", duration: 30, cue: "Extend both arms forward. Slow full circles — 5 forward, 5 backward. The wrist joint needs full rotation, not just the typing plane it's stuck in all day.", phase: 4, draw: "wrist_circles" },
-  { name: "Supine Figure-4", duration: 45, side: "LEFT HIP", cue: "Lie on back. Cross left ankle over right thigh just above the knee. Flex the left foot. Either stay here or draw the right knee toward your chest. Targets the piriformis and external hip rotators — the muscles that lock up from sitting.", phase: 4, draw: "supine_figure4_left" },
-  { name: "Supine Figure-4", duration: 45, side: "RIGHT HIP", cue: "Cross right ankle over left thigh, flex right foot. Draw the left knee in. This is the lying version of Pigeon — accessible to everyone and often more effective because the pelvis stays level.", phase: 4, draw: "supine_figure4_right" },
-  { name: "Legs Up the Wall", duration: 45, cue: "Hips to a wall, legs straight up. Arms open, palms up. Eyes closed. Blood drains back from feet and ankles — reversing the pooling from sitting all day. Stay completely still.", phase: 4, draw: "legs_up_wall" },
+  { name: "Wrist Circles", duration: 30, cue: "Extend both arms forward. Slow full circles — 5 forward, 5 backward.", phase: 4, draw: "wrist_circles" },
+  { name: "Supine Figure-4", duration: 45, side: "LEFT HIP", cue: "Lie on back. Cross left ankle over right thigh just above the knee. Flex the left foot.", phase: 4, draw: "supine_figure4_left" },
+  { name: "Supine Figure-4", duration: 45, side: "RIGHT HIP", cue: "Cross right ankle over left thigh, flex right foot. Draw the left knee in.", phase: 4, draw: "supine_figure4_right" },
+  { name: "Legs Up the Wall", duration: 45, cue: "Hips to a wall, legs straight up. Arms open, palms up. Eyes closed.", phase: 4, draw: "legs_up_wall" },
 ];
 
 let currentIdx=0,timeLeft=0,totalDuration=0,paused=false,tickInterval=null;
 function goToSession(){getAudioCtx();ytPlay();document.getElementById('start-screen').style.display='none';document.getElementById('session-screen').style.display='flex';currentIdx=0;displayPose(0);document.getElementById('br-main').style.display='none';document.getElementById('preview-btns').style.display='flex';}
-function beginSession(){document.getElementById('preview-btns').style.display='none';document.getElementById('br-main').style.display='flex';document.getElementById('audio-corner').style.display='flex';startGetReady(5);}
+function beginSession(){document.getElementById('preview-btns').style.display='none';document.getElementById('br-main').style.display='flex';document.getElementById('audio-corner').style.display='flex';startGetReady(3);}
 function displayPose(idx){clearInterval(tickInterval);currentIdx=idx;const pose=POSES[idx],phase=PHASES[pose.phase];const badge=document.getElementById('phase-badge');badge.textContent=phase.name;badge.style.background=phase.color+'22';badge.style.color=phase.color;document.getElementById('progress-text').textContent=`${Math.round((idx+1)/POSES.length*100)}% (${idx+1}/${POSES.length})`;const pct=(idx/POSES.length)*100;const fill=document.getElementById('progress-fill');fill.style.width=pct+'%';fill.style.background=phase.color;const imgSrc=IMAGES[pose.draw],imgEl=document.getElementById('pose-img'),missingEl=document.getElementById('pose-img-missing');if(imgSrc){imgEl.src=imgSrc;imgEl.style.display='block';missingEl.style.display='none';imgEl.onerror=()=>{imgEl.style.display='none';missingEl.style.display='flex';};}else{imgEl.style.display='none';missingEl.style.display='flex';}document.getElementById('pose-name').textContent=pose.name;document.getElementById('pose-side').textContent=pose.side||'';document.getElementById('pose-cue').textContent=pose.cue;announcePose(pose);timeLeft=pose.duration;totalDuration=pose.duration;paused=false;document.getElementById('btn-pause').textContent='⏸';updateTimerDisplay();}
 function updateTimerDisplay(){document.getElementById('timer-num').textContent=timeLeft;const offset=295.3*(1-timeLeft/totalDuration);const ring=document.getElementById('timer-ring');ring.style.strokeDashoffset=offset;ring.style.stroke=PHASES[POSES[currentIdx].phase].color;}
 
 function startGetReady(secs) {
   clearInterval(tickInterval);
-  var timerLabel = document.querySelector('.timer-label');
   var timerRing = document.getElementById('timer-ring');
   var circumference = timerRing ? parseFloat(timerRing.getAttribute('stroke-dasharray')) || 295.3 : 295.3;
-  var origLabel = timerLabel ? timerLabel.textContent : 'secs';
-  if (timerLabel) timerLabel.textContent = 'get ready';
   if (timerRing) timerRing.style.stroke = '#555';
   var count = secs;
   document.getElementById('timer-num').textContent = count;
   if (timerRing) timerRing.style.strokeDashoffset = 0;
   tickInterval = setInterval(function() {
-    count--;
-    if (count <= 0) {
-      clearInterval(tickInterval);
-      if (timerLabel) timerLabel.textContent = origLabel;
-      updateTimerDisplay();
-      startTick();
-    } else {
-      document.getElementById('timer-num').textContent = count;
-      if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+    if (!paused) {
+      count--;
+      if (count <= 0) {
+        clearInterval(tickInterval);
+        updateTimerDisplay();
+        startTick();
+      } else {
+        document.getElementById('timer-num').textContent = count;
+        if (timerRing) timerRing.style.strokeDashoffset = circumference * (1 - count / secs);
+      }
     }
   }, 1000);
 }
-function startTick(){tickInterval=setInterval(()=>{if(!paused){timeLeft--;updateTimerDisplay();if(timeLeft<=0){clearInterval(tickInterval);playGong();if(navigator.vibrate)navigator.vibrate([200,100,200]);setTimeout(()=>{if(currentIdx<POSES.length-1){displayPose(currentIdx+1);startGetReady(5);}else{showDone();}},600);}}},1000);}
-function startCountdown(nextIdx,initialCount=3,label='Next Up'){const overlay=document.getElementById('countdown-overlay');const next=POSES[nextIdx];document.getElementById('cd-name').textContent=next.name;document.getElementById('cd-side').textContent=next.side||'';const labelEl=document.querySelector('#countdown-overlay .cdlabel');if(labelEl)labelEl.textContent=label;let count=initialCount;document.getElementById('cd-num').textContent=count;overlay.style.display='flex';const cd=setInterval(()=>{count--;if(count<=0){clearInterval(cd);overlay.style.display='none';if(labelEl)labelEl.textContent='Next Up';currentIdx=nextIdx;displayPose(currentIdx);}else{document.getElementById('cd-num').textContent=count;}},1000);}
+function startTick(){tickInterval=setInterval(()=>{if(!paused){timeLeft--;updateTimerDisplay();if(timeLeft<=0){clearInterval(tickInterval);playGong();if(navigator.vibrate)navigator.vibrate([200,100,200]);setTimeout(()=>{if(currentIdx<POSES.length-1){displayPose(currentIdx+1);startGetReady(3);}else{showDone();}},600);}}},1000);}
+function startCountdown(nextIdx,initialCount=3,label='Next Up'){const overlay=document.getElementById('countdown-overlay');const next=POSES[nextIdx];document.getElementById('cd-name').textContent=next.name;document.getElementById('cd-side').textContent=next.side||'';const labelEl=document.querySelector('#countdown-overlay .cdlabel');if(labelEl)labelEl.textContent=label;let count=initialCount;document.getElementById('cd-num').textContent=count;overlay.style.display='flex';const cd=setInterval(()=>{if(!paused){count--;if(count<=0){clearInterval(cd);overlay.style.display='none';if(labelEl)labelEl.textContent='Next Up';currentIdx=nextIdx;displayPose(currentIdx);}else{document.getElementById('cd-num').textContent=count;}}},1000);}
 function togglePause(){paused=!paused;document.getElementById('btn-pause').textContent=paused?'▶':'⏸';if(paused)ytPause();else ytPlay();}
-function nextPose(){if(currentIdx<POSES.length-1){displayPose(currentIdx+1);startGetReady(5);}else{showDone();}}
-function prevPose(){if(currentIdx>0){displayPose(currentIdx-1);startGetReady(5);}}
+function nextPose(){if(currentIdx<POSES.length-1){displayPose(currentIdx+1);startGetReady(3);}else{showDone();}}
+function prevPose(){if(currentIdx>0){displayPose(currentIdx-1);startGetReady(3);}}
 function exitSession(){clearInterval(tickInterval);ytPause();document.getElementById('session-screen').style.display='none';document.getElementById('start-screen').style.display='flex';var bm=document.getElementById('br-main');var pb=document.getElementById('preview-btns');if(bm)bm.style.display='flex';if(pb)pb.style.display='none';}
 function showDone(){clearInterval(tickInterval);ytPause();document.getElementById('session-screen').style.display='none';document.getElementById('done-screen').style.display='flex';}
 function restart(){document.getElementById('done-screen').style.display='none';document.getElementById('start-screen').style.display='flex';}
